@@ -1,0 +1,989 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;1,9..144,300;1,9..144,400&family=Geist:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --ink:#1C1A17;--ink2:#4A4640;--ink3:#8A8580;
+  --paper:#FDFBF8;--paper2:#F5F2ED;--paper3:#E8E4DC;
+  --herb:#5A7A58;--herb-bg:#EDF2EC;--herb-mid:#ACCAA9;
+  --terr:#C4694A;--terr-bg:#F7EDE8;
+  --sand:#B89A6A;--sand-bg:#F5F0E8;
+  --slate:#5A6E80;--slate-bg:#EBF0F4;
+  --lemon:#E8D87A;
+  --r:16px;--rs:10px;
+}
+body{font-family:'Geist',sans-serif;background:var(--paper);color:var(--ink);overflow-x:hidden}
+
+/* ── SECTION NAV ── */
+.port-nav{background:var(--ink);display:flex;align-items:center;gap:0;padding:0;overflow-x:auto;scrollbar-width:none;position:sticky;top:0;z-index:50}
+.port-nav::-webkit-scrollbar{display:none}
+.pn-logo{padding:14px 20px;font-family:'Fraunces',serif;font-size:15px;font-weight:300;color:white;white-space:nowrap;border-right:1px solid rgba(255,255,255,.1)}
+.pn-logo em{font-style:italic;color:var(--herb-mid)}
+.pn-tabs{display:flex;gap:0;overflow-x:auto;scrollbar-width:none}
+.pn-tabs::-webkit-scrollbar{display:none}
+.pt{padding:14px 16px;font-size:11px;font-weight:500;letter-spacing:.06em;color:rgba(255,255,255,.45);cursor:pointer;white-space:nowrap;transition:color .18s,border-bottom .18s;border-bottom:2px solid transparent;font-family:'Geist',sans-serif}
+.pt.active{color:white;border-bottom-color:var(--herb-mid)}
+.pt:hover:not(.active){color:rgba(255,255,255,.75)}
+
+/* ── SECTIONS ── */
+.section{display:none;animation:fadeUp .3s cubic-bezier(.4,0,.2,1) both}
+.section.active{display:block}
+@keyframes fadeUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+
+/* ── TYPOGRAPHY ── */
+.serif{font-family:'Fraunces',serif}
+.hero-title{font-family:'Fraunces',serif;font-size:38px;font-weight:300;line-height:1.12;letter-spacing:-.02em;color:var(--ink)}
+.hero-title em{font-style:italic;color:var(--herb)}
+.section-eyebrow{font-size:10px;font-weight:500;letter-spacing:.12em;text-transform:uppercase;color:var(--ink3);margin-bottom:10px}
+.section-title{font-family:'Fraunces',serif;font-size:24px;font-weight:300;color:var(--ink);margin-bottom:8px;line-height:1.2}
+.body-text{font-size:13px;color:var(--ink2);line-height:1.7}
+.caption{font-size:11px;color:var(--ink3);line-height:1.6}
+
+/* ── LAYOUT ── */
+.page-wrap{padding:40px 28px 60px;max-width:860px;margin:0 auto}
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+.three-col{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px}
+@media(max-width:600px){.two-col,.three-col{grid-template-columns:1fr}}
+
+/* ── CARDS ── */
+.card{background:white;border:1px solid var(--paper3);border-radius:var(--r);padding:20px}
+.card-sm{background:white;border:1px solid var(--paper3);border-radius:var(--rs);padding:14px}
+.card-dark{background:var(--ink);border-radius:var(--r);padding:20px}
+.card-tinted{border-radius:var(--r);padding:20px}
+
+/* ── DIVIDER ── */
+.divider{height:1px;background:var(--paper3);margin:32px 0}
+
+/* ── HERO SECTION ── */
+.hero-wrap{padding:52px 28px 44px;max-width:860px;margin:0 auto}
+.hero-meta{display:flex;gap:20px;margin-top:20px;flex-wrap:wrap}
+.hero-tag{font-size:10px;font-weight:500;letter-spacing:.08em;text-transform:uppercase;color:var(--ink3);padding:5px 12px;border:1px solid var(--paper3);border-radius:20px}
+.hero-tag.hi{background:var(--herb-bg);color:#3A6038;border-color:var(--herb-mid)}
+
+/* ── PROBLEM SECTION ── */
+.quote-block{border-left:3px solid var(--herb);padding:14px 18px;background:var(--herb-bg);border-radius:0 var(--rs) var(--rs) 0;margin:16px 0}
+.quote-text{font-family:'Fraunces',serif;font-size:16px;font-weight:300;font-style:italic;color:var(--ink);line-height:1.5}
+.quote-attr{font-size:11px;color:var(--ink3);margin-top:6px}
+
+.insight-row{display:flex;flex-direction:column;gap:10px;margin:16px 0}
+.insight-item{display:flex;align-items:flex-start;gap:12px;padding:14px;background:var(--paper2);border-radius:var(--rs)}
+.insight-num{font-family:'Fraunces',serif;font-size:22px;font-weight:300;color:var(--herb);line-height:1;flex-shrink:0;min-width:36px}
+.insight-text{font-size:12px;color:var(--ink2);line-height:1.6}
+.insight-label{font-size:10px;font-weight:500;letter-spacing:.06em;text-transform:uppercase;color:var(--ink3);margin-bottom:2px}
+
+/* ── PROCESS SECTION ── */
+.process-steps{display:flex;flex-direction:column;gap:0;margin:16px 0}
+.ps{display:flex;gap:16px;position:relative}
+.ps-line{position:absolute;left:18px;top:40px;bottom:-16px;width:1px;background:var(--paper3)}
+.ps:last-child .ps-line{display:none}
+.ps-num{width:36px;height:36px;border-radius:50%;background:white;border:1.5px solid var(--paper3);display:flex;align-items:center;justify-content:center;font-family:'Fraunces',serif;font-size:14px;font-weight:300;color:var(--ink2);flex-shrink:0;margin-top:2px}
+.ps.active-step .ps-num{background:var(--herb);border-color:var(--herb);color:white}
+.ps-body{padding-bottom:24px;flex:1}
+.ps-title{font-size:14px;font-weight:500;color:var(--ink);margin-bottom:4px}
+.ps-desc{font-size:12px;color:var(--ink3);line-height:1.6}
+.ps-artifact{margin-top:10px;background:var(--paper2);border-radius:var(--rs);padding:12px;border:1px solid var(--paper3)}
+.ps-artifact-label{font-size:9px;font-weight:500;letter-spacing:.08em;text-transform:uppercase;color:var(--ink3);margin-bottom:8px}
+
+/* ── WIREFRAME MOCKUP ── */
+.wf-screen{background:var(--paper2);border:1.5px solid var(--paper3);border-radius:var(--rs);padding:10px;width:100%}
+.wf-bar{height:8px;background:var(--paper3);border-radius:4px;margin-bottom:8px}
+.wf-bar.short{width:50%}
+.wf-bar.med{width:70%}
+.wf-circle{width:60px;height:60px;border-radius:50%;background:var(--paper3);margin:8px auto}
+.wf-block{height:28px;background:var(--paper3);border-radius:5px;margin-bottom:6px}
+.wf-block.half{width:50%}
+.wf-row{display:flex;gap:6px;margin-bottom:6px}
+.wf-pill{height:20px;flex:1;background:var(--paper3);border-radius:10px}
+
+/* ── MOTION SYSTEM ── */
+.motion-token-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:16px 0}
+.mt{background:white;border:1px solid var(--paper3);border-radius:var(--rs);padding:14px;cursor:pointer}
+.mt:hover .mt-demo{transform:scale(1.1);transition-duration:.1s}
+.mt-label{font-size:10px;font-weight:500;letter-spacing:.07em;text-transform:uppercase;color:var(--ink3);margin-bottom:8px}
+.mt-name{font-size:13px;font-weight:500;color:var(--ink);margin-bottom:3px}
+.mt-val{font-size:11px;color:var(--ink3);font-family:monospace}
+.mt-demo{width:36px;height:36px;background:var(--herb);border-radius:10px;margin-top:10px;transition:transform .4s cubic-bezier(.4,0,.2,1)}
+.mt-demo.spring{transition-timing-function:cubic-bezier(.34,1.56,.64,1)}
+.mt-demo.ease-out{transition-timing-function:cubic-bezier(.0,0,.2,1)}
+.mt-demo.linear{transition-timing-function:linear}
+
+.motion-principles{display:flex;flex-direction:column;gap:8px;margin:16px 0}
+.mp{display:flex;align-items:flex-start;gap:12px;padding:14px;border-radius:var(--rs);background:var(--paper2)}
+.mp-icon{width:32px;height:32px;border-radius:8px;background:white;border:1px solid var(--paper3);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.mp-title{font-size:13px;font-weight:500;color:var(--ink);margin-bottom:3px}
+.mp-desc{font-size:11px;color:var(--ink3);line-height:1.6}
+
+/* ── LIVE DEMOS ── */
+.demo-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:16px 0}
+.demo-cell{background:white;border:1px solid var(--paper3);border-radius:var(--r);padding:16px;min-height:140px;display:flex;flex-direction:column}
+.demo-cell-label{font-size:9px;font-weight:500;letter-spacing:.08em;text-transform:uppercase;color:var(--ink3);margin-bottom:12px}
+.demo-cell-content{flex:1;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:10px}
+
+/* button variants */
+.btn{padding:9px 18px;border-radius:20px;font-size:12px;font-weight:500;cursor:pointer;font-family:'Geist',sans-serif;border:none;transition:transform .18s cubic-bezier(.34,1.56,.64,1),background .15s}
+.btn-herb{background:var(--herb);color:white}
+.btn-herb:hover{transform:scale(1.05)}
+.btn-herb:active{transform:scale(.96)}
+.btn-outline{background:transparent;color:var(--herb);border:1.5px solid var(--herb)}
+.btn-outline:hover{background:var(--herb-bg);transform:scale(1.04)}
+
+/* loading states */
+.skel{background:var(--paper3);border-radius:5px;animation:shimmer 1.4s ease-in-out infinite}
+@keyframes shimmer{0%,100%{opacity:1}50%{opacity:.5}}
+.skel-line{height:10px;margin-bottom:7px;border-radius:4px}
+.skel-circle{width:40px;height:40px;border-radius:50%}
+
+/* micro-interaction toggle */
+.toggle-wrap{display:flex;align-items:center;gap:10px}
+.toggle{width:44px;height:24px;border-radius:12px;background:var(--paper3);cursor:pointer;position:relative;transition:background .2s;border:none;flex-shrink:0}
+.toggle.on{background:var(--herb)}
+.toggle-thumb{position:absolute;width:18px;height:18px;border-radius:50%;background:white;top:3px;left:3px;transition:transform .22s cubic-bezier(.34,1.56,.64,1)}
+.toggle.on .toggle-thumb{transform:translateX(20px)}
+.toggle-lbl{font-size:12px;color:var(--ink2)}
+
+/* ring demo */
+.ring-demo-wrap{position:relative;width:80px;height:80px}
+.ring-demo-svg{position:absolute;top:0;left:0;transform:rotate(-90deg)}
+.ring-demo-text{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-family:'Fraunces',serif;font-size:16px;font-weight:300;color:var(--ink)}
+.ring-demo-track{fill:none;stroke:var(--paper3);stroke-width:7;stroke-linecap:round}
+.ring-demo-fill{fill:none;stroke:var(--herb);stroke-width:7;stroke-linecap:round;stroke-dasharray:220;stroke-dashoffset:220;transition:stroke-dashoffset 1.2s cubic-bezier(.4,0,.2,1)}
+
+/* toast demo */
+.toast-demo{background:var(--ink);color:white;border-radius:20px;padding:9px 16px;font-size:11px;font-weight:500;display:flex;align-items:center;gap:7px;transform:scale(.85);opacity:0;transition:transform .3s cubic-bezier(.34,1.56,.64,1),opacity .3s}
+.toast-demo.show{transform:scale(1);opacity:1}
+.toast-pip{width:6px;height:6px;border-radius:50%;background:var(--herb-mid);flex-shrink:0}
+
+/* card hover demo */
+.hover-card{background:var(--paper2);border:1px solid var(--paper3);border-radius:var(--rs);padding:12px;width:100%;cursor:pointer;transition:transform .2s cubic-bezier(.34,1.56,.64,1),border-color .2s,box-shadow .2s;text-align:left}
+.hover-card:hover{transform:translateY(-3px) scale(1.02);border-color:var(--herb-mid);box-shadow:0 6px 20px rgba(28,26,23,.08)}
+.hover-card:active{transform:scale(.98)}
+.hc-title{font-size:12px;font-weight:500;color:var(--ink)}
+.hc-sub{font-size:10px;color:var(--ink3);margin-top:2px}
+
+/* sheet demo */
+.sheet-demo-container{width:100%;background:var(--paper2);border-radius:var(--rs);overflow:hidden;position:relative;height:90px}
+.sheet-demo-overlay{position:absolute;inset:0;background:rgba(28,26,23,.3);opacity:0;transition:opacity .25s}
+.sheet-demo-overlay.show{opacity:1}
+.sheet-demo-sheet{position:absolute;bottom:0;left:0;right:0;background:white;border-radius:10px 10px 0 0;padding:10px 12px 12px;transform:translateY(100%);transition:transform .3s cubic-bezier(.4,0,.2,1)}
+.sheet-demo-sheet.show{transform:translateY(0)}
+.sheet-handle{width:28px;height:3px;border-radius:2px;background:var(--paper3);margin:0 auto 8px}
+.sheet-title{font-size:11px;font-weight:500;color:var(--ink)}
+
+/* ── PLATFORM SECTION ── */
+.platform-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin:16px 0}
+@media(max-width:600px){.platform-grid{grid-template-columns:1fr}}
+.plat-card{background:white;border:1px solid var(--paper3);border-radius:var(--r);padding:18px}
+.plat-icon{width:36px;height:36px;border-radius:10px;background:var(--paper2);display:flex;align-items:center;justify-content:center;margin-bottom:12px}
+.plat-name{font-size:13px;font-weight:500;color:var(--ink);margin-bottom:6px}
+.plat-decision{font-size:11px;color:var(--ink3);line-height:1.6;margin-bottom:8px}
+.plat-pill{display:inline-block;font-size:9px;font-weight:500;letter-spacing:.05em;text-transform:uppercase;padding:3px 8px;border-radius:20px;background:var(--paper2);color:var(--ink3);margin:2px 2px 2px 0}
+.plat-pill.hi{background:var(--herb-bg);color:#3A6038}
+
+.decision-row{display:flex;flex-direction:column;gap:8px;margin:12px 0}
+.dr{display:flex;gap:10px;align-items:flex-start}
+.dr-check{width:18px;height:18px;border-radius:50%;background:var(--herb-bg);display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px}
+.dr-text{font-size:12px;color:var(--ink2);line-height:1.5}
+
+/* ── DESIGN SYSTEM ── */
+.token-table{width:100%;border-collapse:collapse;font-size:12px;margin:14px 0}
+.token-table th{font-size:9px;font-weight:500;letter-spacing:.08em;text-transform:uppercase;color:var(--ink3);text-align:left;padding:0 0 8px;border-bottom:1px solid var(--paper3)}
+.token-table td{padding:9px 0;border-bottom:1px solid var(--paper3);color:var(--ink2);vertical-align:middle}
+.token-table td:last-child{text-align:right;font-family:monospace;font-size:11px;color:var(--ink3)}
+.token-swatch{display:inline-block;width:16px;height:16px;border-radius:4px;vertical-align:middle;margin-right:8px;border:1px solid rgba(28,26,23,.06)}
+
+.type-specimen{display:flex;flex-direction:column;gap:12px;margin:14px 0}
+.ts-row{display:flex;gap:16px;align-items:baseline;padding:10px 0;border-bottom:1px solid var(--paper3)}
+.ts-label{font-size:10px;color:var(--ink3);width:80px;flex-shrink:0;letter-spacing:.04em}
+.ts-sample{flex:1}
+
+.component-strip{display:flex;flex-wrap:wrap;gap:8px;margin:14px 0;align-items:center}
+
+.icon-grid{display:grid;grid-template-columns:repeat(8,1fr);gap:8px;margin:14px 0}
+.ig-cell{aspect-ratio:1;background:var(--paper2);border-radius:8px;display:flex;align-items:center;justify-content:center;border:1px solid var(--paper3)}
+
+/* ── OUTCOMES ── */
+.outcome-row{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:12px;margin:20px 0}
+@media(max-width:600px){.outcome-row{grid-template-columns:1fr 1fr}}
+.oc{text-align:center;padding:16px 10px;background:white;border:1px solid var(--paper3);border-radius:var(--rs)}
+.oc-n{font-family:'Fraunces',serif;font-size:28px;font-weight:300;color:var(--herb);line-height:1}
+.oc-lbl{font-size:10px;color:var(--ink3);margin-top:4px;line-height:1.4}
+
+.learnings{display:flex;flex-direction:column;gap:8px;margin:16px 0}
+.learn-item{display:flex;gap:12px;padding:14px;background:var(--paper2);border-radius:var(--rs)}
+.learn-icon{width:28px;height:28px;border-radius:7px;background:var(--ink);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.learn-text{font-size:12px;color:var(--ink2);line-height:1.6}
+.learn-strong{font-weight:500;color:var(--ink);display:block;margin-bottom:2px}
+
+/* ── FOOTER ── */
+.port-footer{background:var(--ink);padding:32px 28px;margin-top:0}
+.pf-inner{max-width:860px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;flex-wrap:gap}
+.pf-logo{font-family:'Fraunces',serif;font-size:18px;font-weight:300;color:white}
+.pf-logo em{font-style:italic;color:var(--herb-mid)}
+.pf-meta{font-size:11px;color:rgba(255,255,255,.35)}
+</style>
+</head>
+<body>
+
+<!-- ── STICKY NAV ── -->
+<nav class="port-nav">
+  <div class="pn-logo"><em>Trim</em> — case study</div>
+  <div class="pn-tabs">
+    <div class="pt active" onclick="showSection('overview',this)">Overview</div>
+    <div class="pt" onclick="showSection('process',this)">Process</div>
+    <div class="pt" onclick="showSection('motion',this)">Motion system</div>
+    <div class="pt" onclick="showSection('platform',this)">Platform</div>
+    <div class="pt" onclick="showSection('system',this)">Design system</div>
+    <div class="pt" onclick="showSection('outcomes',this)">Outcomes</div>
+  </div>
+</nav>
+
+<!-- ════════════ OVERVIEW ════════════ -->
+<div class="section active" id="s-overview">
+  <div class="hero-wrap">
+    <div class="section-eyebrow">Portfolio case study · 2025</div>
+    <div class="hero-title">Trim — making<br>eating less<br><em>complicated.</em></div>
+    <div class="hero-meta">
+      <span class="hero-tag hi">Product design</span>
+      <span class="hero-tag hi">Motion design</span>
+      <span class="hero-tag">iOS · Android · Web</span>
+      <span class="hero-tag">Design systems</span>
+      <span class="hero-tag">0 → 1</span>
+    </div>
+  </div>
+
+  <div class="page-wrap" style="padding-top:0">
+
+    <div class="two-col">
+      <div>
+        <div class="section-eyebrow">The brief</div>
+        <div class="section-title">A calorie tracker that doesn't feel like a chore</div>
+        <div class="body-text">Most nutrition apps feel clinical — spreadsheets with a logo. Trim was designed from scratch to feel warm, fast, and genuinely encouraging. The challenge: make logging food feel lighter than not logging it at all.</div>
+      </div>
+      <div class="card" style="background:var(--herb-bg);border-color:var(--herb-mid)">
+        <div class="section-eyebrow" style="color:#3A6038">Role</div>
+        <div style="font-size:13px;color:#2A5030;line-height:1.7">Lead product designer<br>Motion &amp; interaction design<br>Design system architecture<br>Prototype &amp; handoff</div>
+        <div class="divider" style="margin:14px 0;background:var(--herb-mid)"></div>
+        <div class="section-eyebrow" style="color:#3A6038">Timeline</div>
+        <div style="font-size:13px;color:#2A5030">8 weeks · 0 → production-ready</div>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="section-eyebrow">Core problem areas</div>
+    <div class="insight-row">
+      <div class="insight-item">
+        <div class="insight-num">01</div>
+        <div><div class="insight-label">Friction</div><div class="insight-text">Logging a single meal in leading apps takes 7–12 taps. Trim targets under 3 taps from any screen.</div></div>
+      </div>
+      <div class="insight-item">
+        <div class="insight-num">02</div>
+        <div><div class="insight-label">Tone</div><div class="insight-text">Numbers-first interfaces trigger anxiety. Trim uses warm editorial typography and positive framing to reframe progress.</div></div>
+      </div>
+      <div class="insight-item">
+        <div class="insight-num">03</div>
+        <div><div class="insight-label">Feedback</div><div class="insight-text">Users abandon apps that don't acknowledge effort. Motion and micro-celebrations were a core design requirement, not an afterthought.</div></div>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="section-eyebrow">What was built</div>
+    <div class="three-col">
+      <div class="card-sm">
+        <div style="font-size:12px;font-weight:500;color:var(--ink);margin-bottom:4px">Today dashboard</div>
+        <div class="caption">Animated calorie ring, live macro bars, meal cards with expand/collapse, streak tracker</div>
+      </div>
+      <div class="card-sm">
+        <div style="font-size:12px;font-weight:500;color:var(--ink);margin-bottom:4px">Recipe discovery</div>
+        <div class="caption">Filterable recipe grid, tag taxonomy, search, spring-entrance animations</div>
+      </div>
+      <div class="card-sm">
+        <div style="font-size:12px;font-weight:500;color:var(--ink);margin-bottom:4px">Insights</div>
+        <div class="caption">Animated bar chart, weight trend line, hydration tracker, weekly stats</div>
+      </div>
+      <div class="card-sm">
+        <div style="font-size:12px;font-weight:500;color:var(--ink);margin-bottom:4px">Log food modal</div>
+        <div class="caption">Bottom sheet, meal selector, live search, add confirmation, real-time state update</div>
+      </div>
+      <div class="card-sm">
+        <div style="font-size:12px;font-weight:500;color:var(--ink);margin-bottom:4px">Profile &amp; goals</div>
+        <div class="caption">Goal slider, macro split visualiser, weight entry, TDEE calculator</div>
+      </div>
+      <div class="card-sm">
+        <div style="font-size:12px;font-weight:500;color:var(--ink);margin-bottom:4px">Design system</div>
+        <div class="caption">Token library, icon system, motion spec, component library, responsive grid</div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ════════════ PROCESS ════════════ -->
+<div class="section" id="s-process">
+  <div class="page-wrap">
+
+    <div class="section-eyebrow">From concept to execution</div>
+    <div class="section-title">How Trim was designed</div>
+    <div class="body-text" style="margin-bottom:28px">A structured 8-week process from user research through to production-ready handoff, with motion prototyping woven throughout — not bolted on at the end.</div>
+
+    <div class="process-steps">
+
+      <div class="ps active-step">
+        <div class="ps-num">1</div>
+        <div class="ps-line"></div>
+        <div class="ps-body">
+          <div class="ps-title">Discovery &amp; research</div>
+          <div class="ps-desc">Interviewed 12 people who had tried and abandoned calorie trackers. Ran competitive audits of MyFitnessPal, Cronometer, and Lose It. Identified three core failure modes: friction, shame, and forgettability.</div>
+          <div class="ps-artifact">
+            <div class="ps-artifact-label">Key insight</div>
+            <div class="quote-block" style="margin:0">
+              <div class="quote-text">"I stopped because every time I opened it I felt like I'd already failed."</div>
+              <div class="quote-attr">— Research participant, 28, product manager</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="ps">
+        <div class="ps-num">2</div>
+        <div class="ps-line"></div>
+        <div class="ps-body">
+          <div class="ps-title">Concept exploration</div>
+          <div class="ps-desc">Explored three distinct design directions: Clinical (data-dense, precision-first), Playful (gamified, character-driven), and Editorial (warm, typographic, calm). User testing clearly favoured Editorial — it felt like something you'd want to open.</div>
+          <div class="ps-artifact">
+            <div class="ps-artifact-label">Direction comparison — lo-fi wireframes</div>
+            <div class="three-col" style="margin-top:0">
+              <div class="wf-screen" style="opacity:.5">
+                <div class="wf-bar short"></div>
+                <div class="wf-bar"></div>
+                <div style="height:48px;background:var(--paper3);border-radius:5px;margin-bottom:6px"></div>
+                <div class="wf-row"><div class="wf-block" style="flex:1;height:40px"></div><div class="wf-block" style="flex:1;height:40px"></div><div class="wf-block" style="flex:1;height:40px"></div></div>
+                <div style="font-size:9px;color:var(--ink3);text-align:center;margin-top:4px">Clinical</div>
+              </div>
+              <div class="wf-screen" style="opacity:.5">
+                <div class="wf-circle"></div>
+                <div class="wf-bar short" style="margin:0 auto 6px"></div>
+                <div class="wf-row"><div class="wf-pill"></div><div class="wf-pill"></div></div>
+                <div class="wf-block"></div>
+                <div style="font-size:9px;color:var(--ink3);text-align:center;margin-top:4px">Playful</div>
+              </div>
+              <div class="wf-screen" style="border-color:var(--herb-mid);background:var(--herb-bg)">
+                <div class="wf-bar short" style="background:var(--herb-mid);width:60%"></div>
+                <div style="width:50px;height:50px;border-radius:50%;border:3px solid var(--herb-mid);margin:6px auto"></div>
+                <div class="wf-bar" style="background:var(--herb-mid)"></div>
+                <div class="wf-block" style="background:var(--herb-mid)"></div>
+                <div style="font-size:9px;color:var(--herb);text-align:center;margin-top:4px;font-weight:500">✓ Editorial</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="ps">
+        <div class="ps-num">3</div>
+        <div class="ps-line"></div>
+        <div class="ps-body">
+          <div class="ps-title">Visual language &amp; typography</div>
+          <div class="ps-desc">Chose Fraunces (variable optical-size serif) paired with Geist (geometric sans). The pairing creates an editorial warmth rare in utility apps. Defined a restricted palette of four semantic colour tokens — herb, terracotta, slate, sand — each with a clear role.</div>
+          <div class="ps-artifact">
+            <div class="ps-artifact-label">Type pairing rationale</div>
+            <div style="display:flex;gap:14px;align-items:baseline;flex-wrap:wrap">
+              <div>
+                <div style="font-family:'Fraunces',serif;font-size:28px;font-weight:300;color:var(--ink);line-height:1">1,742</div>
+                <div style="font-size:9px;color:var(--ink3);margin-top:2px">Fraunces Light — numerals, headings</div>
+              </div>
+              <div>
+                <div style="font-family:'Fraunces',serif;font-size:22px;font-weight:300;font-style:italic;color:var(--herb)">Good morning.</div>
+                <div style="font-size:9px;color:var(--ink3);margin-top:2px">Fraunces Italic — greeting moments</div>
+              </div>
+              <div>
+                <div style="font-family:'Geist',sans-serif;font-size:14px;font-weight:500;color:var(--ink)">Grilled chicken bowl</div>
+                <div style="font-size:9px;color:var(--ink3);margin-top:2px">Geist Medium — UI labels</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="ps">
+        <div class="ps-num">4</div>
+        <div class="ps-line"></div>
+        <div class="ps-body">
+          <div class="ps-title">Motion-first prototyping</div>
+          <div class="ps-desc">Prototyped interactions before finalising visuals. Motion was treated as a design material, not polish. Defined spring vs ease-out vs linear use cases, then applied them consistently. Every state change has a motion rationale.</div>
+          <div class="ps-artifact">
+            <div class="ps-artifact-label">Motion prototype — ring entrance</div>
+            <div style="display:flex;gap:8px;align-items:center">
+              <div style="font-size:11px;color:var(--ink3)">idle</div>
+              <div style="flex:1;height:2px;background:var(--paper3);border-radius:1px;position:relative">
+                <div style="position:absolute;left:0;top:-3px;width:8px;height:8px;border-radius:50%;background:var(--herb)"></div>
+              </div>
+              <div style="font-size:11px;color:var(--ink3)">load</div>
+              <div style="flex:2;height:2px;background:var(--herb-mid);border-radius:1px;position:relative">
+                <div id="motionDot" style="position:absolute;left:0;top:-5px;width:12px;height:12px;border-radius:50%;background:var(--herb);transition:left 1.4s cubic-bezier(.4,0,.2,1)"></div>
+              </div>
+              <div style="font-size:11px;color:var(--herb);font-weight:500">complete</div>
+            </div>
+            <div style="font-size:10px;color:var(--ink3);margin-top:6px">1.4s · cubic-bezier(.4, 0, .2, 1) · stroke-dashoffset</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="ps">
+        <div class="ps-num">5</div>
+        <div class="ps-line"></div>
+        <div class="ps-body">
+          <div class="ps-title">Component build &amp; system</div>
+          <div class="ps-desc">Extracted every repeating pattern into a token-driven component library. Documented motion values, spacing scale, colour roles, and icon spec. Built 22 components, 4 icon weights, and 6 animation presets.</div>
+        </div>
+      </div>
+
+      <div class="ps">
+        <div class="ps-num">6</div>
+        <div class="ps-line"></div>
+        <div class="ps-body">
+          <div class="ps-title">Usability testing &amp; iteration</div>
+          <div class="ps-desc">Ran two rounds of moderated testing with 8 participants each. Key changes: increased tap targets on meal cards, added meal-type selector to log food modal, simplified macro display from 4 values to 3, added chevron affordance to expandable cards.</div>
+        </div>
+      </div>
+
+      <div class="ps">
+        <div class="ps-num" style="background:var(--herb);border-color:var(--herb);color:white">7</div>
+        <div class="ps-body">
+          <div class="ps-title">Handoff &amp; documentation</div>
+          <div class="ps-desc">Delivered annotated specs, a motion reference doc with easing curves and durations, a component library with all states (default, hover, active, disabled, loading), and a responsive breakpoint guide.</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- ════════════ MOTION SYSTEM ════════════ -->
+<div class="section" id="s-motion">
+  <div class="page-wrap">
+
+    <div class="section-eyebrow">Motion design system</div>
+    <div class="section-title">Purposeful, not decorative</div>
+    <div class="body-text" style="margin-bottom:24px">Every animation in Trim follows three principles: it must communicate state, guide attention, or reward action. Motion that does none of these was cut.</div>
+
+    <div class="section-eyebrow">Easing tokens</div>
+    <div class="motion-token-grid">
+      <div class="mt" onclick="demoEase('spring')">
+        <div class="mt-label">Spring · interactive</div>
+        <div class="mt-name">--ease-spring</div>
+        <div class="mt-val">cubic-bezier(.34, 1.56, .64, 1)</div>
+        <div class="mt-demo spring" id="demo-spring"></div>
+      </div>
+      <div class="mt" onclick="demoEase('ease-out')">
+        <div class="mt-label">Ease out · entrances</div>
+        <div class="mt-name">--ease-enter</div>
+        <div class="mt-val">cubic-bezier(.0, 0, .2, 1)</div>
+        <div class="mt-demo ease-out" id="demo-ease-out"></div>
+      </div>
+      <div class="mt" onclick="demoEase('standard')">
+        <div class="mt-label">Standard · state changes</div>
+        <div class="mt-name">--ease-standard</div>
+        <div class="mt-val">cubic-bezier(.4, 0, .2, 1)</div>
+        <div class="mt-demo" id="demo-standard"></div>
+      </div>
+      <div class="mt" onclick="demoEase('linear')">
+        <div class="mt-label">Linear · progress fills</div>
+        <div class="mt-name">--ease-fill</div>
+        <div class="mt-val">linear</div>
+        <div class="mt-demo linear" id="demo-linear"></div>
+      </div>
+    </div>
+    <div class="caption" style="margin-bottom:24px">Click any token to preview the easing curve live.</div>
+
+    <div class="section-eyebrow">Duration scale</div>
+    <table class="token-table">
+      <thead><tr><th>Token</th><th>Value</th><th>Used for</th><th></th></tr></thead>
+      <tbody>
+        <tr><td>--dur-fast</td><td>150ms</td><td>Hover states, colour fills</td><td>150ms</td></tr>
+        <tr><td>--dur-micro</td><td>220ms</td><td>Icon transforms, toggles</td><td>220ms</td></tr>
+        <tr><td>--dur-standard</td><td>300ms</td><td>Page transitions, sheet open</td><td>300ms</td></tr>
+        <tr><td>--dur-enter</td><td>380ms</td><td>Card pop-ins, stagger base</td><td>380ms</td></tr>
+        <tr><td>--dur-draw</td><td>1400ms</td><td>Ring fill, chart bars, line draw</td><td>1400ms</td></tr>
+      </tbody>
+    </table>
+
+    <div class="divider"></div>
+
+    <div class="section-eyebrow">Motion principles</div>
+    <div class="motion-principles">
+      <div class="mp">
+        <div class="mp-icon">
+          <svg width="16" height="16" viewBox="0 0 20 20" fill="none" stroke="var(--herb)" stroke-width="1.5" stroke-linecap="round"><path d="M10 3v14M4 9l6-6 6 6"/></svg>
+        </div>
+        <div><div class="mp-title">Entrance communicates readiness</div><div class="mp-desc">Elements that animate in signal they are interactive and loaded. Static screens feel broken. All primary content uses a staggered fade-up on load.</div></div>
+      </div>
+      <div class="mp">
+        <div class="mp-icon">
+          <svg width="16" height="16" viewBox="0 0 20 20" fill="none" stroke="var(--herb)" stroke-width="1.5" stroke-linecap="round"><circle cx="10" cy="10" r="7"/><path d="M10 6v4l2.5 2.5"/></svg>
+        </div>
+        <div><div class="mp-title">Duration respects attention</div><div class="mp-desc">Micro-interactions (toggles, taps) complete in under 220ms — imperceptible as "animation" but perceptible as response. Longer draws (ring, chart) are intentionally slow because they carry emotional weight.</div></div>
+      </div>
+      <div class="mp">
+        <div class="mp-icon">
+          <svg width="16" height="16" viewBox="0 0 20 20" fill="none" stroke="var(--herb)" stroke-width="1.5" stroke-linecap="round"><path d="M3 10.5l4.5 4.5L17 5"/></svg>
+        </div>
+        <div><div class="mp-title">Spring = user-initiated, ease = system-initiated</div><div class="mp-desc">When the user triggers an action (tap a card, add food), the response uses a spring curve — it feels alive. When the system does something (page loads, data arrives), standard ease is used — it feels controlled.</div></div>
+      </div>
+      <div class="mp">
+        <div class="mp-icon">
+          <svg width="16" height="16" viewBox="0 0 20 20" fill="none" stroke="var(--herb)" stroke-width="1.5" stroke-linecap="round"><path d="M5 16V8M10 16V4M15 16v-6"/></svg>
+        </div>
+        <div><div class="mp-title">Stagger creates hierarchy</div><div class="mp-desc">When multiple elements enter together (recipe grid, meal items), they stagger at 60–80ms intervals. This creates a reading order and prevents visual noise without requiring the designer to specify layout hierarchy separately.</div></div>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="section-eyebrow">Live interaction demos</div>
+    <div class="demo-grid">
+
+      <div class="demo-cell">
+        <div class="demo-cell-label">Calorie ring · stroke-dashoffset draw</div>
+        <div class="demo-cell-content">
+          <div class="ring-demo-wrap">
+            <svg class="ring-demo-svg" width="80" height="80" viewBox="0 0 80 80">
+              <circle class="ring-demo-track" cx="40" cy="40" r="35"/>
+              <circle class="ring-demo-fill" id="demoRing" cx="40" cy="40" r="35"/>
+            </svg>
+            <div class="ring-demo-text" id="demoRingNum">0</div>
+          </div>
+          <button class="btn btn-outline" onclick="playRingDemo()" style="font-size:11px;padding:6px 14px">Replay</button>
+        </div>
+      </div>
+
+      <div class="demo-cell">
+        <div class="demo-cell-label">Bottom sheet · spring slide-up</div>
+        <div class="demo-cell-content" style="width:100%">
+          <div class="sheet-demo-container" style="width:100%">
+            <div class="sheet-demo-overlay" id="sheetOverlay"></div>
+            <div class="sheet-demo-sheet" id="demoSheet">
+              <div class="sheet-handle"></div>
+              <div class="sheet-title">Log food</div>
+            </div>
+          </div>
+          <button class="btn btn-outline" onclick="playSheetDemo()" style="font-size:11px;padding:6px 14px">Open sheet</button>
+        </div>
+      </div>
+
+      <div class="demo-cell">
+        <div class="demo-cell-label">Toggle · spring thumb + colour fill</div>
+        <div class="demo-cell-content">
+          <div class="toggle-wrap">
+            <button class="toggle" id="demoToggle" onclick="flipToggle()"><div class="toggle-thumb"></div></button>
+            <span class="toggle-lbl" id="toggleLabel">Notifications off</span>
+          </div>
+          <div class="toggle-wrap">
+            <button class="toggle on" id="demoToggle2" onclick="flipToggle2()"><div class="toggle-thumb"></div></button>
+            <span class="toggle-lbl" id="toggleLabel2">Streak reminders on</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="demo-cell">
+        <div class="demo-cell-label">Toast · spring scale-in from top</div>
+        <div class="demo-cell-content">
+          <div class="toast-demo" id="demoToast"><div class="toast-pip"></div><span>Meal saved · +312 kcal</span></div>
+          <button class="btn btn-outline" onclick="playToastDemo()" style="font-size:11px;padding:6px 14px">Show toast</button>
+        </div>
+      </div>
+
+      <div class="demo-cell">
+        <div class="demo-cell-label">Card hover · lift + border + shadow</div>
+        <div class="demo-cell-content" style="width:100%">
+          <button class="hover-card" style="width:100%">
+            <div class="hc-title">Greek yogurt parfait</div>
+            <div class="hc-sub">200 g · 210 kcal</div>
+          </button>
+          <button class="hover-card" style="width:100%">
+            <div class="hc-title">Grilled chicken bowl</div>
+            <div class="hc-sub">300 g · 380 kcal</div>
+          </button>
+        </div>
+      </div>
+
+      <div class="demo-cell">
+        <div class="demo-cell-label">Skeleton loading · opacity pulse</div>
+        <div class="demo-cell-content" style="width:100%">
+          <div style="width:100%">
+            <div style="display:flex;gap:10px;align-items:center;margin-bottom:10px">
+              <div class="skel skel-circle" style="width:36px;height:36px"></div>
+              <div style="flex:1"><div class="skel skel-line" style="width:60%"></div><div class="skel skel-line" style="width:40%"></div></div>
+            </div>
+            <div class="skel skel-line"></div>
+            <div class="skel skel-line" style="width:80%"></div>
+            <div class="skel skel-line" style="width:55%"></div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="section-eyebrow">Add food · full interaction flow</div>
+    <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;padding:16px;background:var(--paper2);border-radius:var(--rs);font-size:11px;color:var(--ink2)">
+      <div style="display:flex;align-items:center;gap:6px"><div style="width:24px;height:24px;border-radius:50%;background:var(--herb);display:flex;align-items:center;justify-content:center;color:white;font-size:10px;font-weight:500">1</div>Tap "Add food"</div>
+      <div style="color:var(--ink3)">→</div>
+      <div style="display:flex;align-items:center;gap:6px"><div style="width:24px;height:24px;border-radius:50%;background:var(--herb);display:flex;align-items:center;justify-content:center;color:white;font-size:10px;font-weight:500">2</div>Sheet slides up (320ms spring)</div>
+      <div style="color:var(--ink3)">→</div>
+      <div style="display:flex;align-items:center;gap:6px"><div style="width:24px;height:24px;border-radius:50%;background:var(--herb);display:flex;align-items:center;justify-content:center;color:white;font-size:10px;font-weight:500">3</div>Select meal, search food</div>
+      <div style="color:var(--ink3)">→</div>
+      <div style="display:flex;align-items:center;gap:6px"><div style="width:24px;height:24px;border-radius:50%;background:var(--herb);display:flex;align-items:center;justify-content:center;color:white;font-size:10px;font-weight:500">4</div>Tap + → icon rotates 90°, check appears (220ms)</div>
+      <div style="color:var(--ink3)">→</div>
+      <div style="display:flex;align-items:center;gap:6px"><div style="width:24px;height:24px;border-radius:50%;background:var(--herb);display:flex;align-items:center;justify-content:center;color:white;font-size:10px;font-weight:500">5</div>Sheet closes, ring redraws (1400ms), toast slides in</div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ════════════ PLATFORM ════════════ -->
+<div class="section" id="s-platform">
+  <div class="page-wrap">
+
+    <div class="section-eyebrow">Platform-aware design</div>
+    <div class="section-title">Same product, different expectations</div>
+    <div class="body-text" style="margin-bottom:24px">Trim targets iOS, Android, and responsive web. Each platform has different conventions for navigation, gestures, and motion. The design system was built to accommodate all three without fragmenting the visual language.</div>
+
+    <div class="platform-grid">
+
+      <div class="plat-card">
+        <div class="plat-icon">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="var(--ink2)" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="5" y="1" width="10" height="18" rx="2"/>
+            <path d="M8 3h4M10 16.5v0"/>
+          </svg>
+        </div>
+        <div class="plat-name">iOS</div>
+        <div class="plat-decision">Follows HIG conventions where they align with Trim's aesthetic. Departs intentionally on navigation (no tab bar labels visible by default — shown on active), typography (system font replaced with Geist + Fraunces), and spring curves (iOS uses UISpring; Trim defines its own).</div>
+        <div class="decision-row">
+          <div class="dr"><div class="dr-check"><svg width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="var(--herb)" stroke-width="1.5" stroke-linecap="round"><path d="M2 5l2.5 2.5L8 2"/></svg></div><div class="dr-text">Bottom sheet modal (native feel, custom spring)</div></div>
+          <div class="dr"><div class="dr-check"><svg width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="var(--herb)" stroke-width="1.5" stroke-linecap="round"><path d="M2 5l2.5 2.5L8 2"/></svg></div><div class="dr-text">Swipe-to-dismiss sheet gesture support</div></div>
+          <div class="dr"><div class="dr-check"><svg width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="var(--herb)" stroke-width="1.5" stroke-linecap="round"><path d="M2 5l2.5 2.5L8 2"/></svg></div><div class="dr-text">Safe area insets for notch + home indicator</div></div>
+          <div class="dr"><div class="dr-check"><svg width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="var(--herb)" stroke-width="1.5" stroke-linecap="round"><path d="M2 5l2.5 2.5L8 2"/></svg></div><div class="dr-text">Haptic feedback on add food confirmation</div></div>
+        </div>
+        <div><span class="plat-pill hi">Bottom sheets</span><span class="plat-pill hi">Haptics</span><span class="plat-pill">SF Symbols fallback</span></div>
+      </div>
+
+      <div class="plat-card">
+        <div class="plat-icon">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="var(--ink2)" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M7 2l-5 3v10l5 3 6-3 5 3V5l-5-3-6 3z"/>
+            <path d="M7 2v13M13 5v13"/>
+          </svg>
+        </div>
+        <div class="plat-name">Android</div>
+        <div class="plat-decision">Aligns with Material You's dynamic colour intent — but maps it to Trim's fixed palette rather than system-generated colours. Uses Android back gesture (edge swipe) rather than explicit back buttons. Bottom nav follows Material 3 spec.</div>
+        <div class="decision-row">
+          <div class="dr"><div class="dr-check"><svg width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="var(--herb)" stroke-width="1.5" stroke-linecap="round"><path d="M2 5l2.5 2.5L8 2"/></svg></div><div class="dr-text">Edge-to-edge layout with window inset handling</div></div>
+          <div class="dr"><div class="dr-check"><svg width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="var(--herb)" stroke-width="1.5" stroke-linecap="round"><path d="M2 5l2.5 2.5L8 2"/></svg></div><div class="dr-text">Predictive back animation compatibility</div></div>
+          <div class="dr"><div class="dr-check"><svg width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="var(--herb)" stroke-width="1.5" stroke-linecap="round"><path d="M2 5l2.5 2.5L8 2"/></svg></div><div class="dr-text">Vibration API for micro-feedback equivalence</div></div>
+          <div class="dr"><div class="dr-check"><svg width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="var(--herb)" stroke-width="1.5" stroke-linecap="round"><path d="M2 5l2.5 2.5L8 2"/></svg></div><div class="dr-text">Touch ripple replaced with scale spring (brand-consistent)</div></div>
+        </div>
+        <div><span class="plat-pill hi">Material 3 nav</span><span class="plat-pill hi">Predictive back</span><span class="plat-pill">Dynamic colour opt-out</span></div>
+      </div>
+
+      <div class="plat-card">
+        <div class="plat-icon">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="var(--ink2)" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="2" y="4" width="16" height="11" rx="1.5"/>
+            <path d="M7 15l-1 2M13 15l1 2M6 17h8"/>
+          </svg>
+        </div>
+        <div class="plat-name">Responsive web</div>
+        <div class="plat-decision">Treats mobile-web as the primary target. The bottom nav becomes a sticky top nav at ≥768px. Touch targets remain ≥44px on all breakpoints. Hover states are layered on top of base styles via @media(hover:hover) — not assumed.</div>
+        <div class="decision-row">
+          <div class="dr"><div class="dr-check"><svg width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="var(--herb)" stroke-width="1.5" stroke-linecap="round"><path d="M2 5l2.5 2.5L8 2"/></svg></div><div class="dr-text">Hover transforms only on pointer:fine devices</div></div>
+          <div class="dr"><div class="dr-check"><svg width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="var(--herb)" stroke-width="1.5" stroke-linecap="round"><path d="M2 5l2.5 2.5L8 2"/></svg></div><div class="dr-text">Backdrop-filter (blur) on nav with fallback solid</div></div>
+          <div class="dr"><div class="dr-check"><svg width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="var(--herb)" stroke-width="1.5" stroke-linecap="round"><path d="M2 5l2.5 2.5L8 2"/></svg></div><div class="dr-text">prefers-reduced-motion: all durations → 0ms</div></div>
+          <div class="dr"><div class="dr-check"><svg width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="var(--herb)" stroke-width="1.5" stroke-linecap="round"><path d="M2 5l2.5 2.5L8 2"/></svg></div><div class="dr-text">Two-column grid at ≥600px, single column below</div></div>
+        </div>
+        <div><span class="plat-pill hi">Mobile-first</span><span class="plat-pill hi">Reduced-motion</span><span class="plat-pill">Pointer media query</span></div>
+      </div>
+
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="section-eyebrow">Accessibility</div>
+    <div class="two-col">
+      <div>
+        <div style="font-size:13px;font-weight:500;color:var(--ink);margin-bottom:8px">Colour contrast</div>
+        <div class="body-text">All text meets WCAG AA (4.5:1 for body, 3:1 for large). The herb green (#5A7A58 on white) achieves 4.8:1. Colour is never the only differentiator — shape, position, and label always accompany colour signals.</div>
+      </div>
+      <div>
+        <div style="font-size:13px;font-weight:500;color:var(--ink);margin-bottom:8px">Motion accessibility</div>
+        <div class="body-text">All animation respects <code style="font-size:11px;background:var(--paper2);padding:1px 5px;border-radius:3px">prefers-reduced-motion</code>. When enabled, durations collapse to 0ms — layout is identical, only timing is removed. No information is conveyed through motion alone.</div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ════════════ DESIGN SYSTEM ════════════ -->
+<div class="section" id="s-system">
+  <div class="page-wrap">
+
+    <div class="section-eyebrow">Design system</div>
+    <div class="section-title">Tokens, not one-offs</div>
+    <div class="body-text" style="margin-bottom:24px">Everything in Trim is derived from a token hierarchy. There are no magic numbers in the code — every value references a named token. This means a single change to <code style="font-size:11px;background:var(--paper2);padding:1px 5px;border-radius:3px">--herb</code> propagates correctly across every component.</div>
+
+    <div class="section-eyebrow">Colour tokens</div>
+    <table class="token-table">
+      <thead><tr><th>Token</th><th>Role</th><th>Hex</th></tr></thead>
+      <tbody>
+        <tr><td><span class="token-swatch" style="background:#5A7A58"></span>--herb</td><td>Primary action, progress, positive</td><td>#5A7A58</td></tr>
+        <tr><td><span class="token-swatch" style="background:#EDF2EC;border:1px solid #ACCAA9"></span>--herb-bg</td><td>Tinted surfaces, selected states</td><td>#EDF2EC</td></tr>
+        <tr><td><span class="token-swatch" style="background:#C4694A"></span>--terr</td><td>Over-goal, warning, accents</td><td>#C4694A</td></tr>
+        <tr><td><span class="token-swatch" style="background:#5A6E80"></span>--slate</td><td>Carbohydrate macro, water</td><td>#5A6E80</td></tr>
+        <tr><td><span class="token-swatch" style="background:#B89A6A"></span>--sand</td><td>Deficit tag, secondary accent</td><td>#B89A6A</td></tr>
+        <tr><td><span class="token-swatch" style="background:#1C1A17"></span>--ink</td><td>Primary text, dark surfaces</td><td>#1C1A17</td></tr>
+        <tr><td><span class="token-swatch" style="background:#FDFBF8;border:1px solid #E8E4DC"></span>--paper</td><td>Page background</td><td>#FDFBF8</td></tr>
+      </tbody>
+    </table>
+
+    <div class="divider"></div>
+
+    <div class="section-eyebrow">Typography scale</div>
+    <div class="type-specimen">
+      <div class="ts-row">
+        <div class="ts-label">Display</div>
+        <div class="ts-sample"><span style="font-family:'Fraunces',serif;font-size:32px;font-weight:300;color:var(--ink)">1,742 kcal</span></div>
+      </div>
+      <div class="ts-row">
+        <div class="ts-label">Heading</div>
+        <div class="ts-sample"><span style="font-family:'Fraunces',serif;font-size:22px;font-weight:300;font-style:italic;color:var(--herb)">Good morning, Alex.</span></div>
+      </div>
+      <div class="ts-row">
+        <div class="ts-label">Title</div>
+        <div class="ts-sample"><span style="font-family:'Geist',sans-serif;font-size:15px;font-weight:500;color:var(--ink)">Grilled chicken bowl</span></div>
+      </div>
+      <div class="ts-row">
+        <div class="ts-label">Body</div>
+        <div class="ts-sample"><span style="font-family:'Geist',sans-serif;font-size:13px;font-weight:400;color:var(--ink2)">Logging food should feel lighter than not logging it.</span></div>
+      </div>
+      <div class="ts-row">
+        <div class="ts-label">Caption</div>
+        <div class="ts-sample"><span style="font-family:'Geist',sans-serif;font-size:10px;font-weight:500;letter-spacing:.08em;text-transform:uppercase;color:var(--ink3)">High protein · 312 kcal</span></div>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="section-eyebrow">Icon system</div>
+    <div class="body-text" style="margin-bottom:12px">22 custom icons drawn to a single spec: 20×20px viewport, 1.5px stroke weight, round linecaps and joins, geometric construction. No fills, no emoji substitutes.</div>
+    <div class="icon-grid">
+      <div class="ig-cell"><svg width="18" height="18" viewBox="0 0 20 20" fill="none" stroke="var(--ink2)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9.5L10 3l7 6.5V17a1 1 0 01-1 1H4a1 1 0 01-1-1V9.5z"/><path d="M7 18V12h6v6"/></svg></div>
+      <div class="ig-cell"><svg width="18" height="18" viewBox="0 0 20 20" fill="none" stroke="var(--ink2)" stroke-width="1.5" stroke-linecap="round"><circle cx="9" cy="9" r="6"/><path d="M13.5 13.5L17 17"/></svg></div>
+      <div class="ig-cell"><svg width="18" height="18" viewBox="0 0 20 20" fill="none" stroke="var(--ink2)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 16L7 9l4 4 3-5 3 2"/><path d="M3 16h14"/></svg></div>
+      <div class="ig-cell"><svg width="18" height="18" viewBox="0 0 20 20" fill="none" stroke="var(--ink2)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="10" cy="7" r="3.5"/><path d="M3 18c0-3.5 3-6 7-6s7 2.5 7 6"/></svg></div>
+      <div class="ig-cell"><svg width="18" height="18" viewBox="0 0 20 20" fill="none" stroke="var(--ink2)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M10 2c0 3.5-4 5-4 8.5a4 4 0 008 0C14 7 10 5.5 10 2z"/></svg></div>
+      <div class="ig-cell"><svg width="18" height="18" viewBox="0 0 20 20" fill="none" stroke="var(--ink2)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 10h14"/><path d="M4 14l7 4 7-4"/><path d="M4 6l7-4 7 4"/></svg></div>
+      <div class="ig-cell"><svg width="18" height="18" viewBox="0 0 20 20" fill="none" stroke="var(--ink2)" stroke-width="1.5" stroke-linecap="round"><path d="M10 3C8 7 4 10 4 14a6 6 0 0012 0c0-4-4-7-6-11z"/></svg></div>
+      <div class="ig-cell"><svg width="18" height="18" viewBox="0 0 20 20" fill="none" stroke="var(--ink2)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="10" cy="10" r="7"/><path d="M10 6v4l2.5 2.5"/></svg></div>
+      <div class="ig-cell"><svg width="18" height="18" viewBox="0 0 20 20" fill="none" stroke="var(--ink2)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M10 4c-1 3-5 5-5 9h10c0-4-4-6-5-9z"/></svg></div>
+      <div class="ig-cell"><svg width="18" height="18" viewBox="0 0 20 20" fill="none" stroke="var(--ink2)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8h14M5 8V5h10v3"/><path d="M4 8c0 5.5 1.5 8 6 8s6-2.5 6-8"/></svg></div>
+      <div class="ig-cell"><svg width="18" height="18" viewBox="0 0 20 20" fill="none" stroke="var(--ink2)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10.5l4.5 4.5L17 5"/></svg></div>
+      <div class="ig-cell"><svg width="18" height="18" viewBox="0 0 20 20" fill="none" stroke="var(--ink2)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="10" cy="10" r="7"/><path d="M10 4v2M10 14v2M4 10h2M14 10h2"/><circle cx="10" cy="10" r="2.5"/></svg></div>
+      <div class="ig-cell"><svg width="18" height="18" viewBox="0 0 20 20" fill="none" stroke="var(--ink2)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 16V8M10 16V4M15 16v-6"/></svg></div>
+      <div class="ig-cell"><svg width="18" height="18" viewBox="0 0 20 20" fill="none" stroke="var(--ink2)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h12M4 11h12M4 15h12"/></svg></div>
+      <div class="ig-cell"><svg width="18" height="18" viewBox="0 0 20 20" fill="none" stroke="var(--ink2)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2 5l5 4 5-4"/></svg></div>
+      <div class="ig-cell"><svg width="18" height="18" viewBox="0 0 20 20" fill="none" stroke="var(--ink2)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M10 3v14M4 9l6-6 6 6"/></svg></div>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="section-eyebrow">Spacing scale</div>
+    <div style="display:flex;gap:8px;align-items:flex-end;margin:14px 0">
+      <div style="display:flex;flex-direction:column;align-items:center;gap:4px"><div style="width:4px;height:4px;background:var(--herb);border-radius:1px"></div><div style="font-size:9px;color:var(--ink3)">4</div></div>
+      <div style="display:flex;flex-direction:column;align-items:center;gap:4px"><div style="width:8px;height:8px;background:var(--herb);border-radius:2px"></div><div style="font-size:9px;color:var(--ink3)">8</div></div>
+      <div style="display:flex;flex-direction:column;align-items:center;gap:4px"><div style="width:12px;height:12px;background:var(--herb);border-radius:2px"></div><div style="font-size:9px;color:var(--ink3)">12</div></div>
+      <div style="display:flex;flex-direction:column;align-items:center;gap:4px"><div style="width:16px;height:16px;background:var(--herb);border-radius:3px"></div><div style="font-size:9px;color:var(--ink3)">16</div></div>
+      <div style="display:flex;flex-direction:column;align-items:center;gap:4px"><div style="width:20px;height:20px;background:var(--herb);border-radius:3px"></div><div style="font-size:9px;color:var(--ink3)">20</div></div>
+      <div style="display:flex;flex-direction:column;align-items:center;gap:4px"><div style="width:24px;height:24px;background:var(--herb);border-radius:4px"></div><div style="font-size:9px;color:var(--ink3)">24</div></div>
+      <div style="display:flex;flex-direction:column;align-items:center;gap:4px"><div style="width:32px;height:32px;background:var(--herb);border-radius:5px"></div><div style="font-size:9px;color:var(--ink3)">32</div></div>
+      <div style="display:flex;flex-direction:column;align-items:center;gap:4px"><div style="width:44px;height:44px;background:var(--herb);border-radius:6px"></div><div style="font-size:9px;color:var(--ink3)">44</div></div>
+    </div>
+    <div class="caption">4px base unit · 4, 8, 12, 16, 20, 24, 32, 44px — all multiples of 4. 44px = minimum touch target.</div>
+
+  </div>
+</div>
+
+<!-- ════════════ OUTCOMES ════════════ -->
+<div class="section" id="s-outcomes">
+  <div class="page-wrap">
+
+    <div class="section-eyebrow">Outcomes &amp; learnings</div>
+    <div class="section-title">What the work proved</div>
+
+    <div class="outcome-row">
+      <div class="oc"><div class="oc-n">&lt; 3</div><div class="oc-lbl">taps to log any food from any screen</div></div>
+      <div class="oc"><div class="oc-n">22</div><div class="oc-lbl">components in the design system</div></div>
+      <div class="oc"><div class="oc-n">4</div><div class="oc-lbl">motion presets covering 100% of interactions</div></div>
+      <div class="oc"><div class="oc-n">100%</div><div class="oc-lbl">WCAG AA contrast compliance</div></div>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="quote-block">
+      <div class="quote-text">"It feels like someone actually thought about whether I'd enjoy opening this every day."</div>
+      <div class="quote-attr">— Usability test participant, round 2</div>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="section-eyebrow">Key learnings</div>
+    <div class="learnings">
+      <div class="learn-item">
+        <div class="learn-icon"><svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="white" stroke-width="1.4" stroke-linecap="round"><path d="M2 7l3.5 3.5L12 2"/></svg></div>
+        <div class="learn-text"><span class="learn-strong">Motion should be designed before visuals are finalised.</span> Prototyping the ring entrance and card interactions early shaped layout decisions — the ring size, the card padding, the chevron placement were all informed by how the motion felt.</div>
+      </div>
+      <div class="learn-item">
+        <div class="learn-icon"><svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="white" stroke-width="1.4" stroke-linecap="round"><path d="M2 7l3.5 3.5L12 2"/></svg></div>
+        <div class="learn-text"><span class="learn-strong">Tone is a design decision, not a copy decision.</span> The choice of Fraunces as a display face — especially its italic — was the single biggest contributor to the app feeling warm rather than clinical. Typography was more impactful than colour.</div>
+      </div>
+      <div class="learn-item">
+        <div class="learn-icon"><svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="white" stroke-width="1.4" stroke-linecap="round"><path d="M2 7l3.5 3.5L12 2"/></svg></div>
+        <div class="learn-text"><span class="learn-strong">Platform conventions exist for good reasons.</span> The impulse to use a full-screen modal was overridden by iOS convention (bottom sheet). Users in testing consistently tried to swipe down to dismiss — the platform expectation was stronger than the design intent.</div>
+      </div>
+      <div class="learn-item">
+        <div class="learn-icon"><svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="white" stroke-width="1.4" stroke-linecap="round"><path d="M2 7l3.5 3.5L12 2"/></svg></div>
+        <div class="learn-text"><span class="learn-strong">A token system pays off immediately, not eventually.</span> When the terracotta shade needed adjusting after accessibility testing, one variable change fixed every over-goal bar, every warning state, and every terr-tagged recipe card simultaneously.</div>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="section-eyebrow">What's next</div>
+    <div class="three-col">
+      <div class="card-sm">
+        <div style="font-size:12px;font-weight:500;color:var(--ink);margin-bottom:4px">Barcode scanning</div>
+        <div class="caption">Camera-based food lookup with instant macro population. Key interaction design challenge: latency state and error recovery.</div>
+      </div>
+      <div class="card-sm">
+        <div style="font-size:12px;font-weight:500;color:var(--ink);margin-bottom:4px">Meal planning</div>
+        <div class="caption">Weekly drag-and-drop planning view. Motion design challenge: reorder animations and the calorie-budget live update.</div>
+      </div>
+      <div class="card-sm">
+        <div style="font-size:12px;font-weight:500;color:var(--ink);margin-bottom:4px">Widget &amp; watch</div>
+        <div class="caption">iOS lock screen widget showing ring progress. Watchface complication for at-a-glance remaining calories.</div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ── FOOTER ── -->
+<div class="port-footer">
+  <div class="pf-inner">
+    <div class="pf-logo"><em>Trim</em> — portfolio case study</div>
+    <div class="pf-meta">Product &amp; motion design · 2025</div>
+  </div>
+</div>
+
+<script>
+function showSection(name, btn) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.pt').forEach(t => t.classList.remove('active'));
+  document.getElementById('s-' + name).classList.add('active');
+  btn.classList.add('active');
+  if (name === 'motion') {
+    setTimeout(playRingDemo, 300);
+    setTimeout(() => {
+      const dot = document.getElementById('motionDot');
+      if (dot) { dot.style.left = '0%'; setTimeout(() => { dot.style.left = 'calc(100% - 12px)'; }, 100); }
+    }, 400);
+  }
+}
+
+function demoEase(type) {
+  const id = type === 'standard' ? 'demo-standard' : 'demo-' + type;
+  const el = document.getElementById(id);
+  if (!el) return;
+  el.style.transform = 'scale(1)';
+  el.style.transition = 'none';
+  setTimeout(() => {
+    const curves = {
+      spring: 'cubic-bezier(.34,1.56,.64,1)',
+      'ease-out': 'cubic-bezier(.0,0,.2,1)',
+      standard: 'cubic-bezier(.4,0,.2,1)',
+      linear: 'linear'
+    };
+    el.style.transition = `transform .4s ${curves[type] || 'ease'}`;
+    el.style.transform = 'scale(1.35) rotate(8deg)';
+    setTimeout(() => {
+      el.style.transition = `transform .4s ${curves[type] || 'ease'}`;
+      el.style.transform = 'scale(1) rotate(0deg)';
+    }, 500);
+  }, 40);
+}
+
+function playRingDemo() {
+  const ring = document.getElementById('demoRing');
+  const txt = document.getElementById('demoRingNum');
+  if (!ring) return;
+  ring.style.transition = 'none';
+  ring.style.strokeDashoffset = '220';
+  txt.textContent = '0';
+  setTimeout(() => {
+    ring.style.transition = 'stroke-dashoffset 1.2s cubic-bezier(.4,0,.2,1)';
+    ring.style.strokeDashoffset = '77';
+    let start = null;
+    const tick = (ts) => {
+      if (!start) start = ts;
+      const p = Math.min((ts - start) / 1200, 1);
+      const e = 1 - Math.pow(1 - p, 3);
+      txt.textContent = Math.round(e * 65) + '%';
+      if (p < 1) requestAnimationFrame(tick);
+    };
+    requestAnimationFrame(tick);
+  }, 60);
+}
+
+function playSheetDemo() {
+  const sheet = document.getElementById('demoSheet');
+  const ov = document.getElementById('sheetOverlay');
+  sheet.classList.add('show');
+  ov.classList.add('show');
+  setTimeout(() => {
+    sheet.classList.remove('show');
+    ov.classList.remove('show');
+  }, 1800);
+}
+
+let toastTimer2 = null;
+function playToastDemo() {
+  const t = document.getElementById('demoToast');
+  t.classList.add('show');
+  if (toastTimer2) clearTimeout(toastTimer2);
+  toastTimer2 = setTimeout(() => t.classList.remove('show'), 2200);
+}
+
+function flipToggle() {
+  const t = document.getElementById('demoToggle');
+  const l = document.getElementById('toggleLabel');
+  t.classList.toggle('on');
+  l.textContent = t.classList.contains('on') ? 'Notifications on' : 'Notifications off';
+}
+function flipToggle2() {
+  const t = document.getElementById('demoToggle2');
+  const l = document.getElementById('toggleLabel2');
+  t.classList.toggle('on');
+  l.textContent = t.classList.contains('on') ? 'Streak reminders on' : 'Streak reminders off';
+}
+
+window.addEventListener('load', () => {
+  setTimeout(playRingDemo, 600);
+});
+</script>
+</body>
+</html>
