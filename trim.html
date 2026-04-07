@@ -536,7 +536,31 @@ input[type=range]{width:100%;accent-color:var(--herb)}
         <input type="range" min="30" max="200" value="70" step="0.5" id="weightSlider" oninput="updateWeightDisplay(this.value)">
         <button class="save-btn" onclick="saveWeight()" id="saveWeightBtn">Log weight entry</button>
       </div>
-
+      <div class="section-lbl">Current goals</div>
+<div class="goal-block">
+  <div style="display:flex;flex-direction:column;gap:8px">
+    <div style="display:flex;justify-content:space-between;font-size:13px">
+      <span style="color:var(--ink3)">Calories</span>
+      <span style="font-weight:500;color:var(--ink)" id="summaryCalGoal">—</span>
+    </div>
+    <div style="display:flex;justify-content:space-between;font-size:13px">
+      <span style="color:var(--ink3)">Protein</span>
+      <span style="font-weight:500;color:var(--ink)" id="summaryProGoal">—</span>
+    </div>
+    <div style="display:flex;justify-content:space-between;font-size:13px">
+      <span style="color:var(--ink3)">Carbs</span>
+      <span style="font-weight:500;color:var(--ink)" id="summaryCarbGoal">—</span>
+    </div>
+    <div style="display:flex;justify-content:space-between;font-size:13px">
+      <span style="color:var(--ink3)">Fat</span>
+      <span style="font-weight:500;color:var(--ink)" id="summaryFatGoal">—</span>
+    </div>
+    <div style="display:flex;justify-content:space-between;font-size:13px">
+      <span style="color:var(--ink3)">Latest weight</span>
+      <span style="font-weight:500;color:var(--ink)" id="summaryWeight">—</span>
+    </div>
+  </div>
+</div>
       <div class="section-lbl">Account</div>
       <div class="goal-block">
         <div style="font-size:13px;color:var(--ink2);margin-bottom:4px">Signed in as</div>
@@ -808,6 +832,11 @@ function initApp() {
   document.getElementById('fatGoalSlider').value = userGoals.fat;
   document.getElementById('fatGoalDisplay').textContent = userGoals.fat + 'g';
   buildWater();
+  document.getElementById('summaryCalGoal').textContent = userGoals.cals.toLocaleString() + ' kcal';
+  document.getElementById('summaryProGoal').textContent = userGoals.protein + 'g';
+  document.getElementById('summaryCarbGoal').textContent = userGoals.carbs + 'g';
+  document.getElementById('summaryFatGoal').textContent = userGoals.fat + 'g';
+  document.getElementById('summaryWeight').textContent = weightEntries.length ? weightEntries[0].weight + ' kg' : 'Not logged yet';
   loadDayData(0);
 }
 
@@ -1203,6 +1232,10 @@ window.saveGoals = async () => {
     triggerToast('Goals saved');
     renderDay(getDateStr(viewingDateOffset));
   } catch(e) { triggerToast('Error saving goals', 'error'); }
+  document.getElementById('summaryCalGoal').textContent = userGoals.cals.toLocaleString() + ' kcal';
+  document.getElementById('summaryProGoal').textContent = userGoals.protein + 'g';
+  document.getElementById('summaryCarbGoal').textContent = userGoals.carbs + 'g';
+  document.getElementById('summaryFatGoal').textContent = userGoals.fat + 'g';
   btn.disabled = false; btn.textContent = 'Save goals';
 };
 
