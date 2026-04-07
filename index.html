@@ -1,1258 +1,432 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Trim — Nutrition Tracker</title>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;1,9..144,300&family=Geist:wght@300;400;500&display=swap" rel="stylesheet">
-<style>
-*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-:root{
-  --ink:#1C1A17;--ink2:#4A4640;--ink3:#8A8580;
-  --paper:#FDFBF8;--paper2:#F5F2ED;--paper3:#E8E4DC;
-  --herb:#5A7A58;--herb-bg:#EDF2EC;--herb-mid:#ACCAA9;
-  --terr:#C4694A;--terr-bg:#F7EDE8;
-  --slate:#5A6E80;--slate-bg:#EBF0F4;
-  --sand:#B89A6A;--sand-bg:#F5F0E8;
-  --lemon:#E8D87A;
-  --r:18px;--rs:11px;
-}
-body{font-family:'Geist',sans-serif;background:var(--paper);color:var(--ink);min-height:100vh;overflow-x:hidden}
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Bertram — Portfolio</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet" />
 
-/* ── AUTH SCREEN ── */
-#authScreen{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px}
-.auth-card{background:white;border:1px solid var(--paper3);border-radius:24px;padding:40px 36px;width:100%;max-width:400px}
-.auth-logo{font-family:'Fraunces',serif;font-size:28px;font-weight:300;color:var(--ink);margin-bottom:4px}
-.auth-logo em{font-style:italic;color:var(--herb)}
-.auth-sub{font-size:13px;color:var(--ink3);margin-bottom:32px}
-.auth-tabs{display:flex;gap:0;margin-bottom:28px;background:var(--paper2);border-radius:var(--rs);padding:3px}
-.auth-tab{flex:1;padding:8px;border-radius:8px;font-size:13px;font-weight:500;color:var(--ink3);cursor:pointer;text-align:center;transition:all .18s;border:none;background:none;font-family:'Geist',sans-serif}
-.auth-tab.active{background:white;color:var(--ink);box-shadow:0 1px 4px rgba(28,26,23,.08)}
-.form-group{margin-bottom:14px}
-.form-label{font-size:11px;font-weight:500;letter-spacing:.06em;text-transform:uppercase;color:var(--ink3);margin-bottom:6px;display:block}
-.form-input{width:100%;padding:12px 14px;border:1px solid var(--paper3);border-radius:var(--rs);font-family:'Geist',sans-serif;font-size:14px;color:var(--ink);background:white;outline:none;transition:border-color .2s,box-shadow .2s}
-.form-input:focus{border-color:var(--herb);box-shadow:0 0 0 3px rgba(90,122,88,.1)}
-.auth-btn{width:100%;padding:13px;background:var(--herb);color:white;border:none;border-radius:var(--rs);font-family:'Geist',sans-serif;font-size:14px;font-weight:500;cursor:pointer;transition:all .18s;margin-top:6px}
-.auth-btn:hover{background:#4A6A48;transform:translateY(-1px)}
-.auth-btn:active{transform:scale(.98)}
-.auth-btn:disabled{opacity:.6;cursor:not-allowed;transform:none}
-.auth-error{font-size:12px;color:var(--terr);margin-top:10px;text-align:center;min-height:18px}
-.auth-divider{height:1px;background:var(--paper3);margin:20px 0}
+  <style>
+    :root {
+      --bg:         #F4F5F6;
+      --bg2:        #ECEEF0;
+      --surface:    #FFFFFF;
+      --surface2:   #F0F5F6;
+      --border:     #D8DCDF;
+      --text:       #272B29;
+      --muted:      #737870;
+      --teal:       #7BB8C4;
+      --teal-dim:   #5A9FAD;
+      --teal-lt:    rgba(123,184,196,0.12);
+      --rose:       #B05A6A;
+      --rose-lt:    rgba(176,90,106,0.09);
+      --sage:       #95B898;
+      --sage-lt:    rgba(149,184,152,0.15);
+      --silver:     #CDD1D5;
+      --radius:     14px;
+      --max:        780px;
+    }
 
-/* ── APP SHELL ── */
-#appShell{display:none}
-.page{display:none;opacity:0;transform:translateY(12px);transition:opacity .28s cubic-bezier(.4,0,.2,1),transform .28s cubic-bezier(.4,0,.2,1)}
-.page.active{display:block}
-.page.visible{opacity:1;transform:translateY(0)}
-.content{padding:0 0 96px}
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      font-size: 16px;
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+    a { color: inherit; text-decoration: none; }
 
-/* ── NAV ── */
-nav{position:fixed;bottom:0;left:0;right:0;background:rgba(253,251,248,.96);backdrop-filter:blur(18px);border-top:1px solid var(--paper3);display:flex;justify-content:space-around;align-items:center;padding:10px 0 20px;z-index:100}
-.nb{display:flex;flex-direction:column;align-items:center;gap:5px;background:none;border:none;cursor:pointer;font-family:'Geist',sans-serif;font-size:10px;font-weight:500;letter-spacing:.05em;color:var(--ink3);padding:2px 16px;transition:color .2s}
-.ni{width:36px;height:36px;border-radius:11px;display:flex;align-items:center;justify-content:center;transition:background .2s,transform .2s cubic-bezier(.34,1.56,.64,1)}
-.nb.active{color:var(--herb)}
-.nb.active .ni{background:var(--herb-bg);transform:scale(1.08)}
-.nb:hover:not(.active) .ni{transform:scale(1.04);background:var(--paper2)}
+    .container { max-width: var(--max); margin: 0 auto; padding: 0 28px; }
 
-/* ── TYPOGRAPHY ── */
-.hero{font-family:'Fraunces',serif;font-optical-sizing:auto;font-size:26px;font-weight:300;color:var(--ink);line-height:1.18;letter-spacing:-.01em}
-.hero em{font-style:italic;color:var(--herb)}
-.section-lbl{font-size:10px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:var(--ink3);padding:0 22px 10px}
+    /* Nav */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      padding: 18px 0;
+      background: rgba(244, 245, 246, 0.85);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-bottom: 1px solid transparent;
+      transition: border-color 0.3s;
+    }
+    nav.scrolled { border-color: var(--border); }
+    nav .inner {
+      max-width: var(--max); margin: 0 auto; padding: 0 28px;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .nav-logo {
+      font-family: 'Instrument Serif', serif;
+      font-size: 1.2rem; letter-spacing: -0.01em;
+      color: var(--teal-dim);
+    }
+    .nav-links {
+      display: flex; gap: 28px; list-style: none;
+      font-size: 0.875rem; font-weight: 400; color: var(--muted);
+    }
+    .nav-links a { transition: color 0.2s; }
+    .nav-links a:hover { color: var(--text); }
 
-/* ── PAGE HEADER ── */
-.phd{padding:44px 22px 18px;display:flex;align-items:flex-start;justify-content:space-between}
-.phd-sub{font-size:12px;color:var(--ink3);margin-top:5px;letter-spacing:.02em}
-.user-btn{width:38px;height:38px;border-radius:50%;border:1.5px solid var(--paper3);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:500;color:var(--ink2);flex-shrink:0;letter-spacing:.04em;background:white;cursor:pointer;transition:border-color .2s}
-.user-btn:hover{border-color:var(--herb)}
+    /* Hero */
+    #hero {
+      min-height: 100vh; display: flex; flex-direction: column;
+      justify-content: center; padding-top: 80px;
+      position: relative; overflow: hidden;
+    }
+    #hero::before {
+      content: ''; position: absolute; top: 0%; right: -12%;
+      width: 600px; height: 600px;
+      background: radial-gradient(circle, rgba(123,184,196,0.13) 0%, transparent 65%);
+      pointer-events: none;
+    }
+    #hero::after {
+      content: ''; position: absolute; bottom: 8%; left: -10%;
+      width: 440px; height: 440px;
+      background: radial-gradient(circle, rgba(176,90,106,0.07) 0%, transparent 68%);
+      pointer-events: none;
+    }
 
-/* ── RING ── */
-.ring-section{display:flex;justify-content:center;padding:2px 22px 24px}
-.ring-wrap{position:relative;width:190px;height:190px;display:flex;align-items:center;justify-content:center}
-.ring-svg{position:absolute;top:0;left:0;transform:rotate(-90deg)}
-.ring-track{fill:none;stroke:var(--paper3);stroke-width:10;stroke-linecap:round}
-.ring-fill{fill:none;stroke:var(--herb);stroke-width:10;stroke-linecap:round;stroke-dasharray:515;stroke-dashoffset:515;transition:stroke-dashoffset 1.4s cubic-bezier(.4,0,.2,1)}
-.ring-center{text-align:center;z-index:1;pointer-events:none}
-.ring-num{font-family:'Fraunces',serif;font-size:42px;font-weight:300;color:var(--ink);line-height:1;letter-spacing:-.02em}
-.ring-unit{font-size:10px;color:var(--ink3);letter-spacing:.08em;text-transform:uppercase;margin-top:4px}
-.ring-remain{font-size:12px;color:var(--herb);font-weight:500;margin-top:5px}
+    .hero-eyebrow {
+      font-size: 0.78rem; letter-spacing: 0.13em; text-transform: uppercase;
+      color: var(--teal-dim); margin-bottom: 22px;
+      display: flex; align-items: center; gap: 10px;
+      opacity: 0; animation: fadeUp 0.75s ease 0.1s forwards;
+    }
+    .hero-eyebrow::before { content: ''; width: 22px; height: 1px; background: var(--teal); display: block; }
 
-/* ── MACROS ── */
-.macro-strip{display:flex;gap:8px;padding:0 22px 24px}
-.mb{flex:1;background:white;border:1px solid var(--paper3);border-radius:var(--rs);padding:13px 10px;text-align:center;transition:transform .18s cubic-bezier(.34,1.56,.64,1)}
-.mb:hover{transform:translateY(-2px)}
-.mb-num{font-family:'Fraunces',serif;font-size:19px;font-weight:300;color:var(--ink);line-height:1}
-.mb-bar-t{height:3px;background:var(--paper3);border-radius:2px;margin:7px 0 5px;overflow:hidden}
-.mb-bar-f{height:100%;border-radius:2px;width:0%;transition:width 1.3s cubic-bezier(.4,0,.2,1)}
-.mb-name{font-size:9px;color:var(--ink3);letter-spacing:.07em;text-transform:uppercase}
+    .hero-name {
+      font-family: 'Instrument Serif', serif;
+      font-size: clamp(3.4rem, 10.5vw, 6.8rem);
+      line-height: 1.0; letter-spacing: -0.025em; margin-bottom: 26px;
+      opacity: 0; animation: fadeUp 0.75s ease 0.2s forwards;
+    }
+    .hero-name .outline {
+      -webkit-text-stroke: 1.5px rgba(39, 43, 41, 0.22);
+      color: transparent;
+    }
+    .hero-name .lit {
+      color: var(--teal-dim);
+      font-style: italic;
+    }
 
-/* ── DATE NAV ── */
-.date-nav{display:flex;align-items:center;justify-content:space-between;padding:0 22px 16px}
-.date-nav-btn{width:32px;height:32px;border-radius:50%;background:white;border:1px solid var(--paper3);display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all .15s;font-family:'Geist',sans-serif}
-.date-nav-btn:hover{border-color:var(--herb);color:var(--herb)}
-.date-lbl{font-size:13px;font-weight:500;color:var(--ink)}
-.date-sub{font-size:11px;color:var(--ink3);text-align:center}
+    .hero-tagline {
+      font-size: 1.1rem; font-weight: 300; font-style: italic;
+      color: var(--muted); max-width: 430px; line-height: 1.7; margin-bottom: 42px;
+      opacity: 0; animation: fadeUp 0.75s ease 0.3s forwards;
+    }
 
-/* ── STREAK ── */
-.streak{margin:0 22px 22px;background:var(--ink);border-radius:var(--r);padding:16px 20px;display:flex;align-items:center;gap:14px;position:relative;overflow:hidden}
-.streak::after{content:'';position:absolute;right:-28px;top:-28px;width:110px;height:110px;border-radius:50%;background:rgba(255,255,255,.04);pointer-events:none}
-.streak-icon{width:38px;height:38px;border-radius:12px;background:rgba(255,255,255,.08);display:flex;align-items:center;justify-content:center;flex-shrink:0}
-.streak-info{flex:1}
-.streak-title{font-size:13px;font-weight:500;color:white}
-.streak-sub{font-size:11px;color:rgba(255,255,255,.45);margin-top:2px}
-.streak-n{font-family:'Fraunces',serif;font-size:36px;font-weight:300;color:var(--lemon);line-height:1;margin-left:auto}
+    .hero-links {
+      display: flex; gap: 12px; flex-wrap: wrap;
+      opacity: 0; animation: fadeUp 0.75s ease 0.4s forwards;
+    }
 
-/* ── MEAL CARDS ── */
-.meal-card{margin:0 22px 10px;background:white;border-radius:var(--r);border:1px solid var(--paper3);cursor:pointer;transition:transform .2s cubic-bezier(.34,1.56,.64,1),border-color .2s}
-.meal-card:hover{transform:translateY(-2px);border-color:var(--herb-mid)}
-.meal-card:active{transform:scale(.99)}
-.meal-hd{display:flex;align-items:center;gap:12px;padding:14px 16px}
-.meal-icon-wrap{width:40px;height:40px;border-radius:11px;background:var(--paper2);display:flex;align-items:center;justify-content:center;flex-shrink:0}
-.meal-info{flex:1;min-width:0}
-.meal-title{font-size:14px;font-weight:500;color:var(--ink)}
-.meal-meta{font-size:11px;color:var(--ink3);margin-top:2px}
-.meal-cal{font-family:'Fraunces',serif;font-size:20px;font-weight:300;color:var(--ink);white-space:nowrap}
-.meal-cal span{font-family:'Geist',sans-serif;font-size:9px;color:var(--ink3)}
-.meal-items{border-top:1px solid var(--paper3)}
-.meal-item{display:flex;justify-content:space-between;align-items:center;padding:10px 16px;border-bottom:1px solid rgba(28,26,23,.04);animation:slideIn .24s cubic-bezier(.4,0,.2,1) both}
-.meal-item:last-child{border-bottom:none}
-.item-name{font-size:12px;color:var(--ink2)}
-.item-g{font-size:10px;color:var(--ink3);margin-top:1px}
-.item-kcal{font-size:12px;font-weight:500;color:var(--ink)}
-.item-del{width:24px;height:24px;border-radius:50%;background:none;border:none;cursor:pointer;color:var(--ink3);font-size:14px;display:flex;align-items:center;justify-content:center;transition:background .15s,color .15s;margin-left:8px}
-.item-del:hover{background:var(--terr-bg);color:var(--terr)}
-.meal-chevron{transition:transform .24s cubic-bezier(.4,0,.2,1);display:flex;align-items:center;margin-left:8px}
-.meal-chevron.open{transform:rotate(180deg)}
-@keyframes slideIn{from{opacity:0;transform:translateX(-6px)}to{opacity:1;transform:translateX(0)}}
+    .btn {
+      display: inline-flex; align-items: center; gap: 7px;
+      padding: 11px 24px; border-radius: 100px;
+      font-size: 0.875rem; font-weight: 500;
+      cursor: pointer; transition: all 0.22s ease;
+    }
+    .btn-primary { background: var(--teal-dim); color: #fff; }
+    .btn-primary:hover {
+      background: var(--teal);
+      box-shadow: 0 4px 24px rgba(123,184,196,0.35);
+      transform: translateY(-1px);
+    }
+    .btn-ghost { background: transparent; color: var(--muted); border: 1px solid var(--border); }
+    .btn-ghost:hover { border-color: var(--teal); color: var(--teal-dim); transform: translateY(-1px); }
 
-/* ── ADD BUTTON ── */
-.add-btn{display:flex;align-items:center;gap:10px;margin:0 22px 10px;background:var(--herb-bg);border:1.5px dashed var(--herb-mid);border-radius:var(--r);padding:13px 16px;cursor:pointer;font-family:'Geist',sans-serif;font-size:13px;color:var(--herb);font-weight:500;width:calc(100% - 44px);transition:all .18s}
-.add-btn:hover{background:#E0EBE0;border-color:var(--herb)}
-.add-circle{width:26px;height:26px;border-radius:50%;background:var(--herb);display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:transform .22s cubic-bezier(.34,1.56,.64,1)}
-.add-btn:hover .add-circle{transform:rotate(90deg) scale(1.1)}
+    .hero-status {
+      margin-top: 72px; display: flex; align-items: center; gap: 10px;
+      font-size: 0.8rem; color: var(--muted);
+      opacity: 0; animation: fadeUp 0.75s ease 0.6s forwards;
+    }
+    .status-dot {
+      width: 7px; height: 7px; border-radius: 50%;
+      background: var(--sage);
+      box-shadow: 0 0 8px rgba(149,184,152,0.6);
+      animation: pulse 2.5s ease infinite;
+    }
+    @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.35; } }
 
-/* ── HISTORY ── */
-.history-list{display:flex;flex-direction:column;gap:8px;padding:0 22px}
-.hist-item{background:white;border:1px solid var(--paper3);border-radius:var(--rs);padding:14px 16px;display:flex;align-items:center;gap:14px;cursor:pointer;transition:border-color .18s}
-.hist-item:hover{border-color:var(--herb-mid)}
-.hist-date{font-family:'Fraunces',serif;font-size:20px;font-weight:300;color:var(--ink);line-height:1;min-width:28px;text-align:center}
-.hist-month{font-size:9px;color:var(--ink3);letter-spacing:.06em;text-transform:uppercase;text-align:center}
-.hist-info{flex:1}
-.hist-title{font-size:13px;font-weight:500;color:var(--ink)}
-.hist-sub{font-size:11px;color:var(--ink3);margin-top:2px}
-.hist-cal{font-family:'Fraunces',serif;font-size:18px;font-weight:300;color:var(--ink)}
-.hist-bar{height:3px;background:var(--paper3);border-radius:2px;margin-top:6px;overflow:hidden}
-.hist-bar-fill{height:100%;border-radius:2px;background:var(--herb)}
-.empty-state{text-align:center;padding:48px 22px;color:var(--ink3);font-size:13px}
-.empty-icon{width:48px;height:48px;border-radius:50%;background:var(--paper2);display:flex;align-items:center;justify-content:center;margin:0 auto 12px}
+    .divider { width: 100%; height: 1px; background: linear-gradient(90deg, transparent, var(--border), transparent); }
 
-/* ── INSIGHTS ── */
-.wk-chart{margin:0 22px 22px;background:white;border-radius:var(--r);border:1px solid var(--paper3);padding:18px}
-.chart-hd{font-size:13px;font-weight:500;color:var(--ink);margin-bottom:14px}
-.bar-chart{display:flex;align-items:flex-end;gap:6px;height:90px}
-.bc{flex:1;display:flex;flex-direction:column;align-items:center;gap:4px}
-.bw{width:100%;height:72px;display:flex;flex-direction:column;justify-content:flex-end}
-.bar{width:100%;border-radius:5px 5px 2px 2px;transform:scaleY(0);transform-origin:bottom;transition:transform .6s cubic-bezier(.4,0,.2,1)}
-.bar.up{transform:scaleY(1)}
-.bd{font-size:8px;color:var(--ink3);letter-spacing:.04em;text-transform:uppercase}
-.goal-row{display:flex;align-items:center;gap:7px;margin-top:10px;padding-top:10px;border-top:1px solid var(--paper3);font-size:11px;color:var(--ink3)}
-.g-dot{width:7px;height:7px;border-radius:50%;background:var(--terr);flex-shrink:0}
-.stat-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:0 22px 22px}
-.sc{background:white;border-radius:var(--rs);border:1px solid var(--paper3);padding:14px;transition:transform .18s cubic-bezier(.34,1.56,.64,1)}
-.sc:hover{transform:scale(1.03)}
-.sc-icon{width:28px;height:28px;border-radius:8px;background:var(--paper2);display:flex;align-items:center;justify-content:center;margin-bottom:8px}
-.sc-n{font-family:'Fraunces',serif;font-size:22px;font-weight:300;color:var(--ink);line-height:1}
-.sc-u{font-family:'Geist',sans-serif;font-size:9px;color:var(--ink3)}
-.sc-lbl{font-size:10px;color:var(--ink3);margin-top:3px}
-.sc-tr{font-size:10px;font-weight:500;margin-top:5px}
-.pos{color:var(--herb)}.neg{color:var(--terr)}
+    /* Sections */
+    section { padding: 96px 0; }
+    .section-label {
+      font-size: 0.78rem; letter-spacing: 0.12em; text-transform: uppercase;
+      color: var(--teal-dim); margin-bottom: 44px;
+      display: flex; align-items: center; gap: 14px;
+    }
+    .section-label::after { content: ''; flex: 1; height: 1px; background: var(--border); }
 
-/* ── WATER ── */
-.water-c{margin:0 22px 22px;background:var(--slate-bg);border:1px solid rgba(90,110,128,.18);border-radius:var(--r);padding:16px 18px}
-.water-hd{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
-.water-title{font-size:13px;font-weight:500;color:#2E4858;display:flex;align-items:center;gap:7px}
-.water-n{font-family:'Fraunces',serif;font-size:22px;font-weight:300;color:#2E4858}
-.glasses-row{display:flex;gap:5px}
-.glass{width:27px;height:27px;border-radius:6px;border:1.5px solid rgba(90,110,128,.35);background:rgba(255,255,255,.4);cursor:pointer;transition:transform .15s cubic-bezier(.34,1.56,.64,1),background .2s,border-color .2s}
-.glass:hover{transform:scale(1.1)}
-.glass.filled{background:var(--slate);border-color:var(--slate)}
+    /* Projects */
+    .projects-grid { display: grid; gap: 12px; }
 
-/* ── WEIGHT CHART ── */
-#wPath{stroke-dasharray:520;stroke-dashoffset:520;transition:stroke-dashoffset 1.6s cubic-bezier(.4,0,.2,1)}
+    .project-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 28px 32px;
+      display: grid; grid-template-columns: 1fr auto; align-items: start; gap: 16px;
+      transition: border-color 0.25s, box-shadow 0.25s, background 0.25s;
+      position: relative; overflow: hidden;
+    }
+    .project-card::before {
+      content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 3px;
+      background: var(--teal);
+      border-radius: 0 2px 2px 0;
+      transform: scaleY(0); transform-origin: bottom;
+      transition: transform 0.3s ease;
+    }
+    .project-card:hover {
+      border-color: var(--silver);
+      box-shadow: 0 8px 36px rgba(123,184,196,0.1);
+      background: var(--surface2);
+    }
+    .project-card:hover::before { transform: scaleY(1); }
 
-/* ── PROFILE ── */
-.goal-block{margin:0 22px 14px;background:white;border-radius:var(--r);border:1px solid var(--paper3);padding:16px}
-.goal-row-hd{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
-.goal-lbl{font-size:13px;font-weight:500;color:var(--ink)}
-.goal-val{font-size:13px;color:var(--herb);font-weight:500}
-input[type=range]{width:100%;accent-color:var(--herb)}
-.range-hints{display:flex;justify-content:space-between;font-size:9px;color:var(--ink3);margin-top:6px;letter-spacing:.03em}
-.macro-legend{display:flex;gap:14px;font-size:11px;color:var(--ink3);margin-top:10px;flex-wrap:wrap}
-.leg-dot{width:9px;height:9px;border-radius:2px;display:inline-block;margin-right:4px;vertical-align:middle}
-.save-btn{width:100%;padding:11px;background:var(--herb);color:white;border:none;border-radius:var(--rs);font-family:'Geist',sans-serif;font-size:13px;font-weight:500;cursor:pointer;transition:all .18s;margin-top:10px}
-.save-btn:hover{background:#4A6A48}
-.save-btn:disabled{opacity:.6;cursor:not-allowed}
-.sign-out-btn{width:100%;padding:11px;background:white;color:var(--terr);border:1px solid var(--terr-bg);border-radius:var(--rs);font-family:'Geist',sans-serif;font-size:13px;font-weight:500;cursor:pointer;transition:all .18s;margin-top:6px}
-.sign-out-btn:hover{background:var(--terr-bg)}
+    .project-num { font-size: 0.72rem; color: var(--silver); margin-bottom: 8px; letter-spacing: 0.05em; }
+    .project-title {
+      font-family: 'Instrument Serif', serif;
+      font-size: 1.2rem; letter-spacing: -0.01em; margin-bottom: 10px;
+      color: var(--text); transition: color 0.2s;
+    }
+    .project-card:hover .project-title { color: var(--teal-dim); }
+    .project-desc {
+      font-size: 0.88rem; font-weight: 300; color: var(--muted);
+      line-height: 1.65; margin-bottom: 20px; font-style: italic;
+    }
+    .project-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 18px; }
+    .tag {
+      font-size: 0.72rem; font-weight: 500;
+      padding: 4px 12px; border-radius: 100px;
+      background: var(--teal-lt);
+      color: var(--teal-dim); letter-spacing: 0.02em;
+      border: 1px solid rgba(123,184,196,0.2);
+    }
+    .project-links { display: flex; gap: 16px; }
+    .project-link {
+      font-size: 0.78rem; font-weight: 500; color: var(--muted);
+      display: flex; align-items: center; gap: 5px; transition: color 0.2s;
+    }
+    .project-link:hover { color: var(--rose); }
+    .project-arrow {
+      font-size: 1.1rem; color: var(--border);
+      transition: color 0.25s, transform 0.25s;
+    }
+    .project-card:hover .project-arrow { color: var(--teal); transform: translate(3px, -3px); }
 
-/* ── MODAL ── */
-.modal-ov{position:fixed;inset:0;background:rgba(28,26,23,.45);backdrop-filter:blur(4px);z-index:200;display:flex;align-items:flex-end;opacity:0;pointer-events:none;transition:opacity .22s}
-.modal-ov.open{opacity:1;pointer-events:all}
-.modal-sheet{width:100%;background:var(--paper);border-radius:24px 24px 0 0;padding:16px 22px 38px;transform:translateY(100%);transition:transform .32s cubic-bezier(.4,0,.2,1);max-height:80vh;overflow-y:auto}
-.modal-ov.open .modal-sheet{transform:translateY(0)}
-.m-handle{width:34px;height:4px;border-radius:2px;background:var(--paper3);margin:0 auto 18px}
-.m-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px}
-.m-title{font-family:'Fraunces',serif;font-size:22px;font-weight:300;color:var(--ink)}
-.m-close{width:30px;height:30px;border-radius:50%;background:var(--paper2);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--ink3);transition:background .15s}
-.m-close:hover{background:var(--paper3)}
-.food-srch{width:100%;padding:11px 15px;border:1px solid var(--paper3);border-radius:var(--rs);font-family:'Geist',sans-serif;font-size:13px;background:white;color:var(--ink);outline:none;transition:border-color .2s,box-shadow .2s;margin-bottom:14px}
-.food-srch:focus{border-color:var(--herb);box-shadow:0 0 0 3px rgba(90,122,88,.12)}
-.food-row{display:flex;justify-content:space-between;align-items:center;padding:11px 0;border-bottom:1px solid var(--paper3);cursor:pointer;transition:padding-left .14s}
-.food-row:last-child{border-bottom:none}
-.food-row:hover{padding-left:4px}
-.food-n{font-size:13px;font-weight:500;color:var(--ink)}
-.food-s{font-size:10px;color:var(--ink3);margin-top:2px}
-.food-add{width:30px;height:30px;border-radius:50%;background:var(--herb-bg);display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:background .15s,transform .2s cubic-bezier(.34,1.56,.64,1)}
-.food-row:hover .food-add{background:var(--herb);transform:scale(1.15) rotate(90deg)}
-.modal-meal-select{display:flex;gap:7px;margin-bottom:14px;overflow-x:auto;scrollbar-width:none}
-.modal-meal-select::-webkit-scrollbar{display:none}
-.mms{flex-shrink:0;padding:5px 13px;border-radius:20px;font-size:11px;font-weight:500;border:1px solid var(--paper3);background:white;color:var(--ink3);cursor:pointer;font-family:'Geist',sans-serif;transition:all .15s}
-.mms.on{background:var(--herb);color:white;border-color:var(--herb)}
-.no-food{padding:24px 0;text-align:center;color:var(--ink3);font-size:13px}
-.custom-food-form{margin-top:16px;padding-top:16px;border-top:1px solid var(--paper3)}
-.custom-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px}
-.cf-input{padding:9px 12px;border:1px solid var(--paper3);border-radius:var(--rs);font-family:'Geist',sans-serif;font-size:13px;color:var(--ink);background:white;outline:none;transition:border-color .2s;width:100%}
-.cf-input:focus{border-color:var(--herb)}
-.cf-input.full{grid-column:1/-1}
+    /* About */
+    .about-grid { display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 48px; align-items: start; }
+    .about-text { font-size: 1rem; font-weight: 300; color: var(--muted); line-height: 1.85; font-style: italic; }
+    .about-text strong { color: var(--text); font-weight: 500; font-style: normal; }
+    .about-text em { color: var(--teal-dim); font-style: normal; }
 
-/* ── TOAST ── */
-.toast{position:fixed;top:16px;left:50%;transform:translateX(-50%) translateY(-80px);background:var(--ink);color:white;padding:11px 18px;border-radius:26px;font-size:12px;font-weight:500;z-index:300;transition:transform .32s cubic-bezier(.34,1.56,.64,1);white-space:nowrap;display:flex;align-items:center;gap:8px;letter-spacing:.01em;pointer-events:none}
-.toast.show{transform:translateX(-50%) translateY(0)}
-.t-pip{width:7px;height:7px;border-radius:50%;background:var(--herb-mid);flex-shrink:0}
+    .skills-block { display: flex; flex-direction: column; gap: 6px; }
+    .skill-row {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 12px 16px; background: var(--surface);
+      border: 1px solid var(--border); border-radius: 10px;
+      font-size: 0.875rem;
+      transition: border-color 0.2s, background 0.2s;
+    }
+    .skill-row:hover { border-color: var(--teal); background: var(--surface2); }
+    .skill-row span { color: var(--silver); font-size: 0.75rem; }
 
-/* ── USER MENU ── */
-.user-menu{position:fixed;top:56px;right:16px;background:white;border:1px solid var(--paper3);border-radius:var(--rs);padding:8px;z-index:150;box-shadow:0 8px 32px rgba(28,26,23,.12);min-width:200px;opacity:0;transform:translateY(-8px) scale(.96);pointer-events:none;transition:all .2s cubic-bezier(.34,1.56,.64,1)}
-.user-menu.open{opacity:1;transform:translateY(0) scale(1);pointer-events:all}
-.um-email{font-size:11px;color:var(--ink3);padding:8px 12px 10px;border-bottom:1px solid var(--paper3);margin-bottom:4px}
-.um-item{display:flex;align-items:center;gap:8px;padding:9px 12px;border-radius:8px;font-size:13px;color:var(--ink2);cursor:pointer;transition:background .15s;border:none;background:none;font-family:'Geist',sans-serif;width:100%;text-align:left}
-.um-item:hover{background:var(--paper2)}
-.um-item.danger{color:var(--terr)}
-.um-item.danger:hover{background:var(--terr-bg)}
+    /* Contact */
+    #contact { text-align: center; padding-bottom: 120px; }
+    .contact-heading {
+      font-family: 'Instrument Serif', serif;
+      font-size: clamp(2.2rem, 6.5vw, 3.8rem);
+      letter-spacing: -0.02em; line-height: 1.1; margin-bottom: 16px;
+    }
+    .contact-heading .lit { font-style: italic; color: var(--rose); }
+    .contact-sub { font-size: 1rem; font-weight: 300; font-style: italic; color: var(--muted); margin-bottom: 36px; }
+    .contact-links { display: flex; justify-content: center; gap: 12px; flex-wrap: wrap; }
 
-/* ── LOADING ── */
-.loading-screen{position:fixed;inset:0;background:var(--paper);display:flex;align-items:center;justify-content:center;z-index:500;transition:opacity .4s}
-.loading-screen.hidden{opacity:0;pointer-events:none}
-.loading-logo{font-family:'Fraunces',serif;font-size:32px;font-weight:300;color:var(--ink)}
-.loading-logo em{font-style:italic;color:var(--herb)}
+    /* Footer */
+    footer { border-top: 1px solid var(--border); padding: 26px 0; }
+    footer .inner {
+      max-width: var(--max); margin: 0 auto; padding: 0 28px;
+      display: flex; justify-content: space-between; align-items: center;
+      font-size: 0.78rem; color: var(--muted);
+    }
+    footer span:last-child { color: var(--silver); }
 
-@keyframes popIn{from{opacity:0;transform:scale(.91) translateY(8px)}to{opacity:1;transform:scale(1) translateY(0)}}
-</style>
+    /* Animations */
+    @keyframes fadeUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+    .reveal { opacity: 0; transform: translateY(18px); transition: opacity 0.65s ease, transform 0.65s ease; }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+
+    @media (max-width: 600px) {
+      .about-grid { grid-template-columns: 1fr; }
+      .project-card { grid-template-columns: 1fr; }
+      .project-arrow { display: none; }
+    }
+  </style>
 </head>
 <body>
 
-<!-- Loading -->
-<div class="loading-screen" id="loadingScreen">
-  <div class="loading-logo"><em>trim.</em></div>
-</div>
-
-<!-- Auth Screen -->
-<div id="authScreen" style="display:none">
-  <div class="auth-card">
-    <div class="auth-logo"><em>trim.</em></div>
-    <div class="auth-sub">Track what you eat, simply.</div>
-    <div class="auth-tabs">
-      <button class="auth-tab active" onclick="setAuthMode('login')">Sign in</button>
-      <button class="auth-tab" onclick="setAuthMode('signup')">Create account</button>
+  <nav id="nav">
+    <div class="inner">
+      <span class="nav-logo">Bertram.</span>
+      <ul class="nav-links">
+        <li><a href="#projects">Projects</a></li>
+        <li><a href="#about">About</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
     </div>
-    <div class="form-group">
-      <label class="form-label">Email</label>
-      <input class="form-input" type="email" id="authEmail" placeholder="you@example.com" autocomplete="email">
-    </div>
-    <div class="form-group" id="nameGroup" style="display:none">
-      <label class="form-label">Your name</label>
-      <input class="form-input" type="text" id="authName" placeholder="Alex">
-    </div>
-    <div class="form-group">
-      <label class="form-label">Password</label>
-      <input class="form-input" type="password" id="authPassword" placeholder="••••••••" autocomplete="current-password">
-    </div>
-    <button class="auth-btn" id="authSubmitBtn" onclick="handleAuth()">Sign in</button>
-    <div class="auth-error" id="authError"></div>
-  </div>
-</div>
-
-<!-- App Shell -->
-<div id="appShell">
-
-  <!-- User menu -->
-  <div class="user-menu" id="userMenu">
-    <div class="um-email" id="userMenuEmail"></div>
-    <button class="um-item" onclick="goTo('profile',document.querySelector('[onclick*=profile]'));closeUserMenu()">
-      <svg width="14" height="14" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><circle cx="10" cy="7" r="3.5"/><path d="M3 18c0-3.5 3-6 7-6s7 2.5 7 6"/></svg>
-      Profile &amp; goals
-    </button>
-    <button class="um-item danger" onclick="signOut()">
-      <svg width="14" height="14" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M13 15l4-4-4-4M17 11H7M10 3H4a1 1 0 00-1 1v12a1 1 0 001 1h6"/></svg>
-      Sign out
-    </button>
-  </div>
-
-  <!-- HOME -->
-  <div class="page active" id="page-home">
-    <div class="content">
-      <div class="phd">
-        <div>
-          <div class="hero" id="greetingText">Good morning,<br><em id="userName">—</em></div>
-          <div class="phd-sub" id="todayDate">—</div>
-        </div>
-        <button class="user-btn" id="userInitialsBtn" onclick="toggleUserMenu()">—</button>
-      </div>
-
-      <div class="date-nav">
-        <button class="date-nav-btn" onclick="changeDay(-1)">
-          <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M7 2L3 6l4 4"/></svg>
-        </button>
-        <div>
-          <div class="date-lbl" id="viewingDate">Today</div>
-          <div class="date-sub" id="viewingDateFull">—</div>
-        </div>
-        <button class="date-nav-btn" onclick="changeDay(1)" id="nextDayBtn">
-          <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M5 2l4 4-4 4"/></svg>
-        </button>
-      </div>
-
-      <div class="ring-section">
-        <div class="ring-wrap">
-          <svg class="ring-svg" width="190" height="190" viewBox="0 0 190 190">
-            <circle class="ring-track" cx="95" cy="95" r="82"/>
-            <circle class="ring-fill" id="calRing" cx="95" cy="95" r="82"/>
-          </svg>
-          <div class="ring-center">
-            <div class="ring-num" id="calCount">0</div>
-            <div class="ring-unit">kcal eaten</div>
-            <div class="ring-remain" id="calRemain">loading…</div>
-          </div>
-        </div>
-      </div>
-
-      <div class="macro-strip">
-        <div class="mb">
-          <div class="mb-num" id="carbNum">—</div>
-          <div class="mb-bar-t"><div class="mb-bar-f" id="carbBar" style="background:var(--slate)"></div></div>
-          <div class="mb-name">Carbs</div>
-        </div>
-        <div class="mb">
-          <div class="mb-num" id="fatNum">—</div>
-          <div class="mb-bar-t"><div class="mb-bar-f" id="fatBar" style="background:var(--terr)"></div></div>
-          <div class="mb-name">Fat</div>
-        </div>
-        <div class="mb">
-          <div class="mb-num" id="proNum">—</div>
-          <div class="mb-bar-t"><div class="mb-bar-f" id="proBar" style="background:var(--herb)"></div></div>
-          <div class="mb-name">Protein</div>
-        </div>
-      </div>
-
-      <div class="streak">
-        <div class="streak-icon">
-          <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="var(--lemon)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M10 2c0 3.5-4 5-4 8.5a4 4 0 008 0C14 7 10 5.5 10 2z"/>
-            <path d="M8 14.5c.5.8 2 1.5 2 1.5s1.5-.7 2-1.5"/>
-          </svg>
-        </div>
-        <div class="streak-info">
-          <div class="streak-title">Current streak</div>
-          <div class="streak-sub" id="streakSub">keep it going</div>
-        </div>
-        <div class="streak-n" id="streakNum">0</div>
-      </div>
-
-      <div class="section-lbl">Meals</div>
-
-      <div class="meal-card" id="mc-breakfast" onclick="toggleMeal('breakfast')">
-        <div class="meal-hd">
-          <div class="meal-icon-wrap">
-            <svg width="18" height="18" viewBox="0 0 20 20" fill="none" stroke="var(--ink2)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="10" cy="10" r="7"/><path d="M10 4v2M10 14v2M4 10h2M14 10h2"/><circle cx="10" cy="10" r="2.5"/></svg>
-          </div>
-          <div class="meal-info"><div class="meal-title">Breakfast</div><div class="meal-meta" id="bf-meta">0 items</div></div>
-          <div class="meal-cal" id="bf-cal">0<span> kcal</span></div>
-          <div class="meal-chevron" id="chev-breakfast"><svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="var(--ink3)" stroke-width="1.5" stroke-linecap="round"><path d="M2 5l5 4 5-4"/></svg></div>
-        </div>
-        <div class="meal-items" id="items-breakfast" style="display:none"></div>
-      </div>
-
-      <div class="meal-card" id="mc-lunch" onclick="toggleMeal('lunch')">
-        <div class="meal-hd">
-          <div class="meal-icon-wrap">
-            <svg width="18" height="18" viewBox="0 0 20 20" fill="none" stroke="var(--ink2)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8h14M5 8V5h10v3"/><path d="M4 8c0 5.5 1.5 8 6 8s6-2.5 6-8"/><path d="M10 16v2"/></svg>
-          </div>
-          <div class="meal-info"><div class="meal-title">Lunch</div><div class="meal-meta" id="lu-meta">0 items</div></div>
-          <div class="meal-cal" id="lu-cal">0<span> kcal</span></div>
-          <div class="meal-chevron" id="chev-lunch"><svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="var(--ink3)" stroke-width="1.5" stroke-linecap="round"><path d="M2 5l5 4 5-4"/></svg></div>
-        </div>
-        <div class="meal-items" id="items-lunch" style="display:none"></div>
-      </div>
-
-      <div class="meal-card" id="mc-dinner" onclick="toggleMeal('dinner')">
-        <div class="meal-hd">
-          <div class="meal-icon-wrap">
-            <svg width="18" height="18" viewBox="0 0 20 20" fill="none" stroke="var(--ink2)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 17h12M6 17V9M14 17V9"/><path d="M6 9C6 6 8 4 10 4s4 2 4 5"/><path d="M8 17v-4h4v4"/></svg>
-          </div>
-          <div class="meal-info"><div class="meal-title">Dinner</div><div class="meal-meta" id="di-meta">0 items</div></div>
-          <div class="meal-cal" id="di-cal">0<span> kcal</span></div>
-          <div class="meal-chevron" id="chev-dinner"><svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="var(--ink3)" stroke-width="1.5" stroke-linecap="round"><path d="M2 5l5 4 5-4"/></svg></div>
-        </div>
-        <div class="meal-items" id="items-dinner" style="display:none"></div>
-      </div>
-
-      <div class="meal-card" id="mc-snack" onclick="toggleMeal('snack')">
-        <div class="meal-hd">
-          <div class="meal-icon-wrap">
-            <svg width="18" height="18" viewBox="0 0 20 20" fill="none" stroke="var(--ink2)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M10 4c-1 3-5 5-5 9h10c0-4-4-6-5-9z"/></svg>
-          </div>
-          <div class="meal-info"><div class="meal-title">Snacks</div><div class="meal-meta" id="sn-meta">0 items</div></div>
-          <div class="meal-cal" id="sn-cal">0<span> kcal</span></div>
-          <div class="meal-chevron" id="chev-snack"><svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="var(--ink3)" stroke-width="1.5" stroke-linecap="round"><path d="M2 5l5 4 5-4"/></svg></div>
-        </div>
-        <div class="meal-items" id="items-snack" style="display:none"></div>
-      </div>
-
-      <button class="add-btn" onclick="showModal()">
-        <div class="add-circle"><svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="white" stroke-width="1.8" stroke-linecap="round"><path d="M7 2v10M2 7h10"/></svg></div>
-        Add food or meal
-      </button>
-    </div>
-  </div>
-
-  <!-- HISTORY -->
-  <div class="page" id="page-history">
-    <div class="content">
-      <div class="phd">
-        <div><div class="hero">History</div><div class="phd-sub">Your logged days</div></div>
-      </div>
-      <div id="historyList" class="history-list"></div>
-    </div>
-  </div>
-
-  <!-- INSIGHTS -->
-  <div class="page" id="page-insights">
-    <div class="content">
-      <div class="phd">
-        <div><div class="hero">Insights</div><div class="phd-sub">Your week at a glance</div></div>
-      </div>
-      <div class="wk-chart">
-        <div class="chart-hd">Calories this week</div>
-        <div class="bar-chart" id="barChart"></div>
-        <div class="goal-row"><div class="g-dot"></div><span id="goalLineLabel">Daily goal: — kcal</span></div>
-      </div>
-      <div class="section-lbl">This week</div>
-      <div class="stat-grid">
-        <div class="sc">
-          <div class="sc-icon"><svg width="16" height="16" viewBox="0 0 20 20" fill="none" stroke="var(--ink2)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M10 2l1.8 5H17l-4 3 1.5 5L10 12l-4.5 3 1.5-5-4-3h5.2z"/></svg></div>
-          <div class="sc-n" id="avgCalsStat">— <span class="sc-u">avg</span></div>
-          <div class="sc-lbl">Calories per day</div>
-          <div class="sc-tr" id="avgCalsTrend"></div>
-        </div>
-        <div class="sc">
-          <div class="sc-icon"><svg width="16" height="16" viewBox="0 0 20 20" fill="none" stroke="var(--ink2)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 16V8M10 16V4M15 16v-6"/></svg></div>
-          <div class="sc-n" id="avgProteinStat">— <span class="sc-u">avg</span></div>
-          <div class="sc-lbl">Protein per day</div>
-        </div>
-        <div class="sc">
-          <div class="sc-icon"><svg width="16" height="16" viewBox="0 0 20 20" fill="none" stroke="var(--ink2)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10.5l4.5 4.5L17 5"/></svg></div>
-          <div class="sc-n" id="goalsHitStat">— <span class="sc-u">days</span></div>
-          <div class="sc-lbl">Goals hit this week</div>
-        </div>
-        <div class="sc">
-          <div class="sc-icon"><svg width="16" height="16" viewBox="0 0 20 20" fill="none" stroke="var(--ink2)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M10 2c0 3.5-4 5-4 8.5a4 4 0 008 0C14 7 10 5.5 10 2z"/></svg></div>
-          <div class="sc-n" id="streakStatNum">— <span class="sc-u">days</span></div>
-          <div class="sc-lbl">Current streak</div>
-        </div>
-      </div>
-      <div class="section-lbl">Hydration today</div>
-      <div class="water-c">
-        <div class="water-hd">
-          <div class="water-title">
-            <svg width="14" height="14" viewBox="0 0 20 20" fill="none" stroke="#3A6070" stroke-width="1.5" stroke-linecap="round"><path d="M10 3C8 7 4 10 4 14a6 6 0 0012 0c0-4-4-7-6-11z"/></svg>
-            Water intake
-          </div>
-          <div class="water-n" id="waterAmt">0.00 L</div>
-        </div>
-        <div class="glasses-row" id="waterGlasses"></div>
-      </div>
-      <div class="section-lbl">Weight trend</div>
-      <div class="wk-chart">
-        <div class="chart-hd">Recent entries</div>
-        <div id="weightChartWrap">
-          <div class="empty-state" style="padding:20px 0">
-            <div style="font-size:12px;color:var(--ink3)">Log your weight in Profile to see your trend</div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- PROFILE -->
-  <div class="page" id="page-profile">
-    <div class="content">
-      <div class="phd">
-        <div><div class="hero">Profile</div><div class="phd-sub">Goals &amp; preferences</div></div>
-      </div>
-
-      <div class="section-lbl">Daily calorie target</div>
-      <div class="goal-block">
-        <div class="goal-row-hd">
-          <div class="goal-lbl">Calorie goal</div>
-          <div class="goal-val" id="goalDisplay">1,800 kcal</div>
-        </div>
-        <input type="range" min="1200" max="3500" value="1800" step="50" id="goalSlider" oninput="updateGoalDisplay(this.value)">
-        <div class="range-hints"><span>1,200 deficit</span><span>2,200 maintain</span><span>3,500 bulk</span></div>
-      </div>
-
-      <div class="section-lbl">Macro targets</div>
-      <div class="goal-block">
-        <div style="display:flex;flex-direction:column;gap:10px">
-          <div>
-            <div class="goal-row-hd"><div class="goal-lbl">Protein</div><div class="goal-val" id="proGoalDisplay">135g</div></div>
-            <input type="range" min="50" max="300" value="135" step="5" id="proGoalSlider" oninput="document.getElementById('proGoalDisplay').textContent=this.value+'g'">
-          </div>
-          <div>
-            <div class="goal-row-hd"><div class="goal-lbl">Carbs</div><div class="goal-val" id="carbGoalDisplay">180g</div></div>
-            <input type="range" min="50" max="500" value="180" step="5" id="carbGoalSlider" oninput="document.getElementById('carbGoalDisplay').textContent=this.value+'g'">
-          </div>
-          <div>
-            <div class="goal-row-hd"><div class="goal-lbl">Fat</div><div class="goal-val" id="fatGoalDisplay">60g</div></div>
-            <input type="range" min="20" max="200" value="60" step="5" id="fatGoalSlider" oninput="document.getElementById('fatGoalDisplay').textContent=this.value+'g'">
-          </div>
-        </div>
-        <button class="save-btn" onclick="saveGoals()" id="saveGoalsBtn">Save goals</button>
-      </div>
-
-      <div class="section-lbl">Log weight</div>
-      <div class="goal-block">
-        <div class="goal-row-hd">
-          <div class="goal-lbl">Today's weight</div>
-          <div class="goal-val" id="weightDisplay">— kg</div>
-        </div>
-        <input type="range" min="30" max="200" value="70" step="0.5" id="weightSlider" oninput="updateWeightDisplay(this.value)">
-        <button class="save-btn" onclick="saveWeight()" id="saveWeightBtn">Log weight entry</button>
-      </div>
-
-      <div class="section-lbl">Account</div>
-      <div class="goal-block">
-        <div style="font-size:13px;color:var(--ink2);margin-bottom:4px">Signed in as</div>
-        <div style="font-size:13px;font-weight:500;color:var(--ink)" id="profileEmail">—</div>
-        <button class="sign-out-btn" onclick="signOut()">Sign out</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- NAV -->
-  <nav>
-    <button class="nb active" onclick="goTo('home',this)">
-      <div class="ni"><svg width="18" height="18" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9.5L10 3l7 6.5V17a1 1 0 01-1 1H4a1 1 0 01-1-1V9.5z"/><path d="M7 18V12h6v6"/></svg></div>
-      <span>Today</span>
-    </button>
-    <button class="nb" onclick="goTo('history',this)">
-      <div class="ni"><svg width="18" height="18" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="14" height="14" rx="2"/><path d="M3 8h14M8 4V2M12 4V2"/></svg></div>
-      <span>History</span>
-    </button>
-    <button class="nb" onclick="goTo('insights',this)">
-      <div class="ni"><svg width="18" height="18" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 16L7 9l4 4 3-5 3 2"/><path d="M3 16h14"/></svg></div>
-      <span>Insights</span>
-    </button>
-    <button class="nb" onclick="goTo('profile',this)">
-      <div class="ni"><svg width="18" height="18" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="10" cy="7" r="3.5"/><path d="M3 18c0-3.5 3-6 7-6s7 2.5 7 6"/></svg></div>
-      <span>Profile</span>
-    </button>
   </nav>
 
-</div>
-
-<!-- LOG FOOD MODAL -->
-<div class="modal-ov" id="modal" onclick="maybeCloseModal(event)">
-  <div class="modal-sheet">
-    <div class="m-handle"></div>
-    <div class="m-top">
-      <div class="m-title">Log food</div>
-      <button class="m-close" onclick="closeModal()"><svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="var(--ink3)" stroke-width="1.6" stroke-linecap="round"><path d="M1 1l10 10M11 1L1 11"/></svg></button>
-    </div>
-    <div class="modal-meal-select" id="mealSelect">
-      <div class="mms on" onclick="selectMeal(this,'breakfast')">Breakfast</div>
-      <div class="mms" onclick="selectMeal(this,'lunch')">Lunch</div>
-      <div class="mms" onclick="selectMeal(this,'dinner')">Dinner</div>
-      <div class="mms" onclick="selectMeal(this,'snack')">Snack</div>
-    </div>
-    <input class="food-srch" id="foodSearch" placeholder="Search food database…" oninput="filterFood(this.value)" autocomplete="off">
-    <div id="foodList"></div>
-    <div class="custom-food-form">
-      <div style="font-size:11px;font-weight:500;letter-spacing:.07em;text-transform:uppercase;color:var(--ink3);margin-bottom:10px">Or add custom food</div>
-      <div class="custom-grid">
-        <input class="cf-input full" type="text" id="cfName" placeholder="Food name">
-        <input class="cf-input" type="number" id="cfCal" placeholder="Calories">
-        <input class="cf-input" type="number" id="cfProtein" placeholder="Protein (g)">
-        <input class="cf-input" type="number" id="cfCarbs" placeholder="Carbs (g)">
-        <input class="cf-input" type="number" id="cfFat" placeholder="Fat (g)">
-        <button class="cf-input" style="background:var(--herb);color:white;border:none;cursor:pointer;font-family:'Geist',sans-serif;font-weight:500" onclick="addCustomFood()">Add</button>
+  <section id="hero">
+    <div class="container">
+      <p class="hero-eyebrow">Software Engineer &amp; Builder</p>
+      <h1 class="hero-name">
+        <span class="outline">Hi,</span><br>
+        I'm <span class="lit">Bertram.</span>
+      </h1>
+      <p class="hero-tagline">
+        <!-- REPLACE THIS --> I build thoughtful software and design experiences that feel just right.
+      </p>
+      <div class="hero-links">
+        <a href="#projects" class="btn btn-primary">View my work ↓</a>
+        <a href="https://github.com" target="_blank" class="btn btn-ghost">GitHub</a>
+        <a href="https://linkedin.com" target="_blank" class="btn btn-ghost">LinkedIn</a>
       </div>
+      <p class="hero-status">
+        <span class="status-dot"></span>
+        Open to opportunities
+      </p>
     </div>
-  </div>
-</div>
+  </section>
 
-<!-- TOAST -->
-<div class="toast" id="toast"><div class="t-pip"></div><span id="toastTxt">—</span></div>
+  <div class="divider"></div>
 
-<!-- Firebase SDKs -->
-<script type="module">
-import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
-import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, signOut as fbSignOut, updateProfile } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
-import { getFirestore, doc, setDoc, getDoc, collection, query, where, getDocs, addDoc, deleteDoc, orderBy, limit } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
+  <section id="projects">
+    <div class="container">
+      <p class="section-label reveal">Selected Work</p>
+      <div class="projects-grid">
 
-// ════════════════════════════════════════════════
-// 🔥 PASTE YOUR FIREBASE CONFIG HERE
-// Go to: console.firebase.google.com
-// → Your project → Project Settings → Your apps → Web app → Config
-const firebaseConfig = {
-  apiKey: "AIzaSyBSDZGo2YmL9LtCuLV3MFN9oKuwoU8yQuQ",
-  authDomain: "trim-app-1cd3f.firebaseapp.com",
-  projectId: "trim-app-1cd3f",
-  storageBucket: "trim-app-1cd3f.firebasestorage.app",
-  messagingSenderId: "171093456875",
-  appId: "1:171093456875:web:178eeb8bc88b75005dcbae"
-};
-// ════════════════════════════════════════════════
-
-const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
-const db = getFirestore(app);
-
-// ── STATE ──────────────────────────────────────
-let currentUser = null;
-let userGoals = { cals: 1800, protein: 135, carbs: 180, fat: 60 };
-let viewingDateOffset = 0; // 0 = today, -1 = yesterday etc
-let dayData = {}; // keyed by dateStr
-let waterCount = 0;
-let weightEntries = [];
-let toastTimer = null;
-
-const FOODS = [
-  {name:'Greek yogurt',detail:'200g · 6g fat · 11g carbs · 20g prot',cal:130,carbs:11,fat:6,protein:20},
-  {name:'Chicken breast',detail:'100g · 3.6g fat · 0g carbs · 31g prot',cal:165,carbs:0,fat:4,protein:31},
-  {name:'Avocado',detail:'1 medium · 22g fat · 9g carbs · 3g prot',cal:240,carbs:9,fat:22,protein:3},
-  {name:'Oat milk latte',detail:'250ml · 3g fat · 14g carbs · 4g prot',cal:90,carbs:14,fat:3,protein:4},
-  {name:'Brown rice',detail:'150g cooked · 2g fat · 44g carbs · 5g prot',cal:215,carbs:44,fat:2,protein:5},
-  {name:'Egg whites ×3',detail:'99g · 0g fat · 1g carbs · 11g prot',cal:52,carbs:1,fat:0,protein:11},
-  {name:'Salmon fillet',detail:'150g · 14g fat · 0g carbs · 36g prot',cal:280,carbs:0,fat:14,protein:36},
-  {name:'Edamame',detail:'100g · 5g fat · 8g carbs · 11g prot',cal:121,carbs:8,fat:5,protein:11},
-  {name:'Sweet potato',detail:'130g · 0g fat · 26g carbs · 2g prot',cal:112,carbs:26,fat:0,protein:2},
-  {name:'Almonds',detail:'30g · 14g fat · 6g carbs · 6g prot',cal:174,carbs:6,fat:14,protein:6},
-  {name:'Banana',detail:'1 medium · 0g fat · 27g carbs · 1g prot',cal:105,carbs:27,fat:0,protein:1},
-  {name:'Whole egg',detail:'1 large · 5g fat · 0g carbs · 6g prot',cal:70,carbs:0,fat:5,protein:6},
-  {name:'Cottage cheese',detail:'100g · 4g fat · 3g carbs · 11g prot',cal:90,carbs:3,fat:4,protein:11},
-  {name:'Whey protein shake',detail:'1 scoop · 2g fat · 5g carbs · 25g prot',cal:130,carbs:5,fat:2,protein:25},
-  {name:'Blueberries',detail:'100g · 0g fat · 14g carbs · 1g prot',cal:57,carbs:14,fat:0,protein:1},
-  {name:'Peanut butter',detail:'2 tbsp · 16g fat · 6g carbs · 8g prot',cal:190,carbs:6,fat:16,protein:8},
-  {name:'Oatmeal',detail:'80g dry · 3g fat · 54g carbs · 10g prot',cal:300,carbs:54,fat:3,protein:10},
-  {name:'Tuna (canned)',detail:'85g · 1g fat · 0g carbs · 20g prot',cal:90,carbs:0,fat:1,protein:20},
-  {name:'White rice',detail:'150g cooked · 0g fat · 40g carbs · 3g prot',cal:180,carbs:40,fat:0,protein:3},
-  {name:'Broccoli',detail:'100g · 0g fat · 7g carbs · 3g prot',cal:35,carbs:7,fat:0,protein:3},
-];
-
-// ── HELPERS ───────────────────────────────────
-function getDateStr(offset = 0) {
-  const d = new Date();
-  d.setDate(d.getDate() + offset);
-  return d.toISOString().split('T')[0];
-}
-function formatDateLabel(dateStr) {
-  const d = new Date(dateStr + 'T12:00:00');
-  return d.toLocaleDateString('en-US', { weekday:'long', month:'long', day:'numeric' });
-}
-function formatDateShort(dateStr) {
-  const d = new Date(dateStr + 'T12:00:00');
-  return d.toLocaleDateString('en-US', { month:'short', day:'numeric' });
-}
-function getGreeting() {
-  const h = new Date().getHours();
-  if (h < 12) return 'Good morning,';
-  if (h < 17) return 'Good afternoon,';
-  return 'Good evening,';
-}
-function animateNumber(id, from, to, dur) {
-  const el = document.getElementById(id);
-  if (!el) return;
-  const s = performance.now();
-  const tick = (now) => {
-    const p = Math.min((now - s) / dur, 1);
-    const e = 1 - Math.pow(1 - p, 3);
-    el.textContent = Math.round(from + (to - from) * e).toLocaleString();
-    if (p < 1) requestAnimationFrame(tick);
-  };
-  requestAnimationFrame(tick);
-}
-function triggerToast(msg, type = 'success') {
-  const t = document.getElementById('toast');
-  const pip = t.querySelector('.t-pip');
-  document.getElementById('toastTxt').textContent = msg;
-  pip.style.background = type === 'error' ? 'var(--terr)' : 'var(--herb-mid)';
-  t.classList.add('show');
-  if (toastTimer) clearTimeout(toastTimer);
-  toastTimer = setTimeout(() => t.classList.remove('show'), 3000);
-}
-function showLoading(show) {
-  document.getElementById('loadingScreen').classList.toggle('hidden', !show);
-}
-
-// ── AUTH ───────────────────────────────────────
-let authMode = 'login';
-window.setAuthMode = (mode) => {
-  authMode = mode;
-  document.querySelectorAll('.auth-tab').forEach((t,i) => t.classList.toggle('active', (i===0&&mode==='login')||(i===1&&mode==='signup')));
-  document.getElementById('nameGroup').style.display = mode === 'signup' ? 'block' : 'none';
-  document.getElementById('authSubmitBtn').textContent = mode === 'login' ? 'Sign in' : 'Create account';
-  document.getElementById('authError').textContent = '';
-  document.getElementById('authPassword').autocomplete = mode === 'login' ? 'current-password' : 'new-password';
-};
-
-window.handleAuth = async () => {
-  const email = document.getElementById('authEmail').value.trim();
-  const password = document.getElementById('authPassword').value;
-  const name = document.getElementById('authName').value.trim();
-  const btn = document.getElementById('authSubmitBtn');
-  const errEl = document.getElementById('authError');
-  errEl.textContent = '';
-  if (!email || !password) { errEl.textContent = 'Please fill in all fields.'; return; }
-  if (authMode === 'signup' && !name) { errEl.textContent = 'Please enter your name.'; return; }
-  btn.disabled = true;
-  btn.textContent = authMode === 'login' ? 'Signing in…' : 'Creating account…';
-  try {
-    if (authMode === 'login') {
-      await signInWithEmailAndPassword(auth, email, password);
-    } else {
-      const cred = await createUserWithEmailAndPassword(auth, email, password);
-      await updateProfile(cred.user, { displayName: name });
-      await setDoc(doc(db, 'users', cred.user.uid), {
-        name, email, goals: userGoals, createdAt: new Date().toISOString()
-      });
-    }
-  } catch (e) {
-    const msgs = {
-      'auth/user-not-found': 'No account found with that email.',
-      'auth/wrong-password': 'Incorrect password.',
-      'auth/email-already-in-use': 'An account already exists with this email.',
-      'auth/weak-password': 'Password must be at least 6 characters.',
-      'auth/invalid-email': 'Please enter a valid email address.',
-      'auth/invalid-credential': 'Incorrect email or password.',
-    };
-    errEl.textContent = msgs[e.code] || 'Something went wrong. Please try again.';
-    btn.disabled = false;
-    btn.textContent = authMode === 'login' ? 'Sign in' : 'Create account';
-  }
-};
-
-// allow enter key
-document.getElementById('authPassword').addEventListener('keydown', e => { if (e.key === 'Enter') window.handleAuth(); });
-document.getElementById('authEmail').addEventListener('keydown', e => { if (e.key === 'Enter') window.handleAuth(); });
-
-// ── AUTH STATE ─────────────────────────────────
-onAuthStateChanged(auth, async (user) => {
-  showLoading(false);
-  if (user) {
-    currentUser = user;
-    document.getElementById('authScreen').style.display = 'none';
-    document.getElementById('appShell').style.display = 'block';
-    await loadUserData();
-    initApp();
-  } else {
-    currentUser = null;
-    document.getElementById('authScreen').style.display = 'flex';
-    document.getElementById('appShell').style.display = 'none';
-  }
-});
-
-window.signOut = async () => {
-  closeUserMenu();
-  await fbSignOut(auth);
-  triggerToast('Signed out successfully');
-};
-
-// ── LOAD USER DATA ─────────────────────────────
-async function loadUserData() {
-  try {
-    const userDoc = await getDoc(doc(db, 'users', currentUser.uid));
-    if (userDoc.exists()) {
-      const data = userDoc.data();
-      if (data.goals) userGoals = data.goals;
-    }
-    // Load weight entries
-    const wq = query(collection(db, 'weights'), where('uid', '==', currentUser.uid), orderBy('date', 'desc'), limit(30));
-    const wSnap = await getDocs(wq);
-    weightEntries = wSnap.docs.map(d => ({id: d.id, ...d.data()}));
-  } catch(e) { console.log('Load error:', e); }
-}
-
-// ── INIT APP ───────────────────────────────────
-function initApp() {
-  const name = currentUser.displayName || currentUser.email.split('@')[0];
-  document.getElementById('greetingText').innerHTML = `${getGreeting()}<br><em>${name}</em>`;
-  document.getElementById('userName').textContent = name;
-  document.getElementById('userMenuEmail').textContent = currentUser.email;
-  document.getElementById('profileEmail').textContent = currentUser.email;
-  const initials = name.split(' ').map(p => p[0]).join('').toUpperCase().slice(0,2);
-  document.getElementById('userInitialsBtn').textContent = initials;
-  document.getElementById('goalSlider').value = userGoals.cals;
-  document.getElementById('goalDisplay').textContent = userGoals.cals.toLocaleString() + ' kcal';
-  document.getElementById('proGoalSlider').value = userGoals.protein;
-  document.getElementById('proGoalDisplay').textContent = userGoals.protein + 'g';
-  document.getElementById('carbGoalSlider').value = userGoals.carbs;
-  document.getElementById('carbGoalDisplay').textContent = userGoals.carbs + 'g';
-  document.getElementById('fatGoalSlider').value = userGoals.fat;
-  document.getElementById('fatGoalDisplay').textContent = userGoals.fat + 'g';
-  buildWater();
-  loadDayData(0);
-}
-
-// ── DAY DATA ───────────────────────────────────
-async function loadDayData(offset) {
-  viewingDateOffset = offset;
-  const dateStr = getDateStr(offset);
-  const isToday = offset === 0;
-  document.getElementById('viewingDate').textContent = isToday ? 'Today' : offset === -1 ? 'Yesterday' : formatDateShort(dateStr);
-  document.getElementById('viewingDateFull').textContent = formatDateLabel(dateStr);
-  document.getElementById('todayDate').textContent = formatDateLabel(getDateStr(0));
-  document.getElementById('nextDayBtn').style.opacity = offset >= 0 ? '0.3' : '1';
-  document.getElementById('nextDayBtn').style.pointerEvents = offset >= 0 ? 'none' : 'auto';
-
-  // load from firestore
-  try {
-    const q = query(collection(db, 'meals'), where('uid','==',currentUser.uid), where('date','==',dateStr));
-    const snap = await getDocs(q);
-    const meals = { breakfast:[], lunch:[], dinner:[], snack:[] };
-    snap.forEach(d => {
-      const item = {id: d.id, ...d.data()};
-      if (meals[item.meal]) meals[item.meal].push(item);
-    });
-    dayData[dateStr] = meals;
-
-    // load water for today
-    if (isToday) {
-      const wdoc = await getDoc(doc(db, 'water', `${currentUser.uid}_${dateStr}`));
-      waterCount = wdoc.exists() ? (wdoc.data().count || 0) : 0;
-      renderWater();
-    }
-  } catch(e) {
-    console.log('Day load error:', e);
-    dayData[dateStr] = { breakfast:[], lunch:[], dinner:[], snack:[] };
-  }
-  renderDay(dateStr);
-}
-
-function renderDay(dateStr) {
-  const meals = dayData[dateStr] || { breakfast:[], lunch:[], dinner:[], snack:[] };
-  let totalCals = 0, totalCarbs = 0, totalFat = 0, totalProtein = 0;
-  ['breakfast','lunch','dinner','snack'].forEach(meal => {
-    const items = meals[meal] || [];
-    const mCal = items.reduce((s,i) => s + i.cal, 0);
-    const mCarbs = items.reduce((s,i) => s + (i.carbs||0), 0);
-    const mFat = items.reduce((s,i) => s + (i.fat||0), 0);
-    const mProt = items.reduce((s,i) => s + (i.protein||0), 0);
-    totalCals += mCal; totalCarbs += mCarbs; totalFat += mFat; totalProtein += mProt;
-    const prefix = meal === 'breakfast' ? 'bf' : meal === 'lunch' ? 'lu' : meal === 'dinner' ? 'di' : 'sn';
-    document.getElementById(`${prefix}-cal`).innerHTML = mCal + '<span> kcal</span>';
-    document.getElementById(`${prefix}-meta`).textContent = items.length + ' item' + (items.length !== 1 ? 's' : '');
-    const container = document.getElementById(`items-${meal}`);
-    if (container.style.display !== 'none') renderMealItems(meal, items);
-  });
-
-  // ring
-  const circ = 2 * Math.PI * 82;
-  const pct = Math.min(totalCals / userGoals.cals, 1);
-  const ring = document.getElementById('calRing');
-  ring.style.strokeDasharray = circ;
-  ring.style.transition = 'none';
-  ring.style.strokeDashoffset = circ;
-  setTimeout(() => {
-    ring.style.transition = 'stroke-dashoffset 1.4s cubic-bezier(.4,0,.2,1)';
-    ring.style.strokeDashoffset = circ - pct * circ;
-  }, 40);
-  animateNumber('calCount', 0, totalCals, 1200);
-  const rem = userGoals.cals - totalCals;
-  document.getElementById('calRemain').textContent = rem > 0 ? rem.toLocaleString() + ' kcal remaining' : 'Goal reached!';
-
-  // macros
-  setTimeout(() => {
-    document.getElementById('carbBar').style.width = Math.min(totalCarbs/userGoals.carbs,1)*100 + '%';
-    document.getElementById('fatBar').style.width = Math.min(totalFat/userGoals.fat,1)*100 + '%';
-    document.getElementById('proBar').style.width = Math.min(totalProtein/userGoals.protein,1)*100 + '%';
-    document.getElementById('carbNum').textContent = Math.round(totalCarbs) + 'g';
-    document.getElementById('fatNum').textContent = Math.round(totalFat) + 'g';
-    document.getElementById('proNum').textContent = Math.round(totalProtein) + 'g';
-  }, 300);
-
-  // streak
-  calcStreak();
-}
-
-function renderMealItems(meal, items) {
-  const container = document.getElementById(`items-${meal}`);
-  if (!items.length) {
-    container.innerHTML = '<div style="padding:12px 16px;font-size:12px;color:var(--ink3)">No items — tap Add food below.</div>';
-    return;
-  }
-  container.innerHTML = items.map((item, i) => `
-    <div class="meal-item" style="animation-delay:${i*.07}s">
-      <div><div class="item-name">${item.name}</div><div class="item-g">${item.cal} kcal · ${item.protein||0}g prot</div></div>
-      <div style="display:flex;align-items:center">
-        <div class="item-kcal">${item.cal}</div>
-        <button class="item-del" onclick="deleteItem('${item.id}','${meal}',event)" title="Remove">
-          <svg width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M1 1l8 8M9 1L1 9"/></svg>
-        </button>
-      </div>
-    </div>
-  `).join('');
-}
-
-// ── DELETE ITEM ────────────────────────────────
-window.deleteItem = async (id, meal, e) => {
-  e.stopPropagation();
-  try {
-    await deleteDoc(doc(db, 'meals', id));
-    const dateStr = getDateStr(viewingDateOffset);
-    dayData[dateStr][meal] = dayData[dateStr][meal].filter(i => i.id !== id);
-    renderDay(dateStr);
-    const container = document.getElementById(`items-${meal}`);
-    if (container.style.display !== 'none') renderMealItems(meal, dayData[dateStr][meal]);
-    triggerToast('Item removed');
-  } catch(e) { triggerToast('Error removing item', 'error'); }
-};
-
-// ── MEAL TOGGLE ────────────────────────────────
-window.toggleMeal = (id) => {
-  const items = document.getElementById(`items-${id}`);
-  const chev = document.getElementById(`chev-${id}`);
-  const open = items.style.display === 'none';
-  items.style.display = open ? 'block' : 'none';
-  if (chev) chev.classList.toggle('open', open);
-  if (open) {
-    const dateStr = getDateStr(viewingDateOffset);
-    renderMealItems(id, (dayData[dateStr] || {})[id] || []);
-  }
-};
-
-// ── DATE NAV ───────────────────────────────────
-window.changeDay = (dir) => {
-  const newOffset = viewingDateOffset + dir;
-  if (newOffset > 0) return;
-  loadDayData(newOffset);
-};
-
-// ── MODAL ──────────────────────────────────────
-let activeMeal = 'breakfast';
-window.showModal = () => {
-  document.getElementById('modal').classList.add('open');
-  document.getElementById('foodSearch').value = '';
-  renderFoodList('');
-  document.getElementById('foodSearch').focus();
-};
-window.closeModal = () => document.getElementById('modal').classList.remove('open');
-window.maybeCloseModal = (e) => { if (e.target === document.getElementById('modal')) closeModal(); };
-window.selectMeal = (el, meal) => {
-  document.querySelectorAll('.mms').forEach(m => m.classList.remove('on'));
-  el.classList.add('on');
-  activeMeal = meal;
-};
-window.filterFood = (v) => renderFoodList(v);
-
-function renderFoodList(query) {
-  const list = document.getElementById('foodList');
-  const filtered = FOODS.filter(f => !query || f.name.toLowerCase().includes(query.toLowerCase()));
-  if (!filtered.length) { list.innerHTML = '<div class="no-food">No results for "' + query + '"</div>'; return; }
-  list.innerHTML = filtered.map(f => `
-    <div class="food-row" onclick="addFood('${f.name}',${f.cal},${f.carbs},${f.fat},${f.protein})">
-      <div><div class="food-n">${f.name}</div><div class="food-s">${f.detail}</div></div>
-      <div class="food-add"><svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="var(--herb)" stroke-width="1.8" stroke-linecap="round"><path d="M7 2v10M2 7h10"/></svg></div>
-    </div>
-  `).join('');
-}
-
-window.addFood = async (name, cal, carbs, fat, protein) => {
-  closeModal();
-  const dateStr = getDateStr(viewingDateOffset);
-  try {
-    const docRef = await addDoc(collection(db, 'meals'), {
-      uid: currentUser.uid, date: dateStr, meal: activeMeal,
-      name, cal, carbs, fat, protein, addedAt: new Date().toISOString()
-    });
-    if (!dayData[dateStr]) dayData[dateStr] = { breakfast:[], lunch:[], dinner:[], snack:[] };
-    dayData[dateStr][activeMeal].push({ id: docRef.id, uid: currentUser.uid, date: dateStr, meal: activeMeal, name, cal, carbs, fat, protein });
-    renderDay(dateStr);
-    triggerToast(name + ' added · +' + cal + ' kcal');
-  } catch(e) { triggerToast('Error saving food', 'error'); console.log(e); }
-};
-
-window.addCustomFood = async () => {
-  const name = document.getElementById('cfName').value.trim();
-  const cal = parseInt(document.getElementById('cfCal').value) || 0;
-  const protein = parseInt(document.getElementById('cfProtein').value) || 0;
-  const carbs = parseInt(document.getElementById('cfCarbs').value) || 0;
-  const fat = parseInt(document.getElementById('cfFat').value) || 0;
-  if (!name || !cal) { triggerToast('Name and calories required', 'error'); return; }
-  ['cfName','cfCal','cfProtein','cfCarbs','cfFat'].forEach(id => document.getElementById(id).value = '');
-  await window.addFood(name, cal, carbs, fat, protein);
-};
-
-// ── STREAK ─────────────────────────────────────
-async function calcStreak() {
-  let streak = 0;
-  let offset = 0;
-  while (true) {
-    const dateStr = getDateStr(offset);
-    let data = dayData[dateStr];
-    if (!data) {
-      try {
-        const q = query(collection(db, 'meals'), where('uid','==',currentUser.uid), where('date','==',dateStr));
-        const snap = await getDocs(q);
-        if (snap.empty) break;
-        streak++;
-        offset--;
-      } catch { break; }
-    } else {
-      const total = Object.values(data).flat().reduce((s,i) => s + i.cal, 0);
-      if (total === 0 && offset < 0) break;
-      if (total > 0) { streak++; offset--; } else break;
-    }
-    if (offset < -90) break;
-  }
-  animateNumber('streakNum', 0, streak, 800);
-  document.getElementById('streakSub').textContent = streak > 0 ? (streak === 1 ? 'day logged' : 'days logged') : 'start logging to build a streak';
-  document.getElementById('streakStatNum').innerHTML = streak + ' <span class="sc-u">days</span>';
-}
-
-// ── HISTORY ────────────────────────────────────
-async function loadHistory() {
-  const list = document.getElementById('historyList');
-  list.innerHTML = '<div class="empty-state"><div style="font-size:13px;color:var(--ink3)">Loading…</div></div>';
-  try {
-    const q = query(collection(db, 'meals'), where('uid','==',currentUser.uid), orderBy('date','desc'));
-    const snap = await getDocs(q);
-    const byDate = {};
-    snap.forEach(d => {
-      const item = d.data();
-      if (!byDate[item.date]) byDate[item.date] = { cals:0, protein:0, items:0 };
-      byDate[item.date].cals += item.cal;
-      byDate[item.date].protein += (item.protein||0);
-      byDate[item.date].items++;
-    });
-    const dates = Object.keys(byDate).sort((a,b) => b.localeCompare(a));
-    if (!dates.length) {
-      list.innerHTML = '<div class="empty-state"><div class="empty-icon"><svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="var(--ink3)" stroke-width="1.5" stroke-linecap="round"><rect x="3" y="4" width="14" height="14" rx="2"/><path d="M3 8h14M8 4V2M12 4V2"/></svg></div><div>No history yet — start logging today!</div></div>';
-      return;
-    }
-    list.innerHTML = dates.map(date => {
-      const d = byDate[date];
-      const pct = Math.min(d.cals / userGoals.cals, 1) * 100;
-      const over = d.cals > userGoals.cals;
-      const dayObj = new Date(date + 'T12:00:00');
-      return `<div class="hist-item" onclick="jumpToDate('${date}')">
-        <div><div class="hist-date">${dayObj.getDate()}</div><div class="hist-month">${dayObj.toLocaleString('en',{month:'short'})}</div></div>
-        <div class="hist-info">
-          <div class="hist-title">${formatDateLabel(date)}</div>
-          <div class="hist-sub">${d.items} items · ${Math.round(d.protein)}g protein</div>
-          <div class="hist-bar"><div class="hist-bar-fill" style="width:${pct}%;background:${over?'var(--terr)':'var(--herb)'}"></div></div>
+        <div class="project-card reveal">
+          <div>
+            <p class="project-num">01 —</p>
+            <h3 class="project-title">Trim</h3>
+            <p class="project-desc">Need some help with cutting? Trim the calories down.</p>
+            <div class="project-tags">
+              <span class="tag">Product Design</span>
+              <span class="tag">Motion Design</span>
+              <span class="tag">HTML/CSS/JS</span>
+              <span class="tag">Design Systems</span>
+            </div>
+            <div class="project-links">
+              <a href="trim.html" class="project-link">↗ Live Demo</a>
+              <a href="trim_casestudy.html" class="project-link">⌥ Case Study</a>
+            </div>
+          </div>
+          <span class="project-arrow">↗</span>
         </div>
-        <div class="hist-cal" style="color:${over?'var(--terr)':'var(--ink)'}">${d.cals}</div>
-      </div>`;
-    }).join('');
-  } catch(e) { list.innerHTML = '<div class="empty-state">Error loading history</div>'; console.log(e); }
-}
 
-window.jumpToDate = (dateStr) => {
-  const today = getDateStr(0);
-  const diff = (new Date(dateStr) - new Date(today)) / 86400000;
-  goTo('home', document.querySelector('.nb'));
-  setTimeout(() => loadDayData(Math.round(diff)), 100);
-};
+        <div class="project-card reveal">
+          <div>
+            <p class="project-num">02 —</p>
+            <h3 class="project-title">Project Two</h3>
+            <p class="project-desc">Another compelling project description. What it is, what you built, and what makes it cool.</p>
+            <div class="project-tags">
+              <span class="tag">Python</span>
+              <span class="tag">FastAPI</span>
+              <span class="tag">Docker</span>
+            </div>
+            <div class="project-links">
+              <a href="#" class="project-link">↗ Live Demo</a>
+              <a href="#" class="project-link">⌥ GitHub</a>
+            </div>
+          </div>
+          <span class="project-arrow">↗</span>
+        </div>
 
-// ── INSIGHTS ───────────────────────────────────
-async function loadInsights() {
-  // build 7-day data
-  const ch = document.getElementById('barChart');
-  ch.innerHTML = '';
-  const weekDays = [];
-  for (let i = -6; i <= 0; i++) {
-    const dateStr = getDateStr(i);
-    let cals = 0;
-    if (dayData[dateStr]) {
-      cals = Object.values(dayData[dateStr]).flat().reduce((s,item) => s + item.cal, 0);
-    } else {
-      try {
-        const q = query(collection(db, 'meals'), where('uid','==',currentUser.uid), where('date','==',dateStr));
-        const snap = await getDocs(q);
-        snap.forEach(d => cals += d.data().cal);
-        if (!dayData[dateStr]) dayData[dateStr] = null; // mark as checked
-      } catch {}
-    }
-    const d = new Date(dateStr + 'T12:00:00');
-    weekDays.push({ dateStr, cals, label: d.toLocaleString('en',{weekday:'narrow'}), isToday: i === 0 });
-  }
+        <div class="project-card reveal">
+          <div>
+            <p class="project-num">03 —</p>
+            <h3 class="project-title">Project Three</h3>
+            <p class="project-desc">Your third project lives here. Show range — a different stack or a different kind of problem.</p>
+            <div class="project-tags">
+              <span class="tag">TypeScript</span>
+              <span class="tag">Next.js</span>
+              <span class="tag">Tailwind</span>
+            </div>
+            <div class="project-links">
+              <a href="#" class="project-link">↗ Live Demo</a>
+              <a href="#" class="project-link">⌥ GitHub</a>
+            </div>
+          </div>
+          <span class="project-arrow">↗</span>
+        </div>
 
-  const maxCal = Math.max(...weekDays.map(d => d.cals), userGoals.cals);
-  weekDays.forEach((d, i) => {
-    const pct = maxCal > 0 ? (d.cals / maxCal) * 100 : 0;
-    const over = d.cals > userGoals.cals;
-    const col = document.createElement('div');
-    col.className = 'bc';
-    col.innerHTML = `<div class="bw"><div class="bar" id="insbar${i}" style="height:${pct}%;background:${d.isToday?'var(--herb)':over?'var(--terr)':'var(--paper3)'}"></div></div><div class="bd" style="color:${d.isToday?'var(--herb)':'var(--ink3)'};font-weight:${d.isToday?'500':'400'}">${d.label}</div>`;
-    ch.appendChild(col);
-  });
-  setTimeout(() => weekDays.forEach((_,i) => { const b = document.getElementById(`insbar${i}`); if(b) b.classList.add('up'); }), 100);
-  document.getElementById('goalLineLabel').textContent = `Daily goal: ${userGoals.cals.toLocaleString()} kcal`;
 
-  // stats
-  const logged = weekDays.filter(d => d.cals > 0);
-  const avgCals = logged.length ? Math.round(logged.reduce((s,d) => s+d.cals,0)/logged.length) : 0;
-  document.getElementById('avgCalsStat').innerHTML = avgCals.toLocaleString() + ' <span class="sc-u">avg</span>';
-  const goalsHit = weekDays.filter(d => d.cals > 0 && d.cals <= userGoals.cals).length;
-  document.getElementById('goalsHitStat').innerHTML = goalsHit + ' <span class="sc-u">days</span>';
+      </div>
+    </div>
+  </section>
 
-  // avg protein
-  let totalProt = 0, protDays = 0;
-  for (const d of weekDays) {
-    if (dayData[d.dateStr]) {
-      const p = Object.values(dayData[d.dateStr]).flat().reduce((s,i) => s+(i.protein||0), 0);
-      if (p > 0) { totalProt += p; protDays++; }
-    }
-  }
-  const avgProt = protDays ? Math.round(totalProt/protDays) : 0;
-  document.getElementById('avgProteinStat').innerHTML = avgProt + 'g <span class="sc-u">avg</span>';
+  <div class="divider"></div>
 
-  // weight chart
-  if (weightEntries.length > 1) {
-    const sorted = [...weightEntries].sort((a,b) => a.date.localeCompare(b.date)).slice(-10);
-    const minW = Math.min(...sorted.map(e => e.weight)) - 1;
-    const maxW = Math.max(...sorted.map(e => e.weight)) + 1;
-    const range = maxW - minW;
-    const w = 300, h = 70;
-    const pts = sorted.map((e, i) => {
-      const x = sorted.length > 1 ? (i / (sorted.length-1)) * w : w/2;
-      const y = h - ((e.weight - minW) / range) * h;
-      return `${x},${y}`;
+  <section id="about">
+    <div class="container">
+      <p class="section-label reveal">About</p>
+      <div class="about-grid">
+        <div class="reveal">
+          <p class="about-text">
+            I'm <strong>Bertram</strong> — a software engineer who cares about the craft. I like building things that are well-made from the inside out. Clean code, thoughtful interfaces, experiences that feel effortless to use.<br><br>
+            Currently studying / working at <em>[Your School / Company]</em>. Always open to interesting problems and good collaborations.
+          </p>
+        </div>
+        <div class="skills-block reveal">
+          <div class="skill-row">JavaScript / TypeScript <span>Frontend</span></div>
+          <div class="skill-row">Python <span>Backend</span></div>
+          <div class="skill-row">React / Next.js <span>Framework</span></div>
+          <div class="skill-row">SQL / PostgreSQL <span>Database</span></div>
+          <div class="skill-row">Git / GitHub <span>Tooling</span></div>
+          <div class="skill-row">Figma <span>Design</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <section id="contact">
+    <div class="container">
+      <h2 class="contact-heading reveal">
+        Let's build something<br><span class="lit">together.</span>
+      </h2>
+      <p class="contact-sub reveal">Open to work, collaborations, and good conversations.</p>
+      <div class="contact-links reveal">
+        <a href="mailto:hello@bertram.dev" class="btn btn-primary">Say hello ✉</a>
+        <a href="https://github.com" target="_blank" class="btn btn-ghost">GitHub</a>
+        <a href="https://linkedin.com" target="_blank" class="btn btn-ghost">LinkedIn</a>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="inner">
+      <span>© 2026 Bertram</span>
+      <span>Built from scratch — no templates.</span>
+    </div>
+  </footer>
+
+  <script>
+    const nav = document.getElementById('nav');
+    window.addEventListener('scroll', () => {
+      nav.classList.toggle('scrolled', window.scrollY > 20);
     });
-    document.getElementById('weightChartWrap').innerHTML = `
-      <svg width="100%" height="80" viewBox="0 0 300 80" preserveAspectRatio="none" style="overflow:visible">
-        <polyline points="${pts.join(' ')}" stroke="var(--herb)" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
-        ${sorted.map((e,i) => { const [x,y] = pts[i].split(','); return `<circle cx="${x}" cy="${y}" r="3" fill="var(--herb)"/>`; }).join('')}
-        <text x="0" y="76" font-size="9" fill="var(--ink3)" font-family="Geist,sans-serif">${formatDateShort(sorted[0].date)}</text>
-        <text x="${w-40}" y="76" font-size="9" fill="var(--ink3)" font-family="Geist,sans-serif">${formatDateShort(sorted[sorted.length-1].date)}</text>
-        <text x="${w-50}" y="${parseFloat(pts[pts.length-1].split(',')[1])-8}" font-size="10" fill="var(--herb)" font-family="Geist,sans-serif" font-weight="500">${sorted[sorted.length-1].weight} kg</text>
-      </svg>`;
-  }
-}
-
-// ── WATER ──────────────────────────────────────
-function buildWater() {
-  const c = document.getElementById('waterGlasses');
-  c.innerHTML = '';
-  for (let i = 0; i < 8; i++) {
-    const g = document.createElement('div');
-    g.className = 'glass' + (i < waterCount ? ' filled' : '');
-    g.onclick = () => toggleGlass(i);
-    c.appendChild(g);
-  }
-  updateWaterDisplay();
-}
-
-function renderWater() {
-  const glasses = document.querySelectorAll('#waterGlasses .glass');
-  glasses.forEach((g, i) => g.classList.toggle('filled', i < waterCount));
-  updateWaterDisplay();
-}
-
-async function toggleGlass(idx) {
-  const glasses = Array.from(document.querySelectorAll('#waterGlasses .glass'));
-  const wasFilled = glasses[idx].classList.contains('filled');
-  waterCount = wasFilled ? idx : idx + 1;
-  renderWater();
-  const dateStr = getDateStr(0);
-  try {
-    await setDoc(doc(db, 'water', `${currentUser.uid}_${dateStr}`), {
-      uid: currentUser.uid, date: dateStr, count: waterCount
-    });
-  } catch(e) { console.log('Water save error:', e); }
-}
-
-function updateWaterDisplay() {
-  document.getElementById('waterAmt').textContent = (waterCount * 0.25).toFixed(2) + ' L';
-}
-
-// ── GOALS ──────────────────────────────────────
-window.updateGoalDisplay = (v) => {
-  document.getElementById('goalDisplay').textContent = parseInt(v).toLocaleString() + ' kcal';
-};
-
-window.saveGoals = async () => {
-  const btn = document.getElementById('saveGoalsBtn');
-  btn.disabled = true; btn.textContent = 'Saving…';
-  userGoals = {
-    cals: parseInt(document.getElementById('goalSlider').value),
-    protein: parseInt(document.getElementById('proGoalSlider').value),
-    carbs: parseInt(document.getElementById('carbGoalSlider').value),
-    fat: parseInt(document.getElementById('fatGoalSlider').value),
-  };
-  try {
-    await setDoc(doc(db, 'users', currentUser.uid), { goals: userGoals }, { merge: true });
-    triggerToast('Goals saved');
-    renderDay(getDateStr(viewingDateOffset));
-  } catch(e) { triggerToast('Error saving goals', 'error'); }
-  btn.disabled = false; btn.textContent = 'Save goals';
-};
-
-// ── WEIGHT ─────────────────────────────────────
-window.updateWeightDisplay = (v) => {
-  document.getElementById('weightDisplay').textContent = parseFloat(v).toFixed(1) + ' kg';
-};
-
-window.saveWeight = async () => {
-  const btn = document.getElementById('saveWeightBtn');
-  const weight = parseFloat(document.getElementById('weightSlider').value);
-  btn.disabled = true; btn.textContent = 'Saving…';
-  const dateStr = getDateStr(0);
-  try {
-    await setDoc(doc(db, 'weights', `${currentUser.uid}_${dateStr}`), {
-      uid: currentUser.uid, date: dateStr, weight, loggedAt: new Date().toISOString()
-    });
-    const existing = weightEntries.findIndex(e => e.date === dateStr);
-    if (existing >= 0) weightEntries[existing].weight = weight;
-    else weightEntries.push({ uid: currentUser.uid, date: dateStr, weight });
-    triggerToast('Weight logged · ' + weight.toFixed(1) + ' kg');
-  } catch(e) { triggerToast('Error saving weight', 'error'); }
-  btn.disabled = false; btn.textContent = 'Log weight entry';
-};
-
-// ── NAVIGATION ─────────────────────────────────
-window.goTo = (name, btn) => {
-  const current = document.querySelector('.page.active');
-  if (current) { current.classList.remove('visible'); setTimeout(() => current.classList.remove('active'), 280); }
-  document.querySelectorAll('.nb').forEach(b => b.classList.remove('active'));
-  if (btn) btn.classList.add('active');
-  const target = document.getElementById('page-' + name);
-  setTimeout(() => {
-    target.classList.add('active');
-    requestAnimationFrame(() => setTimeout(() => {
-      target.classList.add('visible');
-      if (name === 'history') loadHistory();
-      if (name === 'insights') loadInsights();
-    }, 20));
-  }, 160);
-  closeUserMenu();
-};
-
-// ── USER MENU ───────────────────────────────────
-window.toggleUserMenu = () => document.getElementById('userMenu').classList.toggle('open');
-window.closeUserMenu = () => document.getElementById('userMenu').classList.remove('open');
-document.addEventListener('click', (e) => {
-  if (!e.target.closest('#userMenu') && !e.target.closest('#userInitialsBtn')) closeUserMenu();
-});
-
-</script>
+    const reveals = document.querySelectorAll('.reveal');
+    const observer = new IntersectionObserver(
+      entries => entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); }),
+      { threshold: 0.1 }
+    );
+    reveals.forEach(el => observer.observe(el));
+  </script>
 </body>
 </html>
