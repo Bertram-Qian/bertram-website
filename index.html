@@ -9,24 +9,22 @@
 
   <style>
     :root {
-  --bg:         #F5F2ED;      /* warm beige instead of cool gray */
-  --bg2:        #ECEAE4;      /* slightly deeper beige */
-  --surface:    #FDFBF8;      /* warm white (your portfolio's --paper) */
-  --surface2:   #EDF2EC;      /* herb-tinted surface (your --herb-bg) */
-  --border:     #E0DAD1;      /* warm border instead of blue-gray */
-  --text:       #1C1A17;      /* your portfolio's --ink */
-  --muted:      #8A8580;      /* warm gray muted text */
-  --teal:       #5A7A58;      /* herb green replaces teal */
-  --teal-dim:   #4A6748;      /* darker herb for hover/active */
-  --teal-lt:    rgba(90,122,88,0.12);  /* herb at 12% opacity */
-  --rose:       #C4694A;      /* your portfolio's terracotta */
-  --rose-lt:    rgba(196,105,74,0.09); /* terracotta at 9% */
-  --sage:       #B89A6A;      /* your portfolio's sand */
-  --sage-lt:    rgba(184,154,106,0.15); /* sand at 15% */
-  --silver:     #D5CFC7;      /* warm silver */
-  --radius:     14px;
-  --max:        780px;
-}
+      --bg:         #F5F2ED;
+      --bg2:        #ECEAE4;
+      --surface:    #FDFBF8;
+      --surface2:   #EDF2EC;
+      --border:     #E0DAD1;
+      --text:       #1C1A17;
+      --muted:      #8A8580;
+      --herb:       #5A7A58;
+      --herb-dim:   #4A6748;
+      --herb-lt:    rgba(90,122,88,0.12);
+      --terracotta: #C4694A;
+      --sand:       #B89A6A;
+      --silver:     #D5CFC7;
+      --radius:     14px;
+      --max:        780px;
+    }
 
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     html { scroll-behavior: smooth; }
@@ -39,20 +37,24 @@
       -webkit-font-smoothing: antialiased;
     }
     a { color: inherit; text-decoration: none; }
-
     .container { max-width: var(--max); margin: 0 auto; padding: 0 28px; }
 
-    /* Nav */
+    /* =========== NAV =========== */
     nav {
       position: fixed; top: 0; left: 0; right: 0; z-index: 100;
       padding: 18px 0;
-      background: rgba(244, 245, 246, 0.85);
+      background: rgba(245, 242, 237, 0);
+      backdrop-filter: blur(0px);
+      -webkit-backdrop-filter: blur(0px);
+      border-bottom: 1px solid transparent;
+      transition: background 0.4s ease, backdrop-filter 0.4s ease, border-color 0.3s;
+    }
+    nav.scrolled {
+      background: rgba(245, 242, 237, 0.85);
       backdrop-filter: blur(16px);
       -webkit-backdrop-filter: blur(16px);
-      border-bottom: 1px solid transparent;
-      transition: border-color 0.3s;
+      border-color: var(--border);
     }
-    nav.scrolled { border-color: var(--border); }
     nav .inner {
       max-width: var(--max); margin: 0 auto; padding: 0 28px;
       display: flex; align-items: center; justify-content: space-between;
@@ -60,8 +62,11 @@
     .nav-logo {
       font-family: 'Instrument Serif', serif;
       font-size: 1.2rem; letter-spacing: -0.01em;
-      color: var(--teal-dim);
+      color: var(--herb-dim);
+      opacity: 0;
+      transition: opacity 0.5s ease;
     }
+    nav.scrolled .nav-logo { opacity: 1; }
     .nav-links {
       display: flex; gap: 28px; list-style: none;
       font-size: 0.875rem; font-weight: 400; color: var(--muted);
@@ -69,121 +74,155 @@
     .nav-links a { transition: color 0.2s; }
     .nav-links a:hover { color: var(--text); }
 
-    /* Hero */
+    /* =========== HERO (APPLE-STYLE STICKY) =========== */
+    .hero-wrapper {
+      position: relative;
+      height: 200vh; /* 100vh pin + 100vh release scroll distance */
+    }
     #hero {
-      min-height: 100vh; display: flex; flex-direction: column;
-      justify-content: center; padding-top: 80px;
-      position: relative; overflow: hidden;
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 80px 28px 40px;
+      overflow: hidden;
+      background: var(--bg);
     }
-    #hero::before {
-      content: ''; position: absolute; top: 0%; right: -12%;
-      width: 600px; height: 600px;
-      background: radial-gradient(circle, rgba(123,184,196,0.13) 0%, transparent 65%);
-      pointer-events: none;
+    .hero-inner {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 20px;
+      max-width: 640px;
+      width: 100%;
+      will-change: opacity, transform;
     }
-    #hero::after {
-      content: ''; position: absolute; bottom: 8%; left: -10%;
-      width: 440px; height: 440px;
-      background: radial-gradient(circle, rgba(176,90,106,0.07) 0%, transparent 68%);
-      pointer-events: none;
-    }
-
-    .hero-eyebrow {
-      font-size: 0.78rem; letter-spacing: 0.13em; text-transform: uppercase;
-      color: var(--teal-dim); margin-bottom: 22px;
-      display: flex; align-items: center; gap: 10px;
-      opacity: 0; animation: fadeUp 0.75s ease 0.1s forwards;
-    }
-    .hero-eyebrow::before { content: ''; width: 22px; height: 1px; background: var(--teal); display: block; }
-
-    .hero-name {
+    .hero-greeting {
       font-family: 'Instrument Serif', serif;
-      font-size: clamp(3.4rem, 10.5vw, 6.8rem);
-      line-height: 1.0; letter-spacing: -0.025em; margin-bottom: 26px;
-      opacity: 0; animation: fadeUp 0.75s ease 0.2s forwards;
+      font-weight: 400;
+      font-size: clamp(4rem, 11vw, 7.5rem);
+      line-height: 1;
+      letter-spacing: -0.02em;
+      color: var(--text);
+      opacity: 0;
+      animation: fadeUp 0.9s ease 0.2s forwards;
     }
-    .hero-name .outline {
-      -webkit-text-stroke: 1.5px rgba(39, 43, 41, 0.22);
-      color: transparent;
+    .hero-horse {
+      width: 100%;
+      max-width: 460px;
+      height: auto;
+      display: block;
+      opacity: 0;
+      animation: fadeUp 0.9s ease 0.4s forwards;
+      /* the drawing is black on white — blend it with the cream bg */
+      mix-blend-mode: multiply;
     }
-    .hero-name .lit {
-      color: var(--teal-dim);
-      font-style: italic;
+    .hero-hint {
+      margin-top: 12px;
+      font-size: 0.78rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--muted);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      opacity: 0;
+      animation: fadeUp 0.9s ease 0.7s forwards;
+    }
+    .hero-hint .arrow {
+      display: inline-block;
+      animation: bob 2s ease-in-out infinite;
+    }
+    @keyframes bob {
+      0%, 100% { transform: translateY(0); }
+      50%      { transform: translateY(5px); }
     }
 
-    .hero-tagline {
-      font-size: 1.1rem; font-weight: 300; font-style: italic;
-      color: var(--muted); max-width: 430px; line-height: 1.7; margin-bottom: 42px;
-      opacity: 0; animation: fadeUp 0.75s ease 0.3s forwards;
+    /* =========== MAIN CONTENT (sits above sticky hero) =========== */
+    main {
+      position: relative;
+      z-index: 2;
+      background: var(--bg);
     }
 
-    .hero-links {
-      display: flex; gap: 12px; flex-wrap: wrap;
-      opacity: 0; animation: fadeUp 0.75s ease 0.4s forwards;
-    }
-
-    .btn {
-      display: inline-flex; align-items: center; gap: 7px;
-      padding: 11px 24px; border-radius: 100px;
-      font-size: 0.875rem; font-weight: 500;
-      cursor: pointer; transition: all 0.22s ease;
-    }
-    .btn-primary { background: var(--teal-dim); color: #fff; }
-    .btn-primary:hover {
-      background: var(--teal);
-      box-shadow: 0 4px 24px rgba(123,184,196,0.35);
-      transform: translateY(-1px);
-    }
-    .btn-ghost { background: transparent; color: var(--muted); border: 1px solid var(--border); }
-    .btn-ghost:hover { border-color: var(--teal); color: var(--teal-dim); transform: translateY(-1px); }
-
-    .hero-status {
-      margin-top: 72px; display: flex; align-items: center; gap: 10px;
-      font-size: 0.8rem; color: var(--muted);
-      opacity: 0; animation: fadeUp 0.75s ease 0.6s forwards;
-    }
-    .status-dot {
-      width: 7px; height: 7px; border-radius: 50%;
-      background: var(--sage);
-      box-shadow: 0 0 8px rgba(149,184,152,0.6);
-      animation: pulse 2.5s ease infinite;
-    }
-    @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.35; } }
-
-    .divider { width: 100%; height: 1px; background: linear-gradient(90deg, transparent, var(--border), transparent); }
-
-    /* Sections */
-    section { padding: 96px 0; }
+    /* =========== SECTIONS =========== */
+    section { padding: 96px 0; position: relative; }
     .section-label {
       font-size: 0.78rem; letter-spacing: 0.12em; text-transform: uppercase;
-      color: var(--teal-dim); margin-bottom: 44px;
+      color: var(--herb-dim); margin-bottom: 44px;
       display: flex; align-items: center; gap: 14px;
     }
     .section-label::after { content: ''; flex: 1; height: 1px; background: var(--border); }
 
-    /* Projects */
-    .projects-grid { display: grid; gap: 12px; }
+    /* =========== PROJECTS (with doodle background) =========== */
+    #projects {
+      position: relative;
+      overflow: hidden;
+    }
+    /* Doodles as a low-opacity backdrop, sits BEHIND the cards but ABOVE the section bg */
+    #projects::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image: url('assets/doodles-bg.png');
+      background-repeat: no-repeat;
+      background-position: center top;
+      background-size: 110% auto;
+      opacity: 0.13;
+      mix-blend-mode: multiply;
+      pointer-events: none;
+      z-index: 0;
+    }
+    /* Soft fade on the doodle bg edges so it blends */
+    #projects::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(
+        to bottom,
+        transparent 0%,
+        transparent 65%,
+        var(--bg) 100%
+      );
+      pointer-events: none;
+      z-index: 0;
+    }
+    #projects .container { position: relative; z-index: 1; }
 
+    .projects-grid { display: grid; gap: 14px; }
+
+    /* Cards sit ABOVE the doodles — given a solid surface + stronger border
+       so they stay cleanly legible against the drawn background */
     .project-card {
       background: var(--surface);
       border: 1px solid var(--border);
       border-radius: var(--radius);
       padding: 28px 32px;
       display: grid; grid-template-columns: 1fr auto; align-items: start; gap: 16px;
-      transition: border-color 0.25s, box-shadow 0.25s, background 0.25s;
+      transition: border-color 0.25s, box-shadow 0.25s, background 0.25s, transform 0.25s;
       position: relative; overflow: hidden;
+      /* gentle shadow to lift them off the doodles */
+      box-shadow:
+        0 1px 2px rgba(28, 26, 23, 0.03),
+        0 6px 22px -14px rgba(28, 26, 23, 0.18);
     }
     .project-card::before {
       content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 3px;
-      background: var(--teal);
+      background: var(--herb);
       border-radius: 0 2px 2px 0;
       transform: scaleY(0); transform-origin: bottom;
       transition: transform 0.3s ease;
     }
     .project-card:hover {
       border-color: var(--silver);
-      box-shadow: 0 8px 36px rgba(123,184,196,0.1);
+      box-shadow:
+        0 1px 2px rgba(28, 26, 23, 0.04),
+        0 16px 40px -18px rgba(90, 122, 88, 0.28);
       background: var(--surface2);
+      transform: translateY(-2px);
     }
     .project-card:hover::before { transform: scaleY(1); }
 
@@ -193,7 +232,7 @@
       font-size: 1.2rem; letter-spacing: -0.01em; margin-bottom: 10px;
       color: var(--text); transition: color 0.2s;
     }
-    .project-card:hover .project-title { color: var(--teal-dim); }
+    .project-card:hover .project-title { color: var(--herb-dim); }
     .project-desc {
       font-size: 0.88rem; font-weight: 300; color: var(--muted);
       line-height: 1.65; margin-bottom: 20px; font-style: italic;
@@ -202,27 +241,27 @@
     .tag {
       font-size: 0.72rem; font-weight: 500;
       padding: 4px 12px; border-radius: 100px;
-      background: var(--teal-lt);
-      color: var(--teal-dim); letter-spacing: 0.02em;
-      border: 1px solid rgba(123,184,196,0.2);
+      background: var(--herb-lt);
+      color: var(--herb-dim); letter-spacing: 0.02em;
+      border: 1px solid rgba(90,122,88,0.2);
     }
     .project-links { display: flex; gap: 16px; }
     .project-link {
       font-size: 0.78rem; font-weight: 500; color: var(--muted);
       display: flex; align-items: center; gap: 5px; transition: color 0.2s;
     }
-    .project-link:hover { color: var(--rose); }
+    .project-link:hover { color: var(--terracotta); }
     .project-arrow {
       font-size: 1.1rem; color: var(--border);
       transition: color 0.25s, transform 0.25s;
     }
-    .project-card:hover .project-arrow { color: var(--teal); transform: translate(3px, -3px); }
+    .project-card:hover .project-arrow { color: var(--herb); transform: translate(3px, -3px); }
 
-    /* About */
+    /* =========== ABOUT =========== */
     .about-grid { display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 48px; align-items: start; }
     .about-text { font-size: 1rem; font-weight: 300; color: var(--muted); line-height: 1.85; font-style: italic; }
     .about-text strong { color: var(--text); font-weight: 500; font-style: normal; }
-    .about-text em { color: var(--teal-dim); font-style: normal; }
+    .about-text em { color: var(--herb-dim); font-style: normal; }
 
     .skills-block { display: flex; flex-direction: column; gap: 6px; }
     .skill-row {
@@ -232,22 +271,39 @@
       font-size: 0.875rem;
       transition: border-color 0.2s, background 0.2s;
     }
-    .skill-row:hover { border-color: var(--teal); background: var(--surface2); }
+    .skill-row:hover { border-color: var(--herb); background: var(--surface2); }
     .skill-row span { color: var(--silver); font-size: 0.75rem; }
 
-    /* Contact */
+    /* =========== CONTACT =========== */
     #contact { text-align: center; padding-bottom: 120px; }
     .contact-heading {
       font-family: 'Instrument Serif', serif;
       font-size: clamp(2.2rem, 6.5vw, 3.8rem);
       letter-spacing: -0.02em; line-height: 1.1; margin-bottom: 16px;
     }
-    .contact-heading .lit { font-style: italic; color: var(--rose); }
+    .contact-heading .lit { font-style: italic; color: var(--terracotta); }
     .contact-sub { font-size: 1rem; font-weight: 300; font-style: italic; color: var(--muted); margin-bottom: 36px; }
     .contact-links { display: flex; justify-content: center; gap: 12px; flex-wrap: wrap; }
 
-    /* Footer */
-    footer { border-top: 1px solid var(--border); padding: 26px 0; }
+    /* =========== BUTTONS =========== */
+    .btn {
+      display: inline-flex; align-items: center; gap: 7px;
+      padding: 11px 24px; border-radius: 100px;
+      font-size: 0.875rem; font-weight: 500;
+      cursor: pointer; transition: all 0.22s ease;
+    }
+    .btn-primary { background: var(--herb-dim); color: #fff; border: 1px solid var(--herb-dim); }
+    .btn-primary:hover {
+      background: var(--herb);
+      border-color: var(--herb);
+      box-shadow: 0 4px 24px rgba(90,122,88,0.35);
+      transform: translateY(-1px);
+    }
+    .btn-ghost { background: transparent; color: var(--muted); border: 1px solid var(--border); }
+    .btn-ghost:hover { border-color: var(--herb); color: var(--herb-dim); transform: translateY(-1px); }
+
+    /* =========== FOOTER =========== */
+    footer { border-top: 1px solid var(--border); padding: 26px 0; position: relative; z-index: 2; background: var(--bg); }
     footer .inner {
       max-width: var(--max); margin: 0 auto; padding: 0 28px;
       display: flex; justify-content: space-between; align-items: center;
@@ -255,15 +311,18 @@
     }
     footer span:last-child { color: var(--silver); }
 
-    /* Animations */
+    /* =========== ANIMATIONS =========== */
     @keyframes fadeUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
     .reveal { opacity: 0; transform: translateY(18px); transition: opacity 0.65s ease, transform 0.65s ease; }
     .reveal.visible { opacity: 1; transform: translateY(0); }
 
+    /* =========== MOBILE =========== */
     @media (max-width: 600px) {
       .about-grid { grid-template-columns: 1fr; }
       .project-card { grid-template-columns: 1fr; }
       .project-arrow { display: none; }
+      .hero-wrapper { height: 180vh; }
+      #projects::before { background-size: 180% auto; opacity: 0.1; }
     }
   </style>
 </head>
@@ -280,165 +339,170 @@
     </div>
   </nav>
 
-  <section id="hero">
-    <div class="container">
-      <p class="hero-eyebrow">Software Engineer &amp; Builder</p>
-      <h1 class="hero-name">
-        <span class="outline">Hi,</span><br>
-        I'm <span class="lit">Bertram.</span>
-      </h1>
-      <p class="hero-tagline">
-        <!-- REPLACE THIS --> I build thoughtful software and design experiences that feel just right.
-      </p>
-      <div class="hero-links">
-        <a href="#projects" class="btn btn-primary">View my work ↓</a>
-        <a href="https://github.com" target="_blank" class="btn btn-ghost">GitHub</a>
-        <a href="https://linkedin.com" target="_blank" class="btn btn-ghost">LinkedIn</a>
+  <!-- STICKY APPLE-STYLE HERO -->
+  <div class="hero-wrapper">
+    <section id="hero">
+      <div class="hero-inner" id="heroInner">
+        <h1 class="hero-greeting">Hi!</h1>
+        <img src="assets/horse-hero.png" alt="A hand-drawn horse saying hi" class="hero-horse" />
+        <p class="hero-hint">Scroll <span class="arrow">↓</span></p>
       </div>
-      <p class="hero-status">
-        <span class="status-dot"></span>
-        Open to opportunities
-      </p>
-    </div>
-  </section>
+    </section>
+  </div>
 
-  <div class="divider"></div>
+  <main>
+    <section id="projects">
+      <div class="container">
+        <p class="section-label reveal">Selected Work</p>
+        <div class="projects-grid">
 
-  <section id="projects">
-    <div class="container">
-      <p class="section-label reveal">Selected Work</p>
-      <div class="projects-grid">
-
-        <div class="project-card reveal">
-          <div>
-            <p class="project-num">01 —</p>
-            <h3 class="project-title">Trim</h3>
-            <p class="project-desc">Need some help with cutting? Trim the calories down.</p>
-            <div class="project-tags">
-              <span class="tag">Product Design</span>
-              <span class="tag">Motion Design</span>
-              <span class="tag">HTML/CSS/JS</span>
-              <span class="tag">Design Systems</span>
+          <div class="project-card reveal">
+            <div>
+              <p class="project-num">01 —</p>
+              <h3 class="project-title">Trim</h3>
+              <p class="project-desc">Need some help with cutting? Trim the calories down.</p>
+              <div class="project-tags">
+                <span class="tag">Product Design</span>
+                <span class="tag">Motion Design</span>
+                <span class="tag">HTML/CSS/JS</span>
+                <span class="tag">Design Systems</span>
+              </div>
+              <div class="project-links">
+                <a href="trim.html" class="project-link">↗ Live Demo</a>
+                <a href="trim_casestudy.html" class="project-link">⌥ Case Study</a>
+              </div>
             </div>
-            <div class="project-links">
-              <a href="trim.html" class="project-link">↗ Live Demo</a>
-              <a href="trim_casestudy.html" class="project-link">⌥ Case Study</a>
-            </div>
+            <span class="project-arrow">↗</span>
           </div>
-          <span class="project-arrow">↗</span>
-        </div>
 
-        <div class="project-card reveal">
-          <div>
-            <p class="project-num">02 —</p>
-            <h3 class="project-title">Auto Guitar Tab Scroller</h3>
-            <p class="project-desc">An auto music sheet scroller that can scroll at a set speed or be triggered by an user-recorded audio</p>
-            <div class="project-tags">
-              <span class="tag">Swift</span>
-              <span class="tag">SwiftUI</span>
-              <span class="tag">PDFkit</span>
-              <span class="tag">Xcode</span>
-              <span class="tag">AVFoundation</span>
-              <span class="tag">Accelerate (vDSP)</span>
+          <div class="project-card reveal">
+            <div>
+              <p class="project-num">02 —</p>
+              <h3 class="project-title">Auto Guitar Tab Scroller</h3>
+              <p class="project-desc">An auto music sheet scroller that can scroll at a set speed or be triggered by a user-recorded audio</p>
+              <div class="project-tags">
+                <span class="tag">Swift</span>
+                <span class="tag">SwiftUI</span>
+                <span class="tag">PDFKit</span>
+                <span class="tag">Xcode</span>
+                <span class="tag">AVFoundation</span>
+                <span class="tag">Accelerate (vDSP)</span>
+              </div>
+              <div class="project-links">
+                <a href="https://github.com/Bertram-Qian/GuitarTabScroller" target="_blank" rel="noopener" class="project-link">↗ Link</a>
+              </div>
             </div>
-            <div class="project-links">
-              <a href="https://github.com/Bertram-Qian/GuitarTabScroller" class="project-link">↗ Link</a>
-            </div>
+            <span class="project-arrow">↗</span>
           </div>
-          <span class="project-arrow">↗</span>
-        </div>
 
-        <div class="project-card reveal">
-          <div>
-            <p class="project-num">03 —</p>
-            <h3 class="project-title">Study Crew (Chrome Extension)</h3>
-            <p class="project-desc">A mini construction crew that build barriers over distracting tabs to help you focus</p>
-            <div class="project-tags">
-              <span class="tag">HTML/CSS/JS</span>
-              <span class="tag">Python</span>
+          <div class="project-card reveal">
+            <div>
+              <p class="project-num">03 —</p>
+              <h3 class="project-title">Study Crew (Chrome Extension)</h3>
+              <p class="project-desc">A mini construction crew that builds barriers over distracting tabs to help you focus</p>
+              <div class="project-tags">
+                <span class="tag">HTML/CSS/JS</span>
+                <span class="tag">Python</span>
+              </div>
+              <div class="project-links">
+                <a href="https://github.com/Bertram-Qian/Study-Crew" target="_blank" rel="noopener" class="project-link">↗ Link</a>
+              </div>
             </div>
-            <div class="project-links">
-              <a href="https://github.com/Bertram-Qian/Study-Crew" class="project-link">↗ Link</a>
-            </div>
+            <span class="project-arrow">↗</span>
           </div>
-          <span class="project-arrow">↗</span>
-        </div>
 
-        <div class="project-card reveal">
-          <div>
-            <p class="project-num">04 —</p>
-            <h3 class="project-title">SEO Casestudy</h3>
-            <p class="project-desc">A SEO experiment I would run for a new product launch</p>
-            <div class="project-tags">
-              <span class="tag">HTML/CSS/JS</span>
-              <span class="tag">SEO</span>
-              <span class="tag">Growth</span>
+          <div class="project-card reveal">
+            <div>
+              <p class="project-num">04 —</p>
+              <h3 class="project-title">SEO Case Study</h3>
+              <p class="project-desc">An SEO experiment I would run for a new product launch</p>
+              <div class="project-tags">
+                <span class="tag">HTML/CSS/JS</span>
+                <span class="tag">SEO</span>
+                <span class="tag">Growth</span>
+              </div>
+              <div class="project-links">
+                <a href="SEO.html" class="project-link">↗ Link</a>
+              </div>
             </div>
-            <div class="project-links">
-              <a href="SEO.html" class="project-link">↗ Link</a>
-            </div>
+            <span class="project-arrow">↗</span>
           </div>
-          <span class="project-arrow">↗</span>
-        </div>
 
-
-
-      </div>
-    </div>
-  </section>
-
-  <div class="divider"></div>
-
-  <section id="about">
-    <div class="container">
-      <p class="section-label reveal">About</p>
-      <div class="about-grid">
-        <div class="reveal">
-          <p class="about-text">
-            I'm <strong>Bertram</strong>,a software engineer who cares about the craft. I like building things that are well-made from the inside out. Clean code, thoughtful interfaces, experiences that feel effortless to use.<br><br>
-            Currently studying at the <em>University of Waterloo</em>. Always open to interesting problems and good collaborations.
-          </p>
-        </div>
-        <div class="skills-block reveal">
-          <div class="skill-row">JavaScript / TypeScript <span>Frontend</span></div>
-          <div class="skill-row">Python <span>Backend</span></div>
-          <div class="skill-row">React / Next.js <span>Framework</span></div>
-          <div class="skill-row">SQL / PostgreSQL <span>Database</span></div>
-          <div class="skill-row">Git / GitHub <span>Tooling</span></div>
-          <div class="skill-row">Figma <span>Design</span></div>
         </div>
       </div>
-    </div>
-  </section>
+    </section>
 
-  <div class="divider"></div>
-
-  <section id="contact">
-    <div class="container">
-      <h2 class="contact-heading reveal">
-        Let's build something<br><span class="lit">together.</span>
-      </h2>
-      <p class="contact-sub reveal">Open to work, collaborations, and good conversations.</p>
-      <div class="contact-links reveal">
-        <a href="mailto:b4qian@uwaterloo.ca" class="btn btn-primary">Say hello ✉</a>
-        <a href="https://github.com/Bertram-Qian" target="_blank" class="btn btn-ghost">GitHub</a>
-        <a href="https://www.linkedin.com/in/bertram-qian/" target="_blank" class="btn btn-ghost">LinkedIn</a>
+    <section id="about">
+      <div class="container">
+        <p class="section-label reveal">About</p>
+        <div class="about-grid">
+          <div class="reveal">
+            <p class="about-text">
+              I'm <strong>Bertram</strong>, a software engineer who cares about the craft. I like building things that are well-made from the inside out. Clean code, thoughtful interfaces, experiences that feel effortless to use.<br><br>
+              Currently studying at the <em>University of Waterloo</em>. Always open to interesting problems and good collaborations.
+            </p>
+          </div>
+          <div class="skills-block reveal">
+            <div class="skill-row">JavaScript / TypeScript <span>Frontend</span></div>
+            <div class="skill-row">Python <span>Backend</span></div>
+            <div class="skill-row">React / Next.js <span>Framework</span></div>
+            <div class="skill-row">SQL / PostgreSQL <span>Database</span></div>
+            <div class="skill-row">Git / GitHub <span>Tooling</span></div>
+            <div class="skill-row">Figma <span>Design</span></div>
+          </div>
+        </div>
       </div>
-    </div>
-  </section>
+    </section>
 
-  <footer>
-    <div class="inner">
-      <span>© 2026 Bertram</span>
-      <span>Built from scratch — no templates.</span>
-    </div>
-  </footer>
+    <section id="contact">
+      <div class="container">
+        <h2 class="contact-heading reveal">
+          Let's build something<br><span class="lit">together.</span>
+        </h2>
+        <p class="contact-sub reveal">Open to work, collaborations, and good conversations.</p>
+        <div class="contact-links reveal">
+          <a href="mailto:b4qian@uwaterloo.ca" class="btn btn-primary">Say hello ✉</a>
+          <a href="https://github.com/Bertram-Qian" target="_blank" rel="noopener" class="btn btn-ghost">GitHub</a>
+          <a href="https://www.linkedin.com/in/bertram-qian/" target="_blank" rel="noopener" class="btn btn-ghost">LinkedIn</a>
+        </div>
+      </div>
+    </section>
+
+    <footer>
+      <div class="inner">
+        <span>© 2026 Bertram</span>
+        <span>Built from scratch — no templates.</span>
+      </div>
+    </footer>
+  </main>
 
   <script>
+    // Nav scroll state
     const nav = document.getElementById('nav');
     window.addEventListener('scroll', () => {
       nav.classList.toggle('scrolled', window.scrollY > 20);
     });
+
+    // Apple-style hero fade as user scrolls past
+    const heroInner = document.getElementById('heroInner');
+    const heroHint  = document.querySelector('.hero-hint');
+    function updateHero() {
+      const vh = window.innerHeight;
+      const y  = window.scrollY;
+      if (y < vh) {
+        const p = y / vh; // 0 -> 1 across one viewport
+        // gentle fade + scale + upward drift
+        heroInner.style.opacity = Math.max(0, 1 - p * 1.2);
+        heroInner.style.transform = `translateY(${p * -60}px) scale(${1 - p * 0.06})`;
+        if (heroHint) heroHint.style.opacity = Math.max(0, 1 - p * 2.5);
+      } else {
+        heroInner.style.opacity = 0;
+      }
+    }
+    window.addEventListener('scroll', updateHero, { passive: true });
+    updateHero();
+
+    // Reveal on scroll
     const reveals = document.querySelectorAll('.reveal');
     const observer = new IntersectionObserver(
       entries => entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); }),
