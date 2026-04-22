@@ -84,44 +84,43 @@
       top: 0;
       height: 100vh;
       display: flex;
-      flex-direction: column;
       align-items: center;
-      justify-content: center;
-      padding: 80px 28px 40px;
       overflow: hidden;
-      background: var(--bg);
+      /* Horse drawing as a big right-anchored backdrop.
+         background-blend-mode lets the ink harmonize with the cream
+         so the image's white background disappears. */
+      background-color: var(--bg);
+      background-image: url('assets/horse-hero.png');
+      background-repeat: no-repeat;
+      background-position: right center;
+      background-size: auto 92%;
+      background-blend-mode: multiply;
+      will-change: opacity;
     }
     .hero-inner {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 20px;
-      max-width: 640px;
       width: 100%;
+      max-width: var(--max);
+      margin: 0 auto;
+      padding: 0 28px;
+      position: relative;
+      z-index: 2;
       will-change: opacity, transform;
     }
     .hero-greeting {
       font-family: 'Instrument Serif', serif;
       font-weight: 400;
-      font-size: clamp(4rem, 11vw, 7.5rem);
-      line-height: 1;
-      letter-spacing: -0.02em;
+      font-size: clamp(5.5rem, 15vw, 12rem);
+      line-height: 0.9;
+      letter-spacing: -0.035em;
       color: var(--text);
       opacity: 0;
       animation: fadeUp 0.9s ease 0.2s forwards;
     }
-    .hero-horse {
-      width: 100%;
-      max-width: 460px;
-      height: auto;
-      display: block;
-      opacity: 0;
-      animation: fadeUp 0.9s ease 0.4s forwards;
-      /* the drawing is black on white — blend it with the cream bg */
-      mix-blend-mode: multiply;
-    }
     .hero-hint {
-      margin-top: 12px;
+      position: absolute;
+      bottom: 36px;
+      left: 50%;
+      transform: translateX(-50%);
       font-size: 0.78rem;
       letter-spacing: 0.14em;
       text-transform: uppercase;
@@ -131,6 +130,7 @@
       gap: 10px;
       opacity: 0;
       animation: fadeUp 0.9s ease 0.7s forwards;
+      z-index: 3;
     }
     .hero-hint .arrow {
       display: inline-block;
@@ -322,6 +322,12 @@
       .project-card { grid-template-columns: 1fr; }
       .project-arrow { display: none; }
       .hero-wrapper { height: 180vh; }
+      /* shrink and shift the horse so "Hi!" isn't crowded on narrow screens */
+      #hero {
+        background-size: auto 55%;
+        background-position: right -40px bottom 80px;
+      }
+      .hero-greeting { font-size: clamp(4.5rem, 22vw, 7rem); }
       #projects::before { background-size: 180% auto; opacity: 0.1; }
     }
   </style>
@@ -344,9 +350,8 @@
     <section id="hero">
       <div class="hero-inner" id="heroInner">
         <h1 class="hero-greeting">Hi!</h1>
-        <img src="assets/horse-hero.png" alt="A hand-drawn horse saying hi" class="hero-horse" />
-        <p class="hero-hint">Scroll <span class="arrow">↓</span></p>
       </div>
+      <p class="hero-hint">Scroll <span class="arrow">↓</span></p>
     </section>
   </div>
 
@@ -484,6 +489,7 @@
     });
 
     // Apple-style hero fade as user scrolls past
+    const heroEl    = document.getElementById('hero');
     const heroInner = document.getElementById('heroInner');
     const heroHint  = document.querySelector('.hero-hint');
     function updateHero() {
@@ -491,12 +497,13 @@
       const y  = window.scrollY;
       if (y < vh) {
         const p = y / vh; // 0 -> 1 across one viewport
-        // gentle fade + scale + upward drift
-        heroInner.style.opacity = Math.max(0, 1 - p * 1.2);
+        // whole hero (including horse background) fades
+        heroEl.style.opacity = Math.max(0, 1 - p * 1.2);
+        // text drifts up and scales slightly
         heroInner.style.transform = `translateY(${p * -60}px) scale(${1 - p * 0.06})`;
         if (heroHint) heroHint.style.opacity = Math.max(0, 1 - p * 2.5);
       } else {
-        heroInner.style.opacity = 0;
+        heroEl.style.opacity = 0;
       }
     }
     window.addEventListener('scroll', updateHero, { passive: true });
