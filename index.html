@@ -158,8 +158,9 @@
     /* =========== SECTIONS =========== */
     section { padding: 96px 0; position: relative; }
     .section-label {
-      font-size: 0.78rem; letter-spacing: 0.12em; text-transform: uppercase;
-      color: var(--herb-dim); margin-bottom: 44px;
+      font-size: 0.72rem; letter-spacing: 0.16em; text-transform: uppercase;
+      color: var(--text); margin-bottom: 44px;
+      font-weight: 500;
       display: flex; align-items: center; gap: 14px;
     }
     .section-label::after { content: ''; flex: 1; height: 1px; background: var(--border); }
@@ -178,7 +179,7 @@
       background-repeat: no-repeat;
       background-position: center top;
       background-size: 110% auto;
-      opacity: 0.1;
+      opacity: 0.07;
       mix-blend-mode: multiply;
       pointer-events: none;
       z-index: 0;
@@ -199,70 +200,104 @@
     }
     #projects .container { position: relative; z-index: 1; }
 
-    .projects-grid { display: grid; gap: 14px; }
+    .projects-grid {
+      display: flex;
+      flex-direction: column;
+      /* hairline divider between entries, runs top + bottom of the stack */
+      border-top: 1px solid var(--text);
+    }
 
-    /* Cards sit ABOVE the doodles — given a solid surface + stronger border
-       so they stay cleanly legible against the drawn background */
+    /* Cards are now flat editorial entries — no fill, no rounded corners,
+       no border. Just generous space and a hairline rule below each one. */
     .project-card {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      padding: 28px 32px;
-      display: grid; grid-template-columns: 1fr auto; align-items: start; gap: 16px;
-      transition: border-color 0.25s, box-shadow 0.25s, background 0.25s, transform 0.25s;
-      position: relative; overflow: hidden;
-      /* gentle shadow to lift them off the doodles */
-      box-shadow:
-        0 1px 2px rgba(28, 26, 23, 0.03),
-        0 6px 22px -14px rgba(28, 26, 23, 0.18);
+      background: transparent;
+      border: none;
+      border-bottom: 1px solid var(--text);
+      border-radius: 0;
+      padding: 36px 0;
+      display: grid; grid-template-columns: 1fr auto; align-items: start; gap: 24px;
+      transition: background 0.3s ease;
+      position: relative;
+      box-shadow: none;
     }
-    .project-card::before {
-      content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 3px;
-      background: var(--herb);
-      border-radius: 0 2px 2px 0;
-      transform: scaleY(0); transform-origin: bottom;
-      transition: transform 0.3s ease;
-    }
+    .project-card::before { display: none; } /* kill old left accent bar */
     .project-card:hover {
-      border-color: var(--silver);
-      box-shadow:
-        0 1px 2px rgba(28, 26, 23, 0.04),
-        0 16px 40px -18px rgba(90, 122, 88, 0.28);
-      background: var(--surface2);
-      transform: translateY(-2px);
+      background: rgba(28, 26, 23, 0.025);
+      transform: none;
+      box-shadow: none;
     }
-    .project-card:hover::before { transform: scaleY(1); }
 
-    .project-num { font-size: 0.72rem; color: var(--silver); margin-bottom: 8px; letter-spacing: 0.05em; }
+    .project-num {
+      font-size: 0.72rem;
+      color: var(--muted);
+      margin-bottom: 14px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      font-weight: 500;
+    }
     .project-title {
       font-family: 'Instrument Serif', serif;
-      font-size: 1.2rem; letter-spacing: -0.01em; margin-bottom: 10px;
-      color: var(--text); transition: color 0.2s;
+      font-size: 1.9rem;
+      letter-spacing: -0.015em;
+      line-height: 1.05;
+      margin-bottom: 12px;
+      color: var(--text);
+      transition: color 0.2s;
     }
-    .project-card:hover .project-title { color: var(--herb-dim); }
+    .project-card:hover .project-title { color: var(--text); }
     .project-desc {
-      font-size: 0.88rem; font-weight: 300; color: var(--muted);
-      line-height: 1.65; margin-bottom: 20px; font-style: italic;
+      font-size: 0.95rem;
+      font-weight: 300;
+      color: var(--muted);
+      line-height: 1.65;
+      margin-bottom: 22px;
+      max-width: 600px;
+      font-style: normal;
     }
-    .project-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 18px; }
+    .project-tags { display: flex; flex-wrap: wrap; gap: 16px; margin-bottom: 22px; }
+    /* Inline text-only tags, comma-style — no pill bubbles */
     .tag {
-      font-size: 0.72rem; font-weight: 500;
-      padding: 4px 12px; border-radius: 100px;
-      background: var(--herb-lt);
-      color: var(--herb-dim); letter-spacing: 0.02em;
-      border: 1px solid rgba(90,122,88,0.2);
+      font-size: 0.72rem;
+      font-weight: 500;
+      padding: 0;
+      border-radius: 0;
+      background: transparent;
+      color: var(--muted);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      border: none;
+      position: relative;
     }
-    .project-links { display: flex; gap: 16px; }
+    .tag:not(:last-child)::after {
+      content: '·';
+      position: absolute;
+      right: -10px; top: 50%;
+      transform: translateY(-50%);
+      color: var(--silver);
+    }
+    .project-links { display: flex; gap: 24px; }
     .project-link {
-      font-size: 0.78rem; font-weight: 500; color: var(--muted);
-      display: flex; align-items: center; gap: 5px; transition: color 0.2s;
+      font-size: 0.78rem;
+      font-weight: 500;
+      color: var(--text);
+      display: flex; align-items: center; gap: 5px;
+      transition: opacity 0.2s;
+      letter-spacing: 0.04em;
+      border-bottom: 1px solid var(--text);
+      padding-bottom: 2px;
     }
-    .project-link:hover { color: var(--terracotta); }
+    .project-link:hover { opacity: 0.55; }
     .project-arrow {
-      font-size: 1.1rem; color: var(--border);
+      font-size: 1.4rem;
+      color: var(--silver);
       transition: color 0.25s, transform 0.25s;
+      align-self: flex-start;
+      margin-top: 8px;
     }
-    .project-card:hover .project-arrow { color: var(--herb); transform: translate(3px, -3px); }
+    .project-card:hover .project-arrow {
+      color: var(--text);
+      transform: translate(4px, -4px);
+    }
 
     /* =========== ABOUT =========== */
     .about-grid { display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 48px; align-items: start; }
