@@ -9,11 +9,11 @@
 
   <style>
     :root {
-      --bg:         #F5F2ED;
-      --bg2:        #ECEAE4;
-      --surface:    #FDFBF8;
+      --bg:         #FFFFFF;
+      --bg2:        #F5F2ED;
+      --surface:    #FAFAF5;
       --surface2:   #EDF2EC;
-      --border:     #E0DAD1;
+      --border:     #E8E4DC;
       --text:       #1C1A17;
       --muted:      #8A8580;
       --herb:       #5A7A58;
@@ -50,7 +50,7 @@
       transition: background 0.4s ease, backdrop-filter 0.4s ease, border-color 0.3s;
     }
     nav.scrolled {
-      background: rgba(245, 242, 237, 0.85);
+      background: rgba(255, 255, 255, 0.85);
       backdrop-filter: blur(16px);
       -webkit-backdrop-filter: blur(16px);
       border-color: var(--border);
@@ -85,36 +85,43 @@
       height: 100vh;
       display: flex;
       align-items: center;
+      justify-content: center;
       overflow: hidden;
-      /* Horse drawing as a big right-anchored backdrop.
-         background-blend-mode lets the ink harmonize with the cream
-         so the image's white background disappears. */
-      background-color: var(--bg);
-      background-image: url('assets/horse-hero.png');
-      background-repeat: no-repeat;
-      background-position: right center;
-      background-size: auto 92%;
-      background-blend-mode: multiply;
+      background: var(--bg);
       will-change: opacity;
     }
     .hero-inner {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 24px;
       width: 100%;
-      max-width: var(--max);
-      margin: 0 auto;
-      padding: 0 28px;
-      position: relative;
-      z-index: 2;
+      max-width: 1280px;
+      padding: 0 40px;
       will-change: opacity, transform;
     }
     .hero-greeting {
       font-family: 'Instrument Serif', serif;
       font-weight: 400;
-      font-size: clamp(5.5rem, 15vw, 12rem);
+      font-size: clamp(5rem, 14vw, 11rem);
       line-height: 0.9;
       letter-spacing: -0.035em;
       color: var(--text);
+      flex-shrink: 0;
       opacity: 0;
       animation: fadeUp 0.9s ease 0.2s forwards;
+    }
+    .hero-horse {
+      max-height: 82vh;
+      max-width: 60vw;
+      width: auto;
+      height: auto;
+      object-fit: contain;
+      /* multiply blend ensures the drawing's white background
+         vanishes into whatever page bg we use */
+      mix-blend-mode: multiply;
+      opacity: 0;
+      animation: fadeUp 0.9s ease 0.4s forwards;
     }
     .hero-hint {
       position: absolute;
@@ -171,7 +178,7 @@
       background-repeat: no-repeat;
       background-position: center top;
       background-size: 110% auto;
-      opacity: 0.13;
+      opacity: 0.1;
       mix-blend-mode: multiply;
       pointer-events: none;
       z-index: 0;
@@ -317,18 +324,19 @@
     .reveal.visible { opacity: 1; transform: translateY(0); }
 
     /* =========== MOBILE =========== */
-    @media (max-width: 600px) {
+    @media (max-width: 760px) {
       .about-grid { grid-template-columns: 1fr; }
       .project-card { grid-template-columns: 1fr; }
       .project-arrow { display: none; }
       .hero-wrapper { height: 180vh; }
-      /* shrink and shift the horse so "Hi!" isn't crowded on narrow screens */
-      #hero {
-        background-size: auto 55%;
-        background-position: right -40px bottom 80px;
+      .hero-inner {
+        flex-direction: column;
+        gap: 0;
+        padding: 0 20px;
       }
       .hero-greeting { font-size: clamp(4.5rem, 22vw, 7rem); }
-      #projects::before { background-size: 180% auto; opacity: 0.1; }
+      .hero-horse { max-height: 45vh; max-width: 90%; }
+      #projects::before { background-size: 180% auto; opacity: 0.09; }
     }
   </style>
 </head>
@@ -350,6 +358,7 @@
     <section id="hero">
       <div class="hero-inner" id="heroInner">
         <h1 class="hero-greeting">Hi!</h1>
+        <img src="assets/horse-hero.png" alt="A hand-drawn horse saying hi" class="hero-horse" />
       </div>
       <p class="hero-hint">Scroll <span class="arrow">↓</span></p>
     </section>
