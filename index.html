@@ -165,138 +165,170 @@
     }
     .section-label::after { content: ''; flex: 1; height: 1px; background: var(--border); }
 
-    /* =========== PROJECTS (with doodle background) =========== */
+    /* =========== PROJECTS (APPLE-STYLE TILES) =========== */
     #projects {
       position: relative;
-      overflow: hidden;
+      padding: 0;
+      background: var(--bg2);
     }
-    /* Doodles as a low-opacity backdrop, sits BEHIND the cards but ABOVE the section bg */
-    #projects::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background-image: url('assets/doodles-bg.png');
-      background-repeat: no-repeat;
-      background-position: center top;
-      background-size: 110% auto;
-      opacity: 0.07;
-      mix-blend-mode: multiply;
-      pointer-events: none;
-      z-index: 0;
+    #projects .container {
+      max-width: none;
+      padding: 0;
     }
-    /* Soft fade on the doodle bg edges so it blends */
-    #projects::after {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(
-        to bottom,
-        transparent 0%,
-        transparent 65%,
-        var(--bg) 100%
-      );
-      pointer-events: none;
-      z-index: 0;
-    }
-    #projects .container { position: relative; z-index: 1; }
 
-    .projects-grid {
+    /* Section label sits in its own padded band above the tiles */
+    .projects-intro {
+      max-width: var(--max);
+      margin: 0 auto;
+      padding: 96px 28px 44px;
+    }
+
+    /* =========== APPLE-STYLE TILE GRID =========== */
+    /* Grid gap creates the thin bg-color gutters between tiles */
+    .project-grid-row {
+      display: grid;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+    .project-grid-row.full { grid-template-columns: 1fr; }
+    .project-grid-row.two  { grid-template-columns: 1fr 1fr; }
+
+    /* Each tile fills most of a viewport — dark or light, alternating */
+    .tile {
+      position: relative;
+      min-height: 620px;
+      padding: 64px 32px 40px;
       display: flex;
       flex-direction: column;
-      /* hairline divider between entries, runs top + bottom of the stack */
-      border-top: 1px solid var(--text);
+      align-items: center;
+      text-align: center;
+      overflow: hidden;
+      transition: transform 0.4s ease;
     }
+    .tile-light {
+      background: var(--bg);
+      color: var(--text);
+    }
+    .tile-dark {
+      background: #1C1A17;
+      color: #F5F2ED;
+    }
+    .tile-dark .tile-eyebrow,
+    .tile-dark .tile-tagline { color: rgba(245, 242, 237, 0.7); }
 
-    /* Cards are now flat editorial entries — no fill, no rounded corners,
-       no border. Just generous space and a hairline rule below each one. */
-    .project-card {
-      background: transparent;
-      border: none;
-      border-bottom: 1px solid var(--text);
-      border-radius: 0;
-      padding: 36px 0;
-      display: grid; grid-template-columns: 1fr auto; align-items: start; gap: 24px;
-      transition: background 0.3s ease;
-      position: relative;
-      box-shadow: none;
+    /* Header block — title + tagline + buttons, centered Apple-style */
+    .tile-header {
+      max-width: 680px;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 14px;
+      z-index: 2;
     }
-    .project-card::before { display: none; } /* kill old left accent bar */
-    .project-card:hover {
-      background: rgba(28, 26, 23, 0.025);
-      transform: none;
-      box-shadow: none;
-    }
-
-    .project-num {
+    .tile-eyebrow {
       font-size: 0.72rem;
-      color: var(--muted);
-      margin-bottom: 14px;
-      letter-spacing: 0.12em;
+      letter-spacing: 0.18em;
       text-transform: uppercase;
+      color: var(--muted);
       font-weight: 500;
+      margin-bottom: 2px;
     }
-    .project-title {
+    .tile-title {
       font-family: 'Instrument Serif', serif;
-      font-size: 1.9rem;
-      letter-spacing: -0.015em;
-      line-height: 1.05;
-      margin-bottom: 12px;
-      color: var(--text);
-      transition: color 0.2s;
+      font-weight: 400;
+      font-size: clamp(2.6rem, 4.8vw, 4rem);
+      line-height: 1;
+      letter-spacing: -0.025em;
     }
-    .project-card:hover .project-title { color: var(--text); }
-    .project-desc {
-      font-size: 0.95rem;
-      font-weight: 300;
+    .tile-tagline {
+      font-size: 1.05rem;
+      font-weight: 400;
       color: var(--muted);
-      line-height: 1.65;
-      margin-bottom: 22px;
-      max-width: 600px;
-      font-style: normal;
+      max-width: 540px;
+      line-height: 1.5;
+      margin-bottom: 8px;
     }
-    .project-tags { display: flex; flex-wrap: wrap; gap: 16px; margin-bottom: 22px; }
-    /* Inline text-only tags, comma-style — no pill bubbles */
-    .tag {
-      font-size: 0.72rem;
+    .tile-buttons {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      justify-content: center;
+      margin-top: 4px;
+    }
+    .tile-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 10px 22px;
+      border-radius: 100px;
+      font-size: 0.875rem;
       font-weight: 500;
-      padding: 0;
-      border-radius: 0;
+      transition: all 0.2s ease;
+      border: 1px solid transparent;
+    }
+    .tile-btn-filled {
+      background: var(--text);
+      color: var(--bg);
+    }
+    .tile-btn-filled:hover {
+      opacity: 0.82;
+      transform: translateY(-1px);
+    }
+    .tile-btn-outline {
       background: transparent;
-      color: var(--muted);
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      border: none;
+      color: var(--text);
+      border-color: currentColor;
+      opacity: 0.7;
+    }
+    .tile-btn-outline:hover {
+      opacity: 1;
+      transform: translateY(-1px);
+    }
+    .tile-dark .tile-btn-filled {
+      background: #F5F2ED;
+      color: #1C1A17;
+    }
+    .tile-dark .tile-btn-outline {
+      color: #F5F2ED;
+    }
+
+    /* Visual zone — sits below the header, ready for your horse drawings
+       or screenshots. Leaving it intentionally empty for now. */
+    .tile-visual {
+      flex: 1;
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 280px;
+      margin-top: 40px;
       position: relative;
     }
-    .tag:not(:last-child)::after {
-      content: '·';
+    /* Subtle dashed placeholder shown only until you drop a visual in */
+    .tile-visual:empty::before {
+      content: 'Visual goes here';
       position: absolute;
-      right: -10px; top: 50%;
-      transform: translateY(-50%);
-      color: var(--silver);
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      font-size: 0.72rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: rgba(138, 133, 128, 0.35);
+      padding: 12px 18px;
+      border: 1px dashed rgba(138, 133, 128, 0.25);
+      border-radius: 8px;
     }
-    .project-links { display: flex; gap: 24px; }
-    .project-link {
-      font-size: 0.78rem;
-      font-weight: 500;
-      color: var(--text);
-      display: flex; align-items: center; gap: 5px;
-      transition: opacity 0.2s;
-      letter-spacing: 0.04em;
-      border-bottom: 1px solid var(--text);
-      padding-bottom: 2px;
+    .tile-dark .tile-visual:empty::before {
+      color: rgba(245, 242, 237, 0.22);
+      border-color: rgba(245, 242, 237, 0.15);
     }
-    .project-link:hover { opacity: 0.55; }
-    .project-arrow {
-      font-size: 1.4rem;
-      color: var(--silver);
-      transition: color 0.25s, transform 0.25s;
-      align-self: flex-start;
-      margin-top: 8px;
-    }
-    .project-card:hover .project-arrow {
-      color: var(--text);
-      transform: translate(4px, -4px);
+
+    /* Clickable whole-tile link layer */
+    .tile-link-overlay {
+      position: absolute;
+      inset: 0;
+      z-index: 1;
     }
 
     /* =========== ABOUT =========== */
@@ -361,8 +393,6 @@
     /* =========== MOBILE =========== */
     @media (max-width: 760px) {
       .about-grid { grid-template-columns: 1fr; }
-      .project-card { grid-template-columns: 1fr; }
-      .project-arrow { display: none; }
       .hero-wrapper { height: 180vh; }
       .hero-inner {
         flex-direction: column;
@@ -371,7 +401,15 @@
       }
       .hero-greeting { font-size: clamp(4.5rem, 22vw, 7rem); }
       .hero-horse { max-height: 45vh; max-width: 90%; }
-      #projects::before { background-size: 180% auto; opacity: 0.09; }
+
+      /* Tiles stack on mobile */
+      .project-grid-row.two { grid-template-columns: 1fr; }
+      .tile {
+        min-height: 520px;
+        padding: 52px 24px 32px;
+      }
+      .tile-title { font-size: clamp(2.2rem, 9vw, 3rem); }
+      .projects-intro { padding: 72px 22px 32px; }
     }
   </style>
 </head>
@@ -401,84 +439,68 @@
 
   <main>
     <section id="projects">
-      <div class="container">
+      <div class="projects-intro">
         <p class="section-label reveal">Selected Work</p>
-        <div class="projects-grid">
-
-          <div class="project-card reveal">
-            <div>
-              <p class="project-num">01 —</p>
-              <h3 class="project-title">Trim</h3>
-              <p class="project-desc">Need some help with cutting? Trim the calories down.</p>
-              <div class="project-tags">
-                <span class="tag">Product Design</span>
-                <span class="tag">Motion Design</span>
-                <span class="tag">HTML/CSS/JS</span>
-                <span class="tag">Design Systems</span>
-              </div>
-              <div class="project-links">
-                <a href="trim.html" class="project-link">↗ Live Demo</a>
-                <a href="trim_casestudy.html" class="project-link">⌥ Case Study</a>
-              </div>
-            </div>
-            <span class="project-arrow">↗</span>
-          </div>
-
-          <div class="project-card reveal">
-            <div>
-              <p class="project-num">02 —</p>
-              <h3 class="project-title">Auto Guitar Tab Scroller</h3>
-              <p class="project-desc">An auto music sheet scroller that can scroll at a set speed or be triggered by a user-recorded audio</p>
-              <div class="project-tags">
-                <span class="tag">Swift</span>
-                <span class="tag">SwiftUI</span>
-                <span class="tag">PDFKit</span>
-                <span class="tag">Xcode</span>
-                <span class="tag">AVFoundation</span>
-                <span class="tag">Accelerate (vDSP)</span>
-              </div>
-              <div class="project-links">
-                <a href="https://github.com/Bertram-Qian/GuitarTabScroller" target="_blank" rel="noopener" class="project-link">↗ Link</a>
-              </div>
-            </div>
-            <span class="project-arrow">↗</span>
-          </div>
-
-          <div class="project-card reveal">
-            <div>
-              <p class="project-num">03 —</p>
-              <h3 class="project-title">Study Crew (Chrome Extension)</h3>
-              <p class="project-desc">A mini construction crew that builds barriers over distracting tabs to help you focus</p>
-              <div class="project-tags">
-                <span class="tag">HTML/CSS/JS</span>
-                <span class="tag">Python</span>
-              </div>
-              <div class="project-links">
-                <a href="https://github.com/Bertram-Qian/Study-Crew" target="_blank" rel="noopener" class="project-link">↗ Link</a>
-              </div>
-            </div>
-            <span class="project-arrow">↗</span>
-          </div>
-
-          <div class="project-card reveal">
-            <div>
-              <p class="project-num">04 —</p>
-              <h3 class="project-title">SEO Case Study</h3>
-              <p class="project-desc">An SEO experiment I would run for a new product launch</p>
-              <div class="project-tags">
-                <span class="tag">HTML/CSS/JS</span>
-                <span class="tag">SEO</span>
-                <span class="tag">Growth</span>
-              </div>
-              <div class="project-links">
-                <a href="SEO.html" class="project-link">↗ Link</a>
-              </div>
-            </div>
-            <span class="project-arrow">↗</span>
-          </div>
-
-        </div>
       </div>
+
+      <!-- Row 1: Full-width feature tile (Trim) -->
+      <div class="project-grid-row full reveal">
+        <article class="tile tile-light">
+          <div class="tile-header">
+            <p class="tile-eyebrow">01 — Product Design</p>
+            <h3 class="tile-title">Trim</h3>
+            <p class="tile-tagline">Need some help with cutting? Trim the calories down.</p>
+            <div class="tile-buttons">
+              <a href="trim.html" class="tile-btn tile-btn-filled">Live Demo →</a>
+              <a href="trim_casestudy.html" class="tile-btn tile-btn-outline">Case Study</a>
+            </div>
+          </div>
+          <div class="tile-visual"></div>
+        </article>
+      </div>
+
+      <!-- Row 2: Paired 2-up (Guitar Scroller + Study Crew) -->
+      <div class="project-grid-row two reveal">
+        <article class="tile tile-dark">
+          <div class="tile-header">
+            <p class="tile-eyebrow">02 — iOS / Swift</p>
+            <h3 class="tile-title">Auto Guitar Tab Scroller</h3>
+            <p class="tile-tagline">A music sheet scroller that runs at a set speed — or follows along with your playing.</p>
+            <div class="tile-buttons">
+              <a href="https://github.com/Bertram-Qian/GuitarTabScroller" target="_blank" rel="noopener" class="tile-btn tile-btn-filled">View on GitHub →</a>
+            </div>
+          </div>
+          <div class="tile-visual"></div>
+        </article>
+
+        <article class="tile tile-light">
+          <div class="tile-header">
+            <p class="tile-eyebrow">03 — Chrome Extension</p>
+            <h3 class="tile-title">Study Crew</h3>
+            <p class="tile-tagline">A mini construction crew that builds barriers over distracting tabs so you can focus.</p>
+            <div class="tile-buttons">
+              <a href="https://github.com/Bertram-Qian/Study-Crew" target="_blank" rel="noopener" class="tile-btn tile-btn-filled">View on GitHub →</a>
+            </div>
+          </div>
+          <div class="tile-visual"></div>
+        </article>
+      </div>
+
+      <!-- Row 3: Full-width (SEO Case Study) -->
+      <div class="project-grid-row full reveal">
+        <article class="tile tile-light">
+          <div class="tile-header">
+            <p class="tile-eyebrow">04 — Growth / SEO</p>
+            <h3 class="tile-title">SEO Case Study</h3>
+            <p class="tile-tagline">An SEO experiment I would run for a new product launch.</p>
+            <div class="tile-buttons">
+              <a href="SEO.html" class="tile-btn tile-btn-filled">Read the Study →</a>
+            </div>
+          </div>
+          <div class="tile-visual"></div>
+        </article>
+      </div>
+
     </section>
 
     <section id="about">
