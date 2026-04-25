@@ -324,6 +324,59 @@
       border-color: rgba(245, 242, 237, 0.15);
     }
 
+    /* ---- Helper classes for tile visuals ----
+       Use ONE of these on any <img> inside .tile-visual */
+
+    /* For hand-drawn horse doodles (white bg PNG).
+       Multiply blend hides the white background so the ink
+       sits naturally on the tile. */
+    .visual-doodle {
+      max-height: 320px;
+      max-width: 80%;
+      width: auto;
+      height: auto;
+      object-fit: contain;
+      mix-blend-mode: multiply;
+    }
+    .tile-dark .visual-doodle {
+      /* On dark tiles, multiply would just make the doodle vanish.
+         Invert + screen makes black ink read as light ink instead. */
+      mix-blend-mode: screen;
+      filter: invert(1);
+    }
+
+    /* For demo screenshots / app mockups.
+       Rounded corners + soft shadow = lifted "product shot" feel. */
+    .visual-screenshot {
+      max-width: 78%;
+      max-height: 420px;
+      width: auto;
+      height: auto;
+      object-fit: contain;
+      border-radius: 14px;
+      box-shadow: 0 24px 60px -24px rgba(0, 0, 0, 0.3);
+    }
+    .tile-dark .visual-screenshot {
+      box-shadow: 0 24px 60px -24px rgba(0, 0, 0, 0.55);
+    }
+
+    /* For short looping video clips (2–5s product demos, like Apple's tiles).
+       Same lifted look as screenshots, but for <video> elements. */
+    .visual-clip {
+      max-width: 78%;
+      max-height: 420px;
+      width: auto;
+      height: auto;
+      object-fit: contain;
+      border-radius: 14px;
+      box-shadow: 0 24px 60px -24px rgba(0, 0, 0, 0.3);
+      background: #000; /* prevents flash of bg color before video loads */
+      display: block;
+    }
+    .tile-dark .visual-clip {
+      box-shadow: 0 24px 60px -24px rgba(0, 0, 0, 0.55);
+    }
+
     /* Clickable whole-tile link layer */
     .tile-link-overlay {
       position: absolute;
@@ -455,7 +508,11 @@
               <a href="trim_casestudy.html" class="tile-btn tile-btn-outline">Case Study</a>
             </div>
           </div>
-          <div class="tile-visual"></div>
+          <div class="tile-visual">
+            <video class="visual-clip" autoplay loop muted playsinline>
+              <source src="assets/trim-demo.mp4" type="video/mp4">
+            </video>
+          </div>
         </article>
       </div>
 
@@ -482,7 +539,11 @@
               <a href="https://github.com/Bertram-Qian/Study-Crew" target="_blank" rel="noopener" class="tile-btn tile-btn-filled">View on GitHub →</a>
             </div>
           </div>
-          <div class="tile-visual"></div>
+          <div class="tile-visual">
+            <video class="visual-clip" autoplay loop muted playsinline>
+              <source src="assets/study-crew-demo.mp4" type="video/mp4">
+            </video>
+          </div>
         </article>
       </div>
 
