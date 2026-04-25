@@ -92,36 +92,36 @@
     }
     .hero-inner {
       display: flex;
+      flex-direction: column;
       align-items: center;
       justify-content: center;
-      gap: 24px;
+      text-align: center;
+      gap: 22px;
       width: 100%;
-      max-width: 1280px;
-      padding: 0 40px;
+      max-width: 720px;
+      padding: 0 28px;
       will-change: opacity, transform;
     }
     .hero-greeting {
       font-family: 'Instrument Serif', serif;
       font-weight: 400;
-      font-size: clamp(5rem, 14vw, 11rem);
+      font-size: clamp(6rem, 18vw, 14rem);
       line-height: 0.9;
-      letter-spacing: -0.035em;
+      letter-spacing: -0.04em;
       color: var(--text);
-      flex-shrink: 0;
       opacity: 0;
       animation: fadeUp 0.9s ease 0.2s forwards;
     }
-    .hero-horse {
-      max-height: 82vh;
-      max-width: 60vw;
-      width: auto;
-      height: auto;
-      object-fit: contain;
-      /* multiply blend ensures the drawing's white background
-         vanishes into whatever page bg we use */
-      mix-blend-mode: multiply;
+    .hero-sub {
+      font-family: 'Instrument Serif', serif;
+      font-style: italic;
+      font-weight: 400;
+      font-size: clamp(1.1rem, 2vw, 1.4rem);
+      color: var(--muted);
+      max-width: 460px;
+      line-height: 1.4;
       opacity: 0;
-      animation: fadeUp 0.9s ease 0.4s forwards;
+      animation: fadeUp 0.9s ease 0.45s forwards;
     }
     .hero-hint {
       position: absolute;
@@ -447,13 +447,8 @@
     @media (max-width: 760px) {
       .about-grid { grid-template-columns: 1fr; }
       .hero-wrapper { height: 180vh; }
-      .hero-inner {
-        flex-direction: column;
-        gap: 0;
-        padding: 0 20px;
-      }
-      .hero-greeting { font-size: clamp(4.5rem, 22vw, 7rem); }
-      .hero-horse { max-height: 45vh; max-width: 90%; }
+      .hero-inner { padding: 0 20px; gap: 16px; }
+      .hero-greeting { font-size: clamp(5rem, 24vw, 8rem); }
 
       /* Tiles stack on mobile */
       .project-grid-row.two { grid-template-columns: 1fr; }
@@ -484,7 +479,7 @@
     <section id="hero">
       <div class="hero-inner" id="heroInner">
         <h1 class="hero-greeting">Hi!</h1>
-        <img src="assets/horse-hero.png" alt="A hand-drawn horse saying hi" class="hero-horse" />
+        <p class="hero-sub">I'm Bertram</p>
       </div>
       <p class="hero-hint">Scroll <span class="arrow">↓</span></p>
     </section>
@@ -628,7 +623,7 @@
       const y  = window.scrollY;
       if (y < vh) {
         const p = y / vh; // 0 -> 1 across one viewport
-        // whole hero (including horse background) fades
+        // whole hero fades
         heroEl.style.opacity = Math.max(0, 1 - p * 1.2);
         // text drifts up and scales slightly
         heroInner.style.transform = `translateY(${p * -60}px) scale(${1 - p * 0.06})`;
