@@ -5,15 +5,22 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Trim — Nutrition Tracker</title>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;1,9..144,300&family=Geist:wght@300;400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="dd.css">
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
-  --ink:#1C1A17;--ink2:#4A4640;--ink3:#8A8580;
-  --paper:#FDFBF8;--paper2:#F5F2ED;--paper3:#E8E4DC;
-  --herb:#5A7A58;--herb-bg:#EDF2EC;--herb-mid:#ACCAA9;
-  --terr:#C4694A;--terr-bg:#F7EDE8;
-  --slate:#5A6E80;--slate-bg:#EBF0F4;
-  --lemon:#E8D87A;--r:18px;--rs:11px;
+  /* dilly&dally palette — same variable names, re-valued. Theme.swift / styles.css */
+  --ink:#1A1A1A;--ink2:#2A2520;--ink3:#6E665A;
+  --paper:#FAFAF8;--paper2:#EFF3F1;--paper3:#ECE9E1;
+  --herb:#4A7A6B;--herb-bg:#EFF3F1;--herb-mid:#C8D9D2;
+  --terr:#B0654A;--terr-bg:#F6EEEA;
+  --sand:#C99B5C;--sand-bg:#FAF4EA;
+  --slate:#5A6E80;--slate-bg:#EDF1F4;
+  --lemon:#F2C94C;
+  --line:rgba(74,53,32,0.14);
+  --font:'Outfit',-apple-system,BlinkMacSystemFont,'SF Pro Text','SF Pro Display','Segoe UI',Roboto,Helvetica,Arial,sans-serif;
+  --font-logo:var(--font);
+  --r:20px;--rs:11px;
 }
 body{font-family:'Geist',sans-serif;background:var(--paper);color:var(--ink);min-height:100vh;overflow-x:hidden}
 #authScreen{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px}
@@ -25,7 +32,7 @@ body{font-family:'Geist',sans-serif;background:var(--paper);color:var(--ink);min
 .auth-tab{flex:1;padding:8px;border-radius:8px;font-size:13px;font-weight:500;color:var(--ink3);cursor:pointer;text-align:center;transition:all .18s;border:none;background:none;font-family:'Geist',sans-serif}
 .auth-tab.active{background:white;color:var(--ink);box-shadow:0 1px 4px rgba(28,26,23,.08)}
 .form-group{margin-bottom:14px}
-.form-label{font-size:11px;font-weight:500;letter-spacing:.06em;text-transform:uppercase;color:var(--ink3);margin-bottom:6px;display:block}
+.form-label{font-size:11px;font-weight:500;letter-spacing:.06em;text-transform:lowercase;color:var(--ink3);margin-bottom:6px;display:block}
 .form-input{width:100%;padding:12px 14px;border:1px solid var(--paper3);border-radius:var(--rs);font-family:'Geist',sans-serif;font-size:14px;color:var(--ink);background:white;outline:none;transition:border-color .2s,box-shadow .2s}
 .form-input:focus{border-color:var(--herb);box-shadow:0 0 0 3px rgba(90,122,88,.1)}
 .auth-btn{width:100%;padding:13px;background:var(--herb);color:white;border:none;border-radius:var(--rs);font-family:'Geist',sans-serif;font-size:14px;font-weight:500;cursor:pointer;transition:all .18s;margin-top:6px}
@@ -44,7 +51,7 @@ nav{position:fixed;bottom:0;left:0;right:0;background:rgba(253,251,248,.96);back
 .nb:hover:not(.active) .ni{transform:scale(1.04);background:var(--paper2)}
 .hero{font-family:'Fraunces',serif;font-size:26px;font-weight:300;color:var(--ink);line-height:1.18;letter-spacing:-.01em}
 .hero em{font-style:italic;color:var(--herb)}
-.section-lbl{font-size:10px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:var(--ink3);padding:0 22px 10px}
+.section-lbl{font-size:10px;font-weight:500;letter-spacing:.1em;text-transform:lowercase;color:var(--ink3);padding:0 22px 10px}
 .phd{padding:44px 22px 18px;display:flex;align-items:flex-start;justify-content:space-between}
 .phd-sub{font-size:12px;color:var(--ink3);margin-top:5px}
 .user-btn{width:38px;height:38px;border-radius:50%;border:1.5px solid var(--paper3);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:500;color:var(--ink2);flex-shrink:0;background:white;cursor:pointer;transition:border-color .2s}
@@ -56,7 +63,7 @@ nav{position:fixed;bottom:0;left:0;right:0;background:rgba(253,251,248,.96);back
 .ring-fill{fill:none;stroke:var(--herb);stroke-width:10;stroke-linecap:round;stroke-dasharray:515;stroke-dashoffset:515;transition:stroke-dashoffset 1.4s cubic-bezier(.4,0,.2,1)}
 .ring-center{text-align:center;z-index:1;pointer-events:none}
 .ring-num{font-family:'Fraunces',serif;font-size:42px;font-weight:300;color:var(--ink);line-height:1;letter-spacing:-.02em}
-.ring-unit{font-size:10px;color:var(--ink3);letter-spacing:.08em;text-transform:uppercase;margin-top:4px}
+.ring-unit{font-size:10px;color:var(--ink3);letter-spacing:.08em;text-transform:lowercase;margin-top:4px}
 .ring-remain{font-size:12px;color:var(--herb);font-weight:500;margin-top:5px}
 .macro-strip{display:flex;gap:8px;padding:0 22px 24px}
 .mb{flex:1;background:white;border:1px solid var(--paper3);border-radius:var(--rs);padding:13px 10px;text-align:center;transition:transform .18s cubic-bezier(.34,1.56,.64,1)}
@@ -64,7 +71,7 @@ nav{position:fixed;bottom:0;left:0;right:0;background:rgba(253,251,248,.96);back
 .mb-num{font-family:'Fraunces',serif;font-size:19px;font-weight:300;color:var(--ink);line-height:1}
 .mb-bar-t{height:3px;background:var(--paper3);border-radius:2px;margin:7px 0 5px;overflow:hidden}
 .mb-bar-f{height:100%;border-radius:2px;width:0%;transition:width 1.3s cubic-bezier(.4,0,.2,1)}
-.mb-name{font-size:9px;color:var(--ink3);letter-spacing:.07em;text-transform:uppercase}
+.mb-name{font-size:9px;color:var(--ink3);letter-spacing:.07em;text-transform:lowercase}
 .date-nav{display:flex;align-items:center;justify-content:space-between;padding:0 22px 16px}
 .date-nav-btn{width:32px;height:32px;border-radius:50%;background:white;border:1px solid var(--paper3);display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all .15s}
 .date-nav-btn:hover{border-color:var(--herb);color:var(--herb)}
@@ -105,7 +112,7 @@ nav{position:fixed;bottom:0;left:0;right:0;background:rgba(253,251,248,.96);back
 .hist-item{background:white;border:1px solid var(--paper3);border-radius:var(--rs);padding:14px 16px;display:flex;align-items:center;gap:14px;cursor:pointer;transition:border-color .18s}
 .hist-item:hover{border-color:var(--herb-mid)}
 .hist-date{font-family:'Fraunces',serif;font-size:20px;font-weight:300;color:var(--ink);line-height:1;min-width:28px;text-align:center}
-.hist-month{font-size:9px;color:var(--ink3);letter-spacing:.06em;text-transform:uppercase;text-align:center}
+.hist-month{font-size:9px;color:var(--ink3);letter-spacing:.06em;text-transform:lowercase;text-align:center}
 .hist-info{flex:1}
 .hist-title{font-size:13px;font-weight:500;color:var(--ink)}
 .hist-sub{font-size:11px;color:var(--ink3);margin-top:2px}
@@ -121,7 +128,7 @@ nav{position:fixed;bottom:0;left:0;right:0;background:rgba(253,251,248,.96);back
 .bw{width:100%;height:72px;display:flex;flex-direction:column;justify-content:flex-end}
 .bar{width:100%;border-radius:5px 5px 2px 2px;transform:scaleY(0);transform-origin:bottom;transition:transform .6s cubic-bezier(.4,0,.2,1)}
 .bar.up{transform:scaleY(1)}
-.bd{font-size:8px;color:var(--ink3);letter-spacing:.04em;text-transform:uppercase}
+.bd{font-size:8px;color:var(--ink3);letter-spacing:.04em;text-transform:lowercase}
 .goal-row{display:flex;align-items:center;gap:7px;margin-top:10px;padding-top:10px;border-top:1px solid var(--paper3);font-size:11px;color:var(--ink3)}
 .g-dot{width:7px;height:7px;border-radius:50%;background:var(--terr);flex-shrink:0}
 .stat-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:0 22px 22px}
@@ -195,6 +202,10 @@ input[type=range]{width:100%;accent-color:var(--herb)}
 </style>
 </head>
 <body>
+<div class="dd-strip">
+  <a href="./"><span class="dd-mark"><svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><g transform="translate(8,8) scale(1.16667) translate(-14,-11)"><path d="M19,31 L30,73 L70,73 L81,31" fill="none" stroke="#1A1A1A" stroke-width="1.7" stroke-linejoin="round" stroke-linecap="round"/><path d="M21.6,41 C26.5,37.5 31,38 38,42 C42,44.5 46,44.5 50,41 C55,37.5 60,37.5 65,41 C69,44.5 73.5,44.5 78.4,41" fill="none" stroke="#1A1A1A" stroke-width="1.7" stroke-linecap="round"/><path d="M52.8,27.9 L58.2,28.3 C60.5,28.3 60.5,30.5 58.2,30.5 L52.8,30.7" fill="#F2C94C" stroke="#1A1A1A" stroke-width="1.35" stroke-linejoin="round" stroke-linecap="round"/><circle cx="50.8" cy="29.3" r="5" fill="#F2C94C" stroke="#1A1A1A" stroke-width="1.35"/><path d="M51.5,34.5 C46,34 41,34.2 37.6,34.9 C35.9,35.2 34.7,35.1 34.7,36.5 C34.7,38.3 35.4,40.9 37.4,42.9 C40.6,46.3 50.4,46.3 53.8,42.5 C56.4,39.5 55.7,34.9 51.5,34.5 Z" fill="#F2C94C" stroke="#1A1A1A" stroke-width="1.35" stroke-linejoin="round"/><circle cx="52.2" cy="28.2" r="1.35" fill="#1A1A1A"/></g></svg></span><span>&larr; back to bertram</span></a>
+  <span class="dd-tag">trim &middot; live demo</span>
+</div>
 
 <div class="loading-screen" id="loadingScreen"><div class="loading-logo"><em>trim.</em></div></div>
 
@@ -353,7 +364,7 @@ input[type=range]{width:100%;accent-color:var(--herb)}
     <input class="food-srch" id="foodSearch" placeholder="Search food database…" oninput="filterFood(this.value)" autocomplete="off">
     <div id="foodList"></div>
     <div class="custom-food-form">
-      <div style="font-size:11px;font-weight:500;letter-spacing:.07em;text-transform:uppercase;color:var(--ink3);margin-bottom:10px">Or add custom food</div>
+      <div style="font-size:11px;font-weight:500;letter-spacing:.07em;text-transform:lowercase;color:var(--ink3);margin-bottom:10px">Or add custom food</div>
       <div class="custom-grid">
         <input class="cf-input full" type="text" id="cfName" placeholder="Food name">
         <input class="cf-input" type="number" id="cfCal" placeholder="Calories">

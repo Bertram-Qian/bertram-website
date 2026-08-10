@@ -1,0 +1,406 @@
+@import './tokens.css';
+
+/* ============================================================== reset ==== */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: var(--font);
+  font-weight: 300;
+  background: var(--offwhite);
+  color: var(--body);
+  font-size: 16px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+a { color: inherit; text-decoration: none; }
+img, svg, video { display: block; max-width: 100%; }
+button { font: inherit; color: inherit; background: none; border: 0; cursor: pointer; }
+
+/* Paper grain. An feTurbulence data-URI multiplied over the page — the one
+   texture in the whole system, and the reason flat colour doesn't read as flat. */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  pointer-events: none;
+  opacity: 0.5;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)' opacity='0.4'/%3E%3C/svg%3E");
+  mix-blend-mode: multiply;
+}
+
+.wrap { max-width: var(--maxw); margin: 0 auto; padding: 0 28px; }
+
+.visually-hidden {
+  position: absolute; width: 1px; height: 1px;
+  padding: 0; margin: -1px; overflow: hidden;
+  clip: rect(0 0 0 0); clip-path: inset(50%); white-space: nowrap; border: 0;
+}
+
+/* ============================================================ wordmark === */
+/* Light, lowercase, widely tracked — the one piece of type whose treatment is
+   copied from the app verbatim. */
+.wordmark {
+  font-family: var(--font-logo);
+  font-weight: 300;
+  text-transform: lowercase;
+  letter-spacing: 0.14em;
+  color: var(--ink);
+}
+
+/* =============================================================== pills === */
+.pill {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 10px 20px;
+  border-radius: 999px;
+  font-size: 11.5px;
+  letter-spacing: 0.08em;
+  text-transform: lowercase;
+  font-weight: 400;
+  border: 1px solid transparent;
+  transition: transform 0.16s ease, background 0.16s ease, border-color 0.16s ease, color 0.16s ease;
+}
+.pill-sage { background: var(--sage); color: #fff; }
+.pill-sage:hover { background: var(--sage-deep); transform: translateY(-1px); }
+.pill-ghost { color: var(--sage-deep); border-color: var(--sage-line); background: var(--sage-tint); }
+.pill-ghost:hover { border-color: var(--sage); transform: translateY(-1px); }
+.pill-quiet { color: var(--muted); border-color: var(--line); }
+.pill-quiet:hover { color: var(--ink); border-color: var(--border-strong); transform: translateY(-1px); }
+
+:focus-visible { outline: 2px solid var(--sage); outline-offset: 3px; }
+
+/* ================================================================ nav ==== */
+.nav {
+  position: fixed; inset: 0 0 auto 0; z-index: 50;
+  padding: 12px 0;
+  background: transparent;
+  border-bottom: 1px solid transparent;
+  transition: background 0.35s var(--ease), border-color 0.35s var(--ease), backdrop-filter 0.35s var(--ease);
+}
+.nav.scrolled {
+  background: rgba(250, 250, 248, 0.78);
+  backdrop-filter: saturate(180%) blur(14px);
+  -webkit-backdrop-filter: saturate(180%) blur(14px);
+  border-bottom-color: var(--line-soft);
+}
+.nav .inner {
+  max-width: var(--maxw); margin: 0 auto; padding: 0 28px;
+  display: flex; align-items: center; justify-content: space-between; gap: 16px;
+}
+.nav-brand { display: flex; align-items: center; gap: 11px; }
+.nav-mark {
+  width: 38px; height: 38px; flex: none;
+  background: var(--paper);
+  border: 1px solid var(--line-soft);
+  border-radius: 11px;
+  overflow: hidden;
+  box-shadow: 0 5px 14px -9px rgba(74, 53, 32, 0.55);
+}
+.nav-mark svg { width: 100%; height: 100%; }
+.nav-brand .wordmark { font-size: 14px; }
+.nav-links { display: flex; align-items: center; gap: 22px; list-style: none; }
+.nav-links a {
+  font-size: 11.5px; letter-spacing: 0.1em; text-transform: lowercase; color: var(--muted);
+  transition: color 0.16s ease;
+}
+.nav-links a:hover { color: var(--ink); }
+/* .nav-links a is two classes deep and would otherwise win over .pill-sage,
+   painting white-on-sage text in muted brown. */
+.nav-links a.pill-sage, .nav-links a.pill-sage:hover { color: #fff; }
+
+/* =============================================================== hero ==== */
+/* One duck, two lines. Nothing else on the screen. */
+.hero-wrapper { position: relative; height: 200vh; }
+.hero {
+  position: sticky; top: 0;
+  height: 100vh;
+  display: flex; align-items: center; justify-content: center;
+  overflow: hidden;
+}
+.hero-inner {
+  display: flex; flex-direction: column; align-items: center;
+  text-align: center;
+  padding: 0 28px;
+  will-change: opacity, transform;
+}
+.hero-duck {
+  width: clamp(150px, 23vw, 290px);
+  margin-bottom: clamp(14px, 2.2vw, 28px);
+  animation: floaty 6.5s ease-in-out infinite;
+}
+.hero-duck svg { width: 100%; height: auto; overflow: visible; }
+@keyframes floaty {
+  0%, 100% { transform: translateY(0) rotate(-1.2deg); }
+  50%      { transform: translateY(-10px) rotate(1.2deg); }
+}
+
+/* Capitalised on purpose — these two lines are the one place the site is not
+   set in the all-lowercase register. */
+.hero h1 {
+  font-size: clamp(60px, 12vw, 132px);
+  font-weight: 400;
+  letter-spacing: -0.045em;
+  line-height: 1;
+  color: var(--ink);
+}
+.hero-sub {
+  font-size: clamp(16px, 2vw, 23px);
+  font-weight: 300;
+  color: var(--muted);
+  margin-top: clamp(8px, 1.2vw, 16px);
+}
+
+/* Content scrolls up OVER the pinned hero. */
+.page { position: relative; z-index: 2; background: var(--offwhite); }
+
+/* ============================================================ sections === */
+.section { padding: 96px 0; }
+.section-label {
+  font-size: 10px; letter-spacing: 0.2em; text-transform: lowercase;
+  color: var(--faint); font-weight: 400;
+  display: flex; align-items: center; gap: 14px;
+  margin-bottom: 30px;
+}
+.section-label::after { content: ''; flex: 1; height: 1px; background: var(--line-soft); }
+
+/* =============================================================== pond ==== */
+/* The caption reserves height for its tallest state, so the section needs less
+   padding under it than a normal one — otherwise the gap before the next
+   section reads as something missing rather than as breathing room. */
+.pond { padding: 84px 0 36px; }
+.pond-stage {
+  position: relative;
+  width: min(1180px, 100%);
+  margin: 0 auto;
+  user-select: none;
+  -webkit-user-select: none;
+}
+.pond-art { position: absolute; inset: 0; }
+.pond-art svg { width: 100%; height: 100%; display: block; }
+
+.pond-ripples {
+  position: absolute; inset: 0;
+  width: 100%; height: 100%;
+  pointer-events: none;
+  overflow: visible;
+}
+
+.pond-well {
+  position: absolute;
+  overflow: hidden;
+  border-radius: 2px;
+  display: grid;
+  place-items: center;
+}
+/* Sequenced swap: out over 0.2s, in over 0.3s. Two things are never legible at
+   the same moment — the dilly&dally banner rule. */
+.dd-swap { transition: opacity 0.3s var(--ease), transform 0.3s var(--ease); }
+.dd-swap[data-hidden='true'] { opacity: 0; transition-duration: 0.2s; }
+.pond-caption .dd-swap[data-hidden='true'] { transform: translateY(-6px); }
+
+.pond-well .dd-swap { position: absolute; inset: 0; }
+.pond-well .dd-swap > * { width: 100%; height: 100%; }
+.pond-well .dd-clip-wrap { position: relative; width: 100%; height: 100%; }
+/* Transparent, not ink: the board is a paper notice board, so letterbox bars
+   read as paper, and a clip that never arrives leaves the paper rather than a
+   black void that looks like a bug. */
+.pond-well .dd-clip { width: 100%; height: 100%; object-fit: contain; background: transparent; }
+/* Only ever rendered when autoplay was refused — normally nobody sees this. */
+.dd-play {
+  position: absolute; left: 50%; top: 50%;
+  transform: translate(-50%, -50%);
+  width: 15%; aspect-ratio: 1; min-width: 34px; max-width: 56px;
+  display: grid; place-items: center;
+  border-radius: 999px;
+  background: rgba(250, 250, 248, 0.92);
+  box-shadow: 0 10px 26px -14px rgba(74, 53, 32, 0.8);
+  transition: transform 0.16s var(--ease), background 0.16s var(--ease);
+}
+.dd-play:hover { transform: translate(-50%, -50%) scale(1.06); background: #fff; }
+.dd-play svg { width: 46%; height: 46%; fill: var(--sage-deep); }
+.pond-well .dd-toy { width: 100%; height: 100%; }
+.pond-well .dd-toy svg { width: 100%; height: 100%; display: block; }
+.pond-well .dd-toy .spa-pad { cursor: grab; }
+.pond-well .dd-toy .spa-pad:active { cursor: grabbing; }
+.dd-well-empty {
+  font-size: clamp(9px, 1.05vw, 12px);
+  letter-spacing: 0.18em;
+  text-transform: lowercase;
+  color: var(--faint);
+  text-align: center;
+  padding: 0 12px;
+  display: grid;
+  place-items: center;
+}
+
+.pond-duck {
+  position: absolute; left: 0; top: 0;
+  aspect-ratio: 32 / 33;
+  cursor: grab;
+  touch-action: none;
+  will-change: transform;
+}
+.pond-duck:active { cursor: grabbing; }
+/* Invisible hit expansion — the duck stays its drawn size but stays grabbable
+   with a thumb. A pseudo-element survives dangerouslySetInnerHTML. */
+.pond-duck::after { content: ''; position: absolute; inset: -9px; }
+.pond-duck svg { width: 100%; height: 100%; overflow: visible; }
+/* Out of the water — lifted on a finger, or perched on the board — so the cast
+   shadow and the waterline go with it. */
+.pond-duck .dd-wet { transition: opacity 0.18s var(--ease); }
+.pond-duck[data-dry] .dd-wet { opacity: 0; }
+.pond-duck:focus-visible { outline: 2px solid var(--sage); outline-offset: 6px; border-radius: 40%; }
+
+.pond-wake {
+  position: absolute; left: 0; top: 0;
+  aspect-ratio: 1;
+  pointer-events: none;
+}
+.pond-wake svg { width: 100%; height: 100%; }
+
+.pond-caption {
+  max-width: 640px;
+  margin: 26px auto 0;
+  padding: 0 28px;
+  text-align: center;
+  min-height: 178px;
+}
+.pond-caption .eyebrow {
+  font-size: 9px; letter-spacing: 0.2em; text-transform: lowercase;
+  color: var(--faint); margin-bottom: 8px;
+}
+.pond-title {
+  font-size: clamp(26px, 3.4vw, 38px);
+  font-weight: 400; letter-spacing: -0.03em; line-height: 1.05;
+  text-transform: lowercase; color: var(--ink);
+  margin-bottom: 10px;
+}
+.pond-blurb {
+  font-size: 14.5px; font-weight: 300; color: var(--muted);
+  line-height: 1.6; text-transform: lowercase;
+  max-width: 46ch; margin: 0 auto;
+}
+.pond-blurb-idle { padding-top: 34px; }
+.pond-links {
+  display: flex; flex-wrap: wrap; gap: 10px; justify-content: center;
+  margin-top: 20px;
+}
+
+/* ---- scene animation ---- */
+.spa-steam {
+  transform-box: view-box;
+  transform-origin: 0 0;
+  animation: ddSteam 11s linear infinite;
+}
+@keyframes ddSteam {
+  0%   { transform: translateY(18px);  stroke-opacity: 0; }
+  25%  { stroke-opacity: 0.2; }
+  85%  { stroke-opacity: 0.07; }
+  100% { transform: translateY(-34px); stroke-opacity: 0; }
+}
+.dd-glint {
+  transform-box: view-box;
+  transform-origin: 0 0;
+  animation: ddGlint 9s ease-in-out infinite;
+}
+@keyframes ddGlint {
+  0%   { stroke-opacity: 0; transform: translateX(-6px); }
+  40%  { stroke-opacity: 0.5; }
+  60%  { stroke-opacity: 0.4; }
+  100% { stroke-opacity: 0; transform: translateX(10px); }
+}
+/* The water answers a beat late, and takes the unhurried 1.7s the app gives it. */
+.dd-ripple {
+  transform-box: fill-box;
+  transform-origin: center;
+  vector-effect: non-scaling-stroke;
+  animation: ddRipple 1.7s var(--ease) forwards;
+}
+@keyframes ddRipple {
+  0%   { transform: scale(0.35); stroke-opacity: 0; }
+  12%  { stroke-opacity: 0.7; }
+  100% { transform: scale(9);    stroke-opacity: 0; }
+}
+
+/* ============================================================ contact ==== */
+.contact { text-align: center; padding-bottom: 110px; }
+.contact h2 {
+  font-size: clamp(30px, 5.4vw, 52px);
+  font-weight: 400; letter-spacing: -0.035em; line-height: 1.06;
+  text-transform: lowercase; color: var(--ink);
+  margin-bottom: 14px;
+}
+.contact h2 b { font-weight: 400; color: var(--sage-deep); }
+.contact p {
+  font-size: 14.5px; font-weight: 300; color: var(--muted);
+  text-transform: lowercase; margin-bottom: 28px;
+}
+.contact-links { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
+
+/* ============================================================= footer ==== */
+/* Same surface as the page — separated by a dashed hairline, never a fill. */
+.footer {
+  background: var(--offwhite);
+  border-top: 1px dashed var(--line);
+  padding: 26px 0 34px;
+}
+.footer .inner {
+  max-width: var(--maxw); margin: 0 auto; padding: 0 28px;
+  display: flex; align-items: center; justify-content: space-between; gap: 16px;
+  font-size: 11px; letter-spacing: 0.06em; text-transform: lowercase; color: var(--faint);
+}
+
+/* ========================================================== responsive === */
+@media (max-width: 760px) {
+  .section { padding: 72px 0; }
+  .hero-wrapper { height: 180vh; }
+  .pond { padding: 56px 0 72px; }
+  .pond-stage { width: 100%; }
+  .pond-caption { min-height: 196px; margin-top: 6px; }
+  .pond-blurb-idle { padding-top: 14px; }
+  .nav-links { gap: 14px; }
+  .nav-links a { font-size: 10.5px; }
+  .footer .inner { flex-direction: column; gap: 8px; text-align: center; }
+}
+@media (max-width: 460px) {
+  .nav-links .nav-cta { display: none; }
+}
+
+/* ======================================================= reduced motion === */
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .spa-steam, .dd-glint, .dd-ripple, .hero-duck {
+    animation: none !important;
+  }
+  .spa-steam, .dd-glint { stroke-opacity: 0.1; }
+  .pill, .nav, .nav-links a, .dd-swap { transition: none !important; }
+}
+
+/* ---- the chair pile, inside the board ---- */
+.dd-pile { position: relative; width: 100%; height: 100%; overflow: hidden; }
+.dd-pile-chair {
+  position: absolute; left: 50%; bottom: 5%;
+  transform: translateX(-50%);
+  height: 66%; aspect-ratio: 1;
+  pointer-events: none;
+}
+.dd-pile-chair svg { width: 100%; height: 100%; display: block; }
+/* `translate` rather than `transform`, so the settle wobble can own `rotate`
+   without the two overwriting each other. */
+.dd-garment { position: absolute; left: 0; top: 0; width: 12%; cursor: grab; touch-action: none; }
+.dd-garment svg { width: 100%; height: auto; display: block; pointer-events: none; }
+.dd-garment.dragging { cursor: grabbing; scale: 1.06; rotate: -4deg; }
+.dd-garment.dragging svg { filter: drop-shadow(0 6px 8px rgba(40, 34, 24, 0.22)); }
+.dd-garment.settle { animation: ddSettle 0.5s ease-out; }
+@keyframes ddSettle {
+  0%   { rotate: -6deg; }
+  25%  { rotate: 4deg; }
+  55%  { rotate: -2deg; }
+  80%  { rotate: 1deg; }
+  100% { rotate: 0deg; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .dd-garment.settle { animation: none !important; }
+  .dd-garment.dragging { rotate: 0deg !important; }
+}
