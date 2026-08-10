@@ -1,0 +1,104 @@
+/* dd.css — the dilly&dally register, for the two standalone Trim pages.
+ *
+ * trim.html is a live Firebase app served straight out of public/ rather than
+ * built, so it keeps its own inline CSS and its own JS untouched. This sheet
+ * supplies the pieces it can't express through its own design tokens: the
+ * wordmark face, the paper grain, and the "back to bertram" strip above the app.
+ *
+ * Its :root block has been re-valued in place (same variable names, new
+ * colours), so everything else re-skins itself.
+ */
+
+@font-face {
+  font-family: 'Outfit';
+  src: url('fonts/outfit-light.woff2') format('woff2');
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Outfit';
+  src: url('fonts/outfit-regular.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+:root {
+  --dd-line: rgba(74, 53, 32, 0.14);
+  --dd-line-soft: rgba(74, 53, 32, 0.09);
+}
+
+/* Paper grain — the one texture in the system, and the reason flat colour
+   doesn't read as flat. */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: 999;
+  pointer-events: none;
+  opacity: 0.42;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)' opacity='0.4'/%3E%3C/svg%3E");
+  mix-blend-mode: multiply;
+}
+
+/* ---------------------------------------------------- back to the pond ---- */
+/* A strip above the app rather than a floating pill: trim.html fills the
+   viewport top to bottom (greeting top-left, avatar top-right, fixed tab bar at
+   the bottom), so anything overlaid would land on top of real UI. */
+.dd-strip {
+  position: sticky;
+  top: 0;
+  z-index: 120;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 8px 16px;
+  background: rgba(250, 250, 248, 0.86);
+  backdrop-filter: saturate(180%) blur(14px);
+  -webkit-backdrop-filter: saturate(180%) blur(14px);
+  border-bottom: 1px solid var(--dd-line-soft);
+}
+.dd-strip a {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  text-transform: lowercase;
+  color: #6E665A;
+  text-decoration: none;
+  transition: color 0.16s ease;
+}
+.dd-strip a:hover { color: #1A1A1A; }
+.dd-strip .dd-mark {
+  width: 22px;
+  height: 22px;
+  flex: none;
+  border-radius: 7px;
+  background: #fff;
+  border: 1px solid var(--dd-line-soft);
+  overflow: hidden;
+}
+.dd-strip .dd-mark svg { width: 100%; height: 100%; display: block; }
+.dd-strip .dd-tag {
+  font-weight: 300;
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  text-transform: lowercase;
+  color: #9A9384;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * { animation: none !important; transition: none !important; }
+}
+
+/* --------------------------------------------------- two-weight type rule */
+/* The site is set in Outfit: Light 300 carries text, Regular 400 carries
+   anything large. These are the case study's display elements — their inline
+   rules re-declare font-weight after the family, so they need overriding here
+   rather than in the page. */
+.hero-title, .section-title, .oc-n, .insight-num, .big-stat, .out-num {
+  font-weight: 400 !important;
+}

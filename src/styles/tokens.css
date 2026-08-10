@@ -1,0 +1,73 @@
+/* tokens.css — the dilly&dally design system.
+ *
+ * Copied from dillydallywebsite/styles.css, which is itself the app's
+ * Theme.swift. Two rules carried over because breaking them is exactly what
+ * makes a spin-off look like a knock-off:
+ *
+ *   1. #F4F1EA is BANNED as a web surface. It is the app's drawer colour and it
+ *      reads as a dirty seam against white. Use --offwhite plus a warm hairline.
+ *   2. No gradients. Depth is flat planes and clipped washes.
+ *
+ * ONE RULE DELIBERATELY BROKEN: the app sets everything in the system font and
+ * reserves Outfit for the wordmark at Light 300 — an app-wide Outfit pass was
+ * tried and reverted on 2026-07-28. This site is set in Outfit throughout.
+ * That is Bertram's call, and this is his site rather than the product.
+ *
+ * Two faces only. Light 300 carries text; Regular 400 carries anything large,
+ * or small and widely tracked (300 goes to mush at 10px with 0.2em letter
+ * spacing). There is no third weight — emphasis is carried by COLOUR.
+ */
+
+@font-face {
+  font-family: 'Outfit';
+  src: url('../fonts/outfit-light.woff2') format('woff2');
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Outfit';
+  src: url('../fonts/outfit-regular.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+:root {
+  /* surfaces */
+  --paper: #FFFFFF;
+  --offwhite: #FAFAF8;   /* THE dilly&dally white */
+
+  /* ink — near-black for headings, warm mutes for body */
+  --ink: #1A1A1A;
+  --body: #2A2520;
+  --muted: #6E665A;
+  --faint: #9A9384;
+
+  /* sage accent */
+  --sage: #4A7A6B;
+  --sage-tint: #EFF3F1;
+  --sage-line: #C8D9D2;
+  --sage-deep: #3C6657;
+
+  /* brand butter (the app-icon duck) */
+  --butter: #F2C94C;
+
+  /* water + wood, for anything that touches the scene */
+  --water: #3F525A;
+  --wood: #C99B5C;
+  --wood-rim: #7A5A30;
+
+  /* hairlines — warm brown at low alpha, never grey */
+  --line: rgba(74, 53, 32, 0.14);
+  --line-soft: rgba(74, 53, 32, 0.09);
+  --hair: #ECE9E1;
+  --border-strong: #D5D2CB;
+
+  --font: 'Outfit', -apple-system, BlinkMacSystemFont, 'SF Pro Text',
+    'SF Pro Display', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  --font-logo: var(--font);
+
+  --maxw: 1080px;
+  --ease: cubic-bezier(0.22, 1, 0.36, 1);
+}
