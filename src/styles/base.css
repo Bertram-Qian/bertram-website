@@ -111,10 +111,11 @@ body::before {
 
 /* =============================================================== hero ==== */
 /* One duck, two lines. Nothing else on the screen. */
-.hero-wrapper { position: relative; height: 200vh; }
+.hero-wrapper { position: relative; height: 200vh; height: 200svh; }
 .hero {
   position: sticky; top: 0;
   height: 100vh;
+  height: 100svh;
   display: flex; align-items: center; justify-content: center;
   overflow: hidden;
 }
@@ -240,6 +241,10 @@ body::before {
   cursor: grab;
   touch-action: none;
   will-change: transform;
+  -webkit-touch-callout: none;
+  -webkit-tap-highlight-color: transparent;
+  -webkit-user-select: none;
+  user-select: none;
 }
 .pond-duck:active { cursor: grabbing; }
 /* Invisible hit expansion — the duck stays its drawn size but stays grabbable
@@ -354,7 +359,7 @@ body::before {
 /* ========================================================== responsive === */
 @media (max-width: 760px) {
   .section { padding: 72px 0; }
-  .hero-wrapper { height: 180vh; }
+  .hero-wrapper { height: 180vh; height: 180svh; }
   .pond { padding: 56px 0 72px; }
   .pond-stage { width: 100%; }
   .pond-caption { min-height: 196px; margin-top: 6px; }
@@ -388,7 +393,14 @@ body::before {
 .dd-pile-chair svg { width: 100%; height: 100%; display: block; }
 /* `translate` rather than `transform`, so the settle wobble can own `rotate`
    without the two overwriting each other. */
-.dd-garment { position: absolute; left: 0; top: 0; width: 12%; cursor: grab; touch-action: none; }
+.dd-garment {
+  position: absolute; left: 0; top: 0; width: 12%;
+  cursor: grab; touch-action: none;
+  -webkit-touch-callout: none;
+  -webkit-tap-highlight-color: transparent;
+  -webkit-user-select: none;
+  user-select: none;
+}
 .dd-garment svg { width: 100%; height: auto; display: block; pointer-events: none; }
 .dd-garment.dragging { cursor: grabbing; scale: 1.06; rotate: -4deg; }
 .dd-garment.dragging svg { filter: drop-shadow(0 6px 8px rgba(40, 34, 24, 0.22)); }

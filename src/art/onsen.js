@@ -37,13 +37,36 @@ const WIDE_WATER =
   'M 0,342 Q 90,322 190,316 Q 290,310 380,308 Q 470,310 570,316 Q 670,322 760,342 ' +
   'L 760,452 Q 700,448 640,458 Q 560,472 480,462 Q 400,452 320,464 Q 240,480 160,468 Q 90,456 40,458 Q 16,459 0,456 Z';
 
-// The far-bank cast shadow, widened. Same low-contrast strip that keeps the
-// rocks from floating on the water.
-const WIDE_CAST =
-  'M 0,340 C 40,346 90,349 140,348 C 200,347 250,343 300,341 C 340,339 370,338 380,338 ' +
-  'C 400,338 440,340 490,342 C 550,345 610,348 670,348 C 710,348 740,345 760,340 ' +
-  'L 760,350 C 730,356 690,358 650,357 C 590,356 530,352 480,350 C 440,348 400,347 380,347 ' +
-  'C 355,347 310,349 260,352 C 200,355 140,357 90,356 C 50,355 20,350 0,346 Z';
+// The bank runs. Named once because the shadows have to use the exact same
+// transforms as the rocks that cast them.
+const BACK_RUNS = ['', 'matrix(-1,0,0,1.08,590,-25.6)', 'matrix(1,0,0,0.93,400,22.4)'];
+const FRONT_RUNS = ['', 'matrix(-1,0,0,1.06,620,-27.6)', 'matrix(1,0,0,0.95,362,23)'];
+
+// Cast shadows, derived from the rocks rather than drawn by hand.
+//
+// The app ships two hand-authored shadow paths fitted to its 380-wide portrait
+// pond. Reused in a 760-wide scene with re-laid banks they line up with
+// nothing — they read as a hard-edged dark slab against the left bank and a
+// band under the far bank that follows no rock at all. Instead: take each
+// boulder's dark silhouette plane, nudge it toward the water, and draw the lot
+// UNDER the rocks. Only the part that pokes out below a rock is ever visible,
+// which is what a cast shadow is, and it can never drift out of register with
+// the thing casting it.
+function bankShadows() {
+  const sil = (rocks) => rocks.map((r) => `<path d="${r[0]}"/>`).join('');
+  let s = `<g fill="#1E2830" fill-opacity="0.17">`;
+  for (const tf of BACK_RUNS) s += `<g transform="${tf ? tf + ' ' : ''}translate(0,9)">${sil(BACK_ROCKS)}</g>`;
+  s += `<g transform="translate(8,4)">${sil(LEFT_ROCKS)}</g>`;
+  s += `<g transform="translate(380,0) translate(-8,4)">${sil(RIGHT_ROCKS)}</g>`;
+  s += '</g>';
+  // The near bank gets a soft dark lip on the water side instead of a cast
+  // shadow — a bank in front of you throws its shadow away from you, but the
+  // water does get deeper and darker where it meets the stone. It also buries
+  // the seams where the three runs overlap.
+  s += `<g fill="#1E2830" fill-opacity="0.13">`;
+  for (const tf of FRONT_RUNS) s += `<g transform="${tf ? tf + ' ' : ''}translate(0,-7)">${sil(FRONT_ROCKS)}</g>`;
+  return s + '</g>';
+}
 
 // Moss, placed by hand across the full width. This is the single thing that
 // breaks the mirror — six tufts on the left bank, five on the right, none of
@@ -187,10 +210,7 @@ export const LAYOUTS = { wide: WIDE, phone: PHONE };
 function wideInner() {
   let s = '';
   s += `<path d="${WIDE_WATER}" fill="${SPA_DAY.water}"/>`;
-  s += `<path d="${WIDE_CAST}" fill="#1E2830" fill-opacity="0.26"/>`;
-  // the left-bank vertical shadow, and its mirror on the right
-  s += `<path d="${CAST_SHADOWS[1]}" fill="#1E2830" fill-opacity="0.26"/>`;
-  s += `<g transform="translate(760,0) scale(-1,1)"><path d="${CAST_SHADOWS[1]}" fill="#1E2830" fill-opacity="0.26"/></g>`;
+  s += bankShadows();
 
   s += lantern(92, 314, 0.9);
   s += lantern(668, 316, 0.96);
@@ -204,9 +224,7 @@ function wideInner() {
   // alone leaves a bank of identically-tall bumps — height variation is what
   // actually reads as different rocks.
   const back = BACK_ROCKS.map(rock3).join('');
-  s += back;                                                        // 0 → 380
-  s += `<g transform="matrix(-1,0,0,1.08,590,-25.6)">${back}</g>`;  // 210 → 590, flipped, 8% taller
-  s += `<g transform="matrix(1,0,0,0.93,400,22.4)">${back}</g>`;    // 400 → 780, 7% shorter
+  for (const tf of BACK_RUNS) s += tf ? `<g transform="${tf}">${back}</g>` : back;
 
   // Side banks stay where they were authored — LEFT at the left edge, RIGHT
   // pushed out to the new right edge. (Drawing RIGHT_ROCKS untranslated in a
@@ -215,9 +233,7 @@ function wideInner() {
   s += `<g transform="translate(380,0)">${RIGHT_ROCKS.map(rock3).join('')}</g>`;
 
   const front = FRONT_ROCKS.map(rock3).join('');
-  s += front;                                                        // 0 → 380
-  s += `<g transform="matrix(-1,0,0,1.06,620,-27.6)">${front}</g>`;  // 240 → 620, flipped
-  s += `<g transform="matrix(1,0,0,0.95,390,23)">${front}</g>`;      // 390 → 770
+  for (const tf of FRONT_RUNS) s += tf ? `<g transform="${tf}">${front}</g>` : front;
 
   s += WIDE_MOSS.map(mossTuft).join('');
   s += bucket(96, 443);
