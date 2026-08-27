@@ -38,6 +38,12 @@ export default defineConfig({
   plugins: [react(), rootIcons()],
   build: {
     target: 'es2020',
+    // `target` is a JS target, and the CSS minifier inherits it when cssTarget
+    // is unset — which left it guessing. It guessed Safari-first and deleted the
+    // UNPREFIXED `backdrop-filter` from .nav.scrolled, keeping only the
+    // -webkit- one, so Firefox lost the frosted nav entirely. Naming real
+    // browsers is what makes it emit both.
+    cssTarget: ['chrome90', 'edge90', 'firefox90', 'safari15'],
     assetsInlineLimit: 2048,
   },
 });

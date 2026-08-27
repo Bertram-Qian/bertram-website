@@ -1,6 +1,6 @@
 import Nav from './sections/Nav.jsx';
 import Hero from './sections/Hero.jsx';
-import Pond from './sections/Pond.jsx';
+import Work from './sections/Work.jsx';
 import Contact from './sections/Contact.jsx';
 import Footer from './sections/Footer.jsx';
 
@@ -12,7 +12,7 @@ export default function App() {
       {/* Sits above the pinned hero and scrolls over it — the whole reason the
           hero fades rather than slides away. */}
       <main className="page">
-        <Pond />
+        <Work />
         <Contact />
         <Footer />
       </main>

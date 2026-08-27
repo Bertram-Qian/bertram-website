@@ -23,19 +23,36 @@ const WATERLINE =
  * @param {string} fill    the duck's colourway hex (from LogoCatalog)
  * @param {string} accKey  a key of `A` — 'crown' | 'chef' | 'scarf' | 'tophat' | 'bucket'
  */
+// The cast shadow, as its own sprite.
+//
+// It is NOT part of the duck, for the same reason the wake is not: a shadow
+// falls ON the river, so it has to be able to pass UNDER the bank stone. Drawn
+// inside the duck it rode in the duck's layer, which sits above all the stone
+// because the duck is the thing you pick up — so a duck drifting close to the
+// shore laid a dark ellipse straight across the boulders.
+//
+// Same viewBox as the sprite, deliberately: the layer that draws it reuses the
+// duck's own box and margins, so the ellipse lands exactly where it always did
+// and there is no second set of offsets to keep in step with the art.
+export const SHADOW_SVG = (() => {
+  const vb = DUCK_VIEWBOX;
+  return `<svg viewBox="${vb.x} ${vb.y} ${vb.w} ${vb.h}" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">` +
+    '<g class="dd-wet">' +
+      '<ellipse cx="46.4" cy="45.4" rx="11.4" ry="2.4" fill="#1E2830" fill-opacity="0.22"/>' +
+    '</g>' +
+  '</svg>';
+})();
+
 export function duckSprite(fill, accKey) {
   const acc = A[accKey] || '';
   const vb = DUCK_VIEWBOX;
-  // The cast shadow and the waterline are grouped as `.dd-wet` so they can be
-  // taken away the moment the duck leaves the water — lifted out on a finger,
-  // or perched on the board. A duck sitting on a wooden rail with a wave
-  // crossing its chest is the sort of detail that makes the whole thing read
-  // as decoration rather than as a scene.
+  // The waterline stays `.dd-wet` so it can be taken away the moment the duck
+  // leaves the water — lifted out on a finger, or perched on the board. A duck
+  // sitting on a wooden rail with a wave crossing its chest is the sort of
+  // detail that makes the whole thing read as decoration rather than as a
+  // scene. The cast shadow used to be grouped here too; it is SHADOW_SVG now.
   return (
     `<svg viewBox="${vb.x} ${vb.y} ${vb.w} ${vb.h}" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">` +
-      '<g class="dd-wet">' +
-        '<ellipse cx="46.4" cy="45.4" rx="11.4" ry="2.4" fill="#1E2830" fill-opacity="0.22"/>' +
-      '</g>' +
       duckBody(fill, 1.55, INK) +
       acc +
       `<g class="dd-wet">${WATERLINE}</g>` +
@@ -43,12 +60,34 @@ export function duckSprite(fill, accKey) {
   );
 }
 
-// The wake that trails a moving duck — the spa lilypad's two arcs, scaled down.
+// The duck-shaped hole in the board: what the stall shows before anything is on
+// it. The same silhouette, drained to a pale sage so it reads as a place rather
+// than as a fifth project — a duck goes here, and none is here yet.
+export const GHOST_DUCK = (() => {
+  const vb = DUCK_VIEWBOX;
+  return `<svg viewBox="${vb.x} ${vb.y} ${vb.w} ${vb.h}" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">` +
+    '<ellipse cx="46.4" cy="45.4" rx="11.4" ry="2.4" fill="#4A7A6B" fill-opacity="0.1"/>' +
+    duckBody('#E4EBE8', 0.9, '#C8D9D2') +
+  '</svg>';
+})();
+
+// The wake that trails a moving duck — the spa lilypad's arc, scaled down.
 // Drawn as its own element so it can be rotated to the heading without turning
-// the duck itself. The viewBox is centred on the duck's centre and the arcs sit
-// at negative x, so rotating to atan2(vy,vx) always trails behind.
+// the duck itself. The viewBox is centred on the duck's waterline and the arcs
+// sit at negative x, so rotating to atan2(vy,vx) always trails behind.
+//
+// The kit draws two arcs at fixed distances and drives their OPACITY off speed,
+// which is right for a lilypad that gets shoved and then stops. A duck under a
+// steady current would just wear a decal. So the same arc is emitted three times
+// on one staggered loop: each is born small at the tail, spreads, drifts back
+// and dies, which is what a wake actually does. Speed still gates the whole
+// element's opacity, so the app's 0.16 ceiling is untouched.
+const WAKE_ARC =
+  'd="M -8,-10 Q -18,0 -8,10" fill="none" stroke="#D2DCDB" stroke-width="1.6" stroke-linecap="round"';
+
 export const WAKE_SVG =
   '<svg viewBox="-24 -24 48 48" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">' +
-    '<path d="M -8,-10 Q -18,0 -8,10" fill="none" stroke="#D2DCDB" stroke-width="1.6" stroke-linecap="round"/>' +
-    '<path d="M -16,-6.5 Q -24,0 -16,6.5" fill="none" stroke="#D2DCDB" stroke-width="1.2" stroke-linecap="round" stroke-opacity="0.6"/>' +
+    '<path class="dd-wk" style="animation-delay:-1.133s" ' + WAKE_ARC + '/>' +
+    '<path class="dd-wk" style="animation-delay:-0.567s" ' + WAKE_ARC + '/>' +
+    '<path class="dd-wk" ' + WAKE_ARC + '/>' +
   '</svg>';

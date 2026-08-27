@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>bertram — portfolio</title>
-  <meta name="description" content="Bertram Qian — software engineer. Four ducks, four projects, one onsen. Drag a duck onto the board to see the work." />
+  <title>bertram, portfolio</title>
+  <meta name="description" content="Bertram Qian, software engineer. Four ducks, four projects, one river. Catch a duck as it drifts past to see the work." />
   <meta name="theme-color" content="#FAFAF8" />
   <!--
     Tab icon: the dilly&dally duck on the app's offwhite tile.
@@ -20,8 +20,8 @@
   <link rel="icon" href="/favicon.ico" sizes="32x32" />
   <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
   <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
-  <meta property="og:title" content="bertram — portfolio" />
-  <meta property="og:description" content="four ducks, four projects, one onsen." />
+  <meta property="og:title" content="bertram, portfolio" />
+  <meta property="og:description" content="four ducks, four projects, one river." />
   <meta property="og:type" content="website" />
 </head>
 <body>
@@ -31,26 +31,31 @@
     same four projects, as plain links.
   -->
   <div id="root">
-    <noscript>
-      <style>
-        .fallback { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-          max-width: 640px; margin: 12vh auto; padding: 0 28px; color: #2A2520; line-height: 1.6; }
-        .fallback h1 { font-weight: 300; font-size: 44px; letter-spacing: -0.03em; color: #1A1A1A; }
-        .fallback li { margin: 18px 0; list-style: none; }
-        .fallback a { color: #3C6657; }
-      </style>
-    </noscript>
+    <!--
+      NOT inside <noscript>. With scripting on, the parser runs a noscript's
+      contents through the raw-text algorithm: the <style> never becomes an
+      element and never applies, so the fallback below rendered unstyled on
+      every single load until React wiped it. It needs styling on BOTH paths,
+      and React removes the markup anyway, so the rules are free afterwards.
+    -->
+    <style>
+      .fallback { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        max-width: 640px; margin: 12vh auto; padding: 0 28px; color: #2A2520; line-height: 1.6; }
+      .fallback h1 { font-weight: 300; font-size: 44px; letter-spacing: -0.03em; color: #1A1A1A; }
+      .fallback li { margin: 18px 0; list-style: none; }
+      .fallback a { color: #3C6657; }
+    </style>
     <div class="fallback">
       <h1>hey! i&rsquo;m bertram.</h1>
       <p>a software engineer studying at the university of waterloo. some things i&rsquo;ve built:</p>
       <ul>
-        <li><strong>dilly&amp;dally</strong> — a cozy home for your closet.
+        <li><strong>dilly&amp;dally</strong>: a cozy home for your closet.
           <a href="https://dilly-dally.app">dilly-dally.app</a></li>
-        <li><strong>trim</strong> — a nutrition tracker built around one honest number a day.
+        <li><strong>trim</strong>: a nutrition tracker built around one honest number a day.
           <a href="/bertram-website/trim.html">live demo</a></li>
-        <li><strong>auto guitar tab scroller</strong> — a music sheet scroller that follows your playing.
+        <li><strong>auto guitar tab scroller</strong>: a music sheet scroller that follows your playing.
           <a href="https://github.com/Bertram-Qian/GuitarTabScroller">github</a></li>
-        <li><strong>study crew</strong> — a mini construction crew that blocks distracting tabs.
+        <li><strong>study crew</strong>: a mini construction crew that blocks distracting tabs.
           <a href="https://github.com/Bertram-Qian/Study-Crew">github</a></li>
       </ul>
       <p><a href="mailto:b4qian@uwaterloo.ca">b4qian@uwaterloo.ca</a></p>

@@ -93,11 +93,18 @@ export default function ChairPileToy({ reduce }) {
     const sleepAt = (g, x, y) => { g._x = x; g._y = y; g._vx = 0; g._vy = 0; g._asleep = true; apply(g); };
     const wobble = (g) => { g.classList.remove('settle'); void g.offsetWidth; g.classList.add('settle'); };
 
-    function frame() {
-      // The well can be laid out at zero size for a beat (the swap mounts before
-      // the board has measured), and a frame without geometry would integrate
-      // NaN into every position and never recover.
-      if (!G) { running = false; return; }
+    // FIXED TIMESTEP. Every constant below is per-FRAME, tuned against 60Hz, so
+    // on a 120Hz display the pile fell twice as fast and on a 144Hz one it flung
+    // garments off the top of the well. Scaling by dt is not the fix here: the
+    // damping is multiplicative (AIR, GFRIC) and the thresholds are magnitudes
+    // (SLEEP, the 0.2 homing lerp), so a dt factor changes their meaning and
+    // every hand-tuned number in THROWS would need retuning. Stepping a fixed
+    // 1/60 the right number of times leaves all of them exactly as authored.
+    const STEP = 1000 / 60;
+    let acc = 0;
+    let prevT = null;
+
+    function tick() {
       let anyActive = false;
       gs.forEach((g) => {
         const gw = g.offsetWidth, gh = g.offsetHeight;
@@ -137,12 +144,33 @@ export default function ChairPileToy({ reduce }) {
         }
         apply(g);
       });
-      if (anyActive && alive) requestAnimationFrame(frame); else running = false;
+      return anyActive;
+    }
+
+    function frame(t) {
+      // The well can be laid out at zero size for a beat (the swap mounts before
+      // the board has measured), and a frame without geometry would integrate
+      // NaN into every position and never recover.
+      if (!G) { running = false; prevT = null; return; }
+      if (prevT == null) prevT = t;
+      // Clamped: a backgrounded tab hands back a gap of seconds, and without a
+      // ceiling the accumulator would replay every one of those steps at once.
+      acc += Math.min(100, t - prevT);
+      prevT = t;
+      let anyActive = false;
+      let n = 0;
+      while (acc >= STEP && n < 6) { anyActive = tick() || anyActive; acc -= STEP; n += 1; }
+      if (n === 0) anyActive = gs.some((g) => g._held || g._homing || !g._asleep);
+      if (anyActive && alive) requestAnimationFrame(frame);
+      else { running = false; prevT = null; acc = 0; }
     }
 
     let running = false, alive = true;
     const ensureRunning = () => {
-      if (!running && alive && !document.hidden) { running = true; requestAnimationFrame(frame); }
+      if (!running && alive && !document.hidden) {
+        running = true; prevT = null; acc = 0;
+        requestAnimationFrame(frame);
+      }
     };
 
     /* ---- the demo: throw, throw, throw, tidy, repeat ---- */

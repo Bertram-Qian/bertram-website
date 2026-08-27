@@ -31,7 +31,7 @@ export const PROJECTS = [
     src: `${base}media/trim.mp4`,
     poster: `${base}media/trim.jpg`,
     eyebrow: 'product design',
-    blurb: 'need some help with cutting? trim the calories down — a nutrition tracker built around one honest number a day.',
+    blurb: 'need some help with cutting? trim the calories down. a nutrition tracker built around one honest number a day.',
     links: [
       { label: 'try the live demo', href: `${base}trim.html`, primary: true },
     ],
@@ -45,7 +45,7 @@ export const PROJECTS = [
     src: `${base}media/guitar.mp4`,
     poster: `${base}media/guitar.jpg`,
     eyebrow: 'ios · swift',
-    blurb: 'a music sheet scroller that runs at a set speed — or listens, and follows along with your playing.',
+    blurb: 'a music sheet scroller that runs at a set speed, or listens, and follows along with your playing.',
     links: [
       { label: 'view on github', href: 'https://github.com/Bertram-Qian/GuitarTabScroller', primary: true },
     ],
