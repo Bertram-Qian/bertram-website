@@ -239,7 +239,9 @@ export function lantern(x = 330, y = 308, scale = 1) {
     rc(-5, -19, 10, 12, D) + rc(-4, -19, 8, 12, M) + rc(-2, -19, 4, 12, H, 0, 0.85) +
     rc(-12, -22, 24, 3, D) + rc(-11, -22.5, 22, 2, M) +
     rc(-11, -39, 22, 17, D, 2) + rc(-10, -39, 20, 17, M, 1.8) + rc(-9, -39, 18, 17, H, 1.5, 0.95) +
-    rc(-4, -36, 8, 11, W, 0.6) +
+    // The one part of the lantern that is allowed to change: the paper window
+    // warms up while a duck is on the board. A flat fill swap, never a glow.
+    '<rect class="dd-lantern-win" x="-4" y="-36" width="8" height="11" rx="0.6" fill="' + W + '"/>' +
     rc(-13, -41, 26, 2, D) + rc(-12, -41.5, 24, 1.5, M) +
     '<path d="M -20,-41 C -22,-44 -20,-48 -16,-50 C -10,-52 -5,-53 0,-53 C 5,-53 10,-52 16,-50 C 20,-48 22,-44 20,-41 L -20,-41 Z" fill="' + D + '"/>' +
     '<path d="M -19,-41.5 C -21,-44 -19,-47.5 -15,-49.5 C -10,-51.5 -5,-52.5 0,-52.5 C 5,-52.5 10,-51.5 15,-49.5 C 19,-47.5 21,-44 19,-41.5 L -19,-41.5 Z" fill="' + M + '"/>' +
@@ -248,6 +250,58 @@ export function lantern(x = 330, y = 308, scale = 1) {
     el(0, -56.5, 2, 2.2, D) + el(0, -56.8, 1.6, 1.8, M) + el(-0.4, -57.4, 0.6, 0.7, H) +
     '<path d="M -0.4,-58.7 L 0.4,-58.7 L 0,-60 Z" fill="' + D + '"/>' +
   '</g>';
+}
+
+/* -------------------------------------------------------------- lilypad -- */
+// The onsen's lilypad, verbatim from the spa's padGroup: a round pad with a
+// notch bitten out of one side (that notch is where the app sits a garment), a
+// darker offset ellipse for the fold, and three veins radiating from the notch.
+// Both sizes are the app's own — PAD_SMALL rides the outer slots, PAD_LARGE the
+// centre one.
+export const PADS = {
+  small: {
+    body: 'M 30,-8 C 24,-6 14,-3 5,0 C 14,3 24,6 30,8 A 30,15 0 1 1 30,-8 Z',
+    shade: [9, 6, 20, 8],
+    veins: [[-22, -10], [-30, 0], [-22, 10]],
+  },
+  large: {
+    body: 'M 32,-9 C 26,-7 16,-3 5,0 C 16,3 26,7 32,9 A 32,16 0 1 1 32,-9 Z',
+    shade: [10, 6, 22, 9],
+    veins: [[-24, -11], [-32, 0], [-24, 11]],
+  },
+};
+
+/**
+ * One lilypad as a standalone sprite, framed on its own centre so it can be
+ * positioned and rotated like the ducks are.
+ *
+ * The kit's spa draws a pad as two layers — the body and one fold ellipse. Flat
+ * on the app's still pond that is enough; floating in open water beside a duck
+ * that has a cast shadow and a waterline, it reads as a sticker. So the pad gets
+ * the same three-plane treatment every other object in this system has, built
+ * the way rock3() builds it: the silhouette drawn again UNDER itself in the
+ * vein green, so a rim of leaf-thickness shows along the near edge, and two flat
+ * washes on the top face — shade where the kit puts it, light opposite. No
+ * gradients, and every colour is one the kit already uses.
+ */
+export function lilypadSprite(size = 'small', flip = false) {
+  const p = PADS[size] || PADS.small;
+  const rx = size === 'large' ? 32 : 30;
+  const ry = size === 'large' ? 16 : 15;
+  const inner =
+    // thrown onto the water, offset the way the lantern's base shadow is
+    el(1, 5.6, rx * 0.94, ry * 0.5, '#1E2830', 0.15) +
+    // the leaf's own thickness, showing as a rim along the near edge
+    '<g transform="translate(0,2.9)"><path d="' + p.body + '" fill="#2D5C42"/></g>' +
+    '<path d="' + p.body + '" fill="#4A8A6D"/>' +
+    // Just the app's fold, and nothing opposite it. A light wash on the other
+    // side read as a hard oval sitting on the leaf rather than as a lit face —
+    // the app draws one shade ellipse and stops, so this does too.
+    el(p.shade[0], p.shade[1], p.shade[2], p.shade[3], '#3B7A5D', 0.45) +
+    p.veins.map((v) => ln(5, 0, v[0], v[1], '#2D5C42', 0.6, 0.5)).join('');
+  return '<svg viewBox="-36 -22 72 44" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">' +
+    (flip ? '<g transform="scale(-1,1)">' + inner + '</g>' : inner) +
+  '</svg>';
 }
 
 // The wooden bucket (oke). Authored at (96,443); parameterised for the wide scene.

@@ -1,16 +1,16 @@
-/* Station.jsx — what fills the board's well.
+/* Station.jsx — what fills the stall's well.
  *
  * Nothing here is a lightbox or an overlay: the media sits inside the wooden
- * frame that is already part of the scene, co-registered with it by the linear
- * viewBox map. The duck perched on the roof rail is the one that put it there.
+ * stall that is already part of the scene, and the duck perched on the beam is
+ * the one that put it there. The out-then-in swap lives one level up in
+ * Stall.jsx, so the media and the copy beside it change on the same beat.
  */
 
 import { useEffect, useRef, useState } from 'react';
 import ChairPileToy from './ChairPileToy.jsx';
-import { useSwap } from '../components/useSwap.js';
 
 // The old site autoplayed three clips the moment the page opened. Here the
-// element does not exist until a duck is on the board, which is a stronger
+// element does not exist until a duck is on the beam, which is a stronger
 // guarantee than any preload hint — and `preload="none"` is actively wrong:
 // Chrome honours it over `autoplay` and never fetches, leaving a blank frame.
 function Clip({ src, poster, name }) {
@@ -53,7 +53,7 @@ function Clip({ src, poster, name }) {
   }, [src]);
 
   // If the clip itself can't be decoded or fetched, fall back to the still.
-  // The board should never be a black rectangle — that reads as broken, where a
+  // The well should never be a black rectangle — that reads as broken, where a
   // frame of the project reads as a photo pinned to a notice board.
   if (failed) return <img className="dd-clip" src={poster} alt={`${name} — still`} />;
 
@@ -88,15 +88,8 @@ function Clip({ src, poster, name }) {
 }
 
 export default function Station({ project, reduce }) {
-  const [shown, visible] = useSwap(project?.id ?? 'empty', project, reduce ? 0 : 200);
-
-  return (
-    <div className="dd-swap" data-hidden={!visible}>
-      {shown
-        ? (shown.kind === 'toy'
-            ? <ChairPileToy key={shown.id} reduce={reduce} />
-            : <Clip key={shown.id} src={shown.src} poster={shown.poster} name={shown.name} />)
-        : <p className="dd-well-empty" aria-hidden="true">drop a duck here</p>}
-    </div>
-  );
+  if (!project) return null;
+  return project.kind === 'toy'
+    ? <ChairPileToy key={project.id} reduce={reduce} />
+    : <Clip key={project.id} src={project.src} poster={project.poster} name={project.name} />;
 }
