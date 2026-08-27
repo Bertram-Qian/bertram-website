@@ -7,7 +7,7 @@
  *   · ONE LINE AT A TIME. The spa loop opens with `guard bubbleId == nil else
  *     { continue }` — a timer never talks over a live line. It is the same rule
  *     the banner swap encodes ("two headlines are never legible at once"), and
- *     four ducks all piping up together would be noise rather than character.
+ *     three ducks all piping up together would be noise rather than character.
  *
  *   · THE APP'S DWELL. 2.8s when you touch one, 3.2s for an ambient line.
  *

@@ -143,7 +143,7 @@ export default function Stall({ project, reduce, dropRef, perchRef, drag, landTi
               </>
             ) : (
               <>
-                <p className="eyebrow">four ducks, four projects</p>
+                <p className="eyebrow">three ducks, three projects</p>
                 <h3 className="stall-title">pick one out of the river</h3>
                 <p className="stall-blurb">
                   tap a duck as it drifts past, or drag it up onto the beam.

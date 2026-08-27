@@ -23,20 +23,6 @@ export const PROJECTS = [
     ],
   },
   {
-    id: 'trim',
-    name: 'trim',
-    colour: '#8FA66C',   // sage
-    accessory: 'chef',
-    kind: 'video',
-    src: `${base}media/trim.mp4`,
-    poster: `${base}media/trim.jpg`,
-    eyebrow: 'product design',
-    blurb: 'need some help with cutting? trim the calories down. a nutrition tracker built around one honest number a day.',
-    links: [
-      { label: 'try the live demo', href: `${base}trim.html`, primary: true },
-    ],
-  },
-  {
     id: 'guitar',
     name: 'auto guitar tab scroller',
     colour: '#5B7A99',   // denim

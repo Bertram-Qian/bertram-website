@@ -21,7 +21,7 @@ const WATERLINE =
 
 /**
  * @param {string} fill    the duck's colourway hex (from LogoCatalog)
- * @param {string} accKey  a key of `A` — 'crown' | 'chef' | 'scarf' | 'tophat' | 'bucket'
+ * @param {string} accKey  a key of `A` — 'crown' | 'scarf' | 'tophat' | 'bucket'
  */
 // The cast shadow, as its own sprite.
 //

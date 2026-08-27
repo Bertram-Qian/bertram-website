@@ -29,10 +29,7 @@ function rootIcons() {
 }
 
 // Served from https://bertram-qian.github.io/bertram-website/, so every emitted
-// URL needs the repo prefix. `trim.html` lives in public/ and is copied
-// byte-for-byte rather than processed: it is a live Firebase app whose inline
-// module hangs ~22 functions off `window` for its inline onclick handlers, and
-// bundling that is a risk with no upside.
+// URL needs the repo prefix.
 export default defineConfig({
   base: '/bertram-website/',
   plugins: [react(), rootIcons()],

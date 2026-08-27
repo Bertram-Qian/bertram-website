@@ -60,9 +60,6 @@ export const A = {};
 // crown — the three-spike crown (butter), resting on the head
 A.crown = acc('<path d="M47.9,25.2 L47.4,21.9 L49.4,23.4 L50.9,21.3 L52.4,23.4 L54.4,21.9 L53.9,25.2 Z"/>', '#F2C94C');
 
-// chef — the cream toque: puffed lobes over a band
-A.chef = acc('<path d="M46.9,24 Q44.7,19.2 48.4,18.7 Q48.7,15.9 51.4,16.5 Q54.6,15.9 54.7,19 Q57.9,19.6 55,24 Z"/><rect x="46.4" y="23.4" width="8.8" height="2.8" rx="1"/>', '#FBF4E6');
-
 // scarf — a rust band at the neck + a short hanging tail
 A.scarf = acc('<rect x="46.5" y="32.6" width="8.6" height="2.9" rx="1.45"/><rect x="51.4" y="35.2" width="2.7" height="4.4" rx="1.3"/>', '#B5512E');
 
