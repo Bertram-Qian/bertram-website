@@ -104,7 +104,12 @@ export default function ChairPileToy({ reduce }) {
     let acc = 0;
     let prevT = null;
 
-    function tick() {
+    // NOTE: distinct name from `demoTick` below. Both were called `tick`, and
+    // since function declarations hoist, the demo scheduler silently replaced
+    // this integrator — `frame` then called the scheduler, got `undefined` back,
+    // read that as "nothing active" and stopped the loop on its first frame. The
+    // pile never fell. Two functions in one scope may not share a name.
+    function stepPhysics() {
       let anyActive = false;
       gs.forEach((g) => {
         const gw = g.offsetWidth, gh = g.offsetHeight;
@@ -159,7 +164,7 @@ export default function ChairPileToy({ reduce }) {
       prevT = t;
       let anyActive = false;
       let n = 0;
-      while (acc >= STEP && n < 6) { anyActive = tick() || anyActive; acc -= STEP; n += 1; }
+      while (acc >= STEP && n < 6) { anyActive = stepPhysics() || anyActive; acc -= STEP; n += 1; }
       if (n === 0) anyActive = gs.some((g) => g._held || g._homing || !g._asleep);
       if (anyActive && alive) requestAnimationFrame(frame);
       else { running = false; prevT = null; acc = 0; }
@@ -190,7 +195,7 @@ export default function ChairPileToy({ reduce }) {
       gs.forEach((g) => { g._homing = true; g._asleep = false; g.style.zIndex = ''; });
       ensureRunning();
     }
-    function tick() {
+    function demoTick() {
       if (!G || document.hidden || !onScreen) return;
       if (gs.some((g) => g._held)) return;     // hands off while someone is playing
       if (tidying) {
@@ -272,7 +277,7 @@ export default function ChairPileToy({ reduce }) {
 
     // Under reduced motion the pile simply sits on the chair. Nothing is thrown,
     // nothing loops, and dragging still works if you want to move one yourself.
-    const timer = reduce ? null : setInterval(tick, TICK_MS);
+    const timer = reduce ? null : setInterval(demoTick, TICK_MS);
     const onVis = () => { if (!document.hidden) ensureRunning(); };
     document.addEventListener('visibilitychange', onVis);
 
